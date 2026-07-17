@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8">
+<title>Tra cứu Pháp luật Đầu tư</title>
+<style>
+  :root {
+    --bg: #F5F3EC;
+    --surface: #FFFFFF;
+    --surface-alt: #ECE8DC;
+    --border: #DCD6C4;
+    --text: #1C241F;
+    --text-muted: #5C6459;
+    --accent: #0F6B54;
+    --accent-soft: #E3EFE9;
+    --accent-warm: #9C6B2E;
+    --accent-warm-soft: #F3E7D3;
+    --cat-luat: #0F6B54;
+    --cat-luat-bg: #E3EFE9;
+    --cat-nd: #33587A;
+    --cat-nd-bg: #E4EBF1;
+    --cat-uudai: #9C6B2E;
+    --cat-uudai-bg: #F3E7D3;
+    --cat-diaban: #9A4A34;
+    --cat-diaban-bg: #F3E1D9;
+    --cat-lienquan: #6A5A78;
+    --cat-lienquan-bg: #EBE5EF;
+    --shadow: 0 1px 2px rgba(28,36,31,0.06), 0 4px 14px rgba(28,36,31,0.05);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #12150F;
+      --surface: #191D16;
+      --surface-alt: #212620;
+      --border: #333A2E;
+      --text: #E9E7DC;
+      --text-muted: #9CA394;
+      --accent: #4CC3A0;
+      --accent-soft: #1B322B;
+      --accent-warm: #D8A75F;
+      --accent-warm-soft: #362B1B;
+      --cat-luat: #4CC3A0;
+      --cat-luat-bg: #1B322B;
+      --cat-nd: #7FA6CE;
+      --cat-nd-bg: #1E2A38;
+      --cat-uudai: #D8A75F;
+      --cat-uudai-bg: #362B1B;
+      --cat-diaban: #D98263;
+      --cat-diaban-bg: #37241D;
+      --cat-lienquan: #B7A2C9;
+      --cat-lienquan-bg: #2A2333;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 4px 16px rgba(0,0,0,0.25);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #12150F;
+    --surface: #191D16;
+    --surface-alt: #212620;
+    --border: #333A2E;
+    --text: #E9E7DC;
+    --text-muted: #9CA394;
+    --accent: #4CC3A0;
+    --accent-soft: #1B322B;
+    --accent-warm: #D8A75F;
+    --accent-warm-soft: #362B1B;
+    --cat-luat: #4CC3A0;
+    --cat-luat-bg: #1B322B;
+    --cat-nd: #7FA6CE;
+    --cat-nd-bg: #1E2A38;
+    --cat-uudai: #D8A75F;
+    --cat-uudai-bg: #362B1B;
+    --cat-diaban: #D98263;
+    --cat-diaban-bg: #37241D;
+    --cat-lienquan: #B7A2C9;
+    --cat-lienquan-bg: #2A2333;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 4px 16px rgba(0,0,0,0.25);
+    color-scheme: dark;
+  }
+  :root[data-theme="light"] {
+    --bg: #F5F3EC;
+    --surface: #FFFFFF;
+    --surface-alt: #ECE8DC;
+    --border: #DCD6C4;
+    --text: #1C241F;
+    --text-muted: #5C6459;
+    --accent: #0F6B54;
+    --accent-soft: #E3EFE9;
+    --accent-warm: #9C6B2E;
+    --accent-warm-soft: #F3E7D3;
+    --cat-luat: #0F6B54;
+    --cat-luat-bg: #E3EFE9;
+    --cat-nd: #33587A;
+    --cat-nd-bg: #E4EBF1;
+    --cat-uudai: #9C6B2E;
+    --cat-uudai-bg: #F3E7D3;
+    --cat-diaban: #9A4A34;
+    --cat-diaban-bg: #F3E1D9;
+    --cat-lienquan: #6A5A78;
+    --cat-lienquan-bg: #EBE5EF;
+    color-scheme: light;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  .app {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 28px 20px 80px;
+  }
+
+  /* ---- Header ---- */
+  header.top {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 22px;
+  }
+  .eyebrow {
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: 12px;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--accent-warm);
+    font-weight: 600;
+  }
+  h1 {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(26px, 3.4vw, 34px);
+    font-weight: 700;
+    margin: 2px 0 4px;
+    text-wrap: balance;
+    letter-spacing: -0.01em;
+  }
+  .sub {
+    color: var(--text-muted);
+    font-size: 14.5px;
+    max-width: 62ch;
+  }
+
+  /* ---- Tabs ---- */
+  .tabs {
+    display: flex;
+    gap: 4px;
+    margin: 18px 0 22px;
+    border-bottom: 1px solid var(--border);
+  }
+  .tab {
+    appearance: none;
+    border: none;
+    background: none;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-muted);
+    padding: 9px 4px;
+    margin-right: 22px;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transform: translateY(1px);
+  }
+  .tab:hover { color: var(--text); }
+  .tab[data-active="true"] {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+
+  /* ---- Search & controls ---- */
+  .controls {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    background: var(--bg);
+    padding: 14px 0 12px;
+    margin-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+  .search-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .search-box {
+    flex: 1;
+    position: relative;
+  }
+  .search-box svg {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    stroke: var(--text-muted);
+    pointer-events: none;
+  }
+  #searchInput {
+    width: 100%;
+    padding: 11px 14px 11px 38px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    font-size: 15px;
+    font-family: inherit;
+    outline: none;
+    transition: border-color .15s ease, box-shadow .15s ease;
+  }
+  #searchInput:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+  }
+  #searchInput::placeholder { color: var(--text-muted); }
+  .result-count {
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-variant-numeric: tabular-nums;
+    font-size: 12.5px;
+    color: var(--text-muted);
+    white-space: nowrap;
+    align-self: center;
+    padding-right: 4px;
+  }
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+  }
+  .chip {
+    appearance: none;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 6px 12px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: all .12s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .chip:hover { border-color: var(--accent); }
+  .chip .dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+  .chip[data-active="true"] {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+  .chip[data-cat="luat"] { color: var(--cat-luat); }
+  .chip[data-cat="nd"] { color: var(--cat-nd); }
+  .chip[data-cat="uudai"] { color: var(--cat-uudai); }
+  .chip[data-cat="diaban"] { color: var(--cat-diaban); }
+  .chip[data-cat="lienquan"] { color: var(--cat-lienquan); }
+  .chip[data-active="true"][data-cat] { color: #fff; }
+
+  /* ---- List ---- */
+  #list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 16px;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  .card-head {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 15px 18px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .card-head:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: -2px;
+  }
+  .badge {
+    flex-shrink: 0;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    padding: 4px 9px;
+    border-radius: 6px;
+    margin-top: 2px;
+    white-space: nowrap;
+  }
+  .badge.luat { color: var(--cat-luat); background: var(--cat-luat-bg); }
+  .badge.nd { color: var(--cat-nd); background: var(--cat-nd-bg); }
+  .badge.uudai { color: var(--cat-uudai); background: var(--cat-uudai-bg); }
+  .badge.diaban { color: var(--cat-diaban); background: var(--cat-diaban-bg); }
+  .badge.lienquan { color: var(--cat-lienquan); background: var(--cat-lienquan-bg); }
+
+  .card-main { flex: 1; min-width: 0; }
+  .card-title-row {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .card-title {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 16.5px;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .card-code {
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: 12px;
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+  a.card-code, a.ref-badge {
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+  }
+  a.card-code:hover, a.ref-badge:hover { text-decoration: underline; }
+  a.card-code svg, a.ref-badge svg {
+    width: 10px;
+    height: 10px;
+    flex-shrink: 0;
+    stroke: currentColor;
+    opacity: 0.75;
+  }
+  .card-summary {
+    color: var(--text-muted);
+    font-size: 13.5px;
+    margin-top: 4px;
+  }
+  .card-meta {
+    font-size: 12px;
+    color: var(--accent-warm);
+    margin-top: 5px;
+    font-weight: 600;
+  }
+  .chevron {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    stroke: var(--text-muted);
+    transition: transform .15s ease;
+    margin-top: 4px;
+  }
+  .card[data-open="true"] .chevron { transform: rotate(180deg); }
+
+  .card-body {
+    display: none;
+    padding: 0 18px 18px 18px;
+    border-top: 1px solid var(--border);
+    margin-top: 0;
+  }
+  .card[data-open="true"] .card-body { display: block; }
+  .card-body-inner { padding-top: 14px; }
+  .card-body h4 {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    margin: 14px 0 6px;
+    font-weight: 700;
+  }
+  .card-body h4:first-child { margin-top: 0; }
+  .card-body ul {
+    margin: 0;
+    padding-left: 20px;
+  }
+  .card-body li {
+    font-size: 14px;
+    margin-bottom: 5px;
+  }
+  .card-body p { font-size: 14px; margin: 0 0 8px; }
+  .note {
+    background: var(--surface-alt);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 12.5px;
+    color: var(--text-muted);
+    margin-top: 12px;
+  }
+  .note b { color: var(--text); }
+
+  mark {
+    background: var(--accent-warm-soft);
+    color: var(--text);
+    border-radius: 3px;
+    padding: 0 1px;
+  }
+
+  .empty {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-muted);
+    font-size: 14px;
+  }
+
+  /* ---- Process stepper ---- */
+  .process-intro {
+    color: var(--text-muted);
+    font-size: 14px;
+    max-width: 68ch;
+    margin: 4px 0 22px;
+  }
+  #steps {
+    display: flex;
+    flex-direction: column;
+  }
+  .step {
+    display: grid;
+    grid-template-columns: 40px 1fr;
+    gap: 16px;
+  }
+  .step-rail {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .step-num {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: 13px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    flex-shrink: 0;
+    background: var(--accent-soft);
+    color: var(--accent);
+    border: 1px solid var(--border);
+  }
+  .step-line {
+    width: 2px;
+    flex: 1;
+    background: var(--border);
+    margin: 4px 0;
+    min-height: 12px;
+  }
+  .step:last-child .step-line { display: none; }
+  .step-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    margin-bottom: 14px;
+    overflow: hidden;
+  }
+  .step-head {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 14px 18px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .step-head:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+  .step-main { flex: 1; min-width: 0; }
+  .step-title-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .step-title {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 16.5px;
+    font-weight: 700;
+  }
+  .step-summary { color: var(--text-muted); font-size: 13.5px; margin-top: 4px; }
+  .step-tags { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+  .step-tag {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 5px;
+    white-space: nowrap;
+  }
+  .step-tag.meta-authority { background: var(--surface-alt); color: var(--text-muted); }
+  .step-tag.meta-duration { background: var(--accent-warm-soft); color: var(--accent-warm); }
+  .step-body {
+    display: none;
+    padding: 0 18px 18px;
+    border-top: 1px solid var(--border);
+  }
+  .step[data-open="true"] .step-body { display: block; }
+  .step[data-open="true"] .chevron { transform: rotate(180deg); }
+  .step-body-inner { padding-top: 14px; }
+  .step-body h4 {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    margin: 14px 0 8px;
+    font-weight: 700;
+  }
+  .step-body h4:first-child { margin-top: 0; }
+  .step-body ul { margin: 0; padding-left: 20px; }
+  .step-body li { font-size: 14px; margin-bottom: 5px; }
+  .legal-list { display: flex; flex-direction: column; gap: 8px; }
+  .legal-item {
+    display: flex;
+    gap: 10px;
+    background: var(--surface-alt);
+    border-radius: 8px;
+    padding: 9px 12px;
+  }
+  .legal-item .ref-badge {
+    flex-shrink: 0;
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: 11.5px;
+    font-weight: 700;
+    color: var(--accent);
+    background: var(--accent-soft);
+    border-radius: 5px;
+    padding: 3px 7px;
+    height: fit-content;
+    white-space: nowrap;
+  }
+  .legal-item .ref-detail { font-size: 13.5px; }
+
+  footer {
+    margin-top: 34px;
+    padding-top: 18px;
+    border-top: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--text-muted);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  @media (max-width: 560px) {
+    .search-row { flex-direction: column; }
+    .result-count { align-self: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+
+<div class="app">
+  <header class="top">
+    <span class="eyebrow">Công cụ nội bộ · Xúc tiến đầu tư</span>
+    <h1>Tra cứu Pháp luật Đầu tư</h1>
+    <p class="sub">Tổng hợp nhanh Luật Đầu tư 2025 và các quy định liên quan đến chuẩn bị, cấp phép và triển khai dự án đầu tư tại Việt Nam.</p>
+  </header>
+
+  <nav class="tabs" id="tabs">
+    <button class="tab" data-view="lookup" data-active="true">Tra cứu văn bản</button>
+    <button class="tab" data-view="process" data-active="false">Quy trình thực hiện dự án</button>
+  </nav>
+
+  <div id="lookupView">
+    <div class="controls">
+      <div class="search-row">
+        <div class="search-box">
+          <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke-width="2"/><path d="M21 21l-4.3-4.3" stroke-width="2" stroke-linecap="round"/></svg>
+          <input id="searchInput" type="text" placeholder="Tìm theo từ khoá: ưu đãi thuế, IRC, chủ trương đầu tư, địa bàn…" autocomplete="off" />
+        </div>
+        <span class="result-count" id="resultCount"></span>
+      </div>
+      <div class="chips" id="chipRow"></div>
+    </div>
+
+    <div id="list"></div>
+    <div class="empty" id="emptyState" style="display:none">Không tìm thấy nội dung phù hợp. Thử từ khoá khác hoặc bỏ bớt bộ lọc.</div>
+  </div>
+
+  <div id="processView" style="display:none">
+    <p class="process-intro">Quy trình chung tham khảo khi hướng dẫn nhà đầu tư triển khai một dự án cụ thể, từ tiếp cận đến vận hành. Bấm vào từng bước để xem điều luật cụ thể áp dụng. Trình tự có thể thay đổi tuỳ loại dự án (ví dụ dự án không thuộc diện chấp thuận chủ trương thì bỏ qua bước 4).</p>
+    <div id="steps"></div>
+  </div>
+
+  <footer>
+    <div><b style="color:var(--text)">Lưu ý:</b> Nội dung tóm tắt phục vụ tra cứu nhanh nội bộ, biên soạn tháng 7/2026 dựa trên Luật Đầu tư số 143/2025/QH15 (hiệu lực 01/3/2026) và Nghị định 96/2026/NĐ-CP. Các mã văn bản/điều luật có biểu tượng liên kết dẫn thẳng đến trang văn bản gốc (thuvienphapluat.vn, hethongphapluat.com, vanban.chinhphu.vn…) — một số dẫn đúng tới điều cụ thể, số khác dẫn tới toàn văn của luật/nghị định do chưa có bản deep-link theo điều. Trước khi áp dụng vào hồ sơ, quyết định hoặc tư vấn nhà đầu tư, vẫn cần đối chiếu văn bản gốc vì các nghị định, thông tư hướng dẫn chi tiết có thể tiếp tục được sửa đổi.</div>
+    <div>Cập nhật lần cuối: 17/07/2026</div>
+  </footer>
+</div>
+
+<script>
+const DATA = [
+  {
+    id: "luat-2025",
+    cat: "luat",
+    code: "Luật số 143/2025/QH15",
+    url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx",
+    title: "Luật Đầu tư 2025 — thay thế Luật Đầu tư 2020",
+    date: "Hiệu lực từ 01/03/2026",
+    summary: "Quốc hội thông qua 11/12/2025, thay thế Luật Đầu tư số 61/2020/QH14. Danh mục ngành nghề đầu tư kinh doanh có điều kiện sửa đổi áp dụng từ 01/7/2026.",
+    body: `
+      <h4>Điểm mới nổi bật</h4>
+      <ul>
+        <li>Đảo trình tự cấp phép cho nhà đầu tư nước ngoài: được cấp <b>Giấy chứng nhận đăng ký doanh nghiệp (ERC)</b> để thành lập pháp nhân <em>trước</em>, sau đó mới xin <b>Giấy chứng nhận đăng ký đầu tư (IRC)</b>.</li>
+        <li>Danh mục ngành, nghề đầu tư kinh doanh có điều kiện (Phụ lục IV) giảm còn <b>198 ngành, nghề</b>, tinh gọn so với Luật 2020.</li>
+        <li>Đơn giản hoá điều chỉnh dự án: bỏ 2 trường hợp phải điều chỉnh chủ trương đầu tư (tăng vốn ≥20%; thay đổi công nghệ đã thẩm định) — chỉ còn 5 trường hợp bắt buộc điều chỉnh.</li>
+        <li>Bãi bỏ thủ tục chấp thuận chủ trương đầu tư ra nước ngoài thuộc thẩm quyền Quốc hội/Thủ tướng.</li>
+      </ul>
+      <h4>Chuyển tiếp</h4>
+      <p>Giấy chứng nhận đăng ký đầu tư, quyết định chấp thuận chủ trương đầu tư và các giấy phép cấp theo Luật Đầu tư 2020 vẫn tiếp tục có hiệu lực, không phải làm lại thủ tục.</p>
+      <div class="note">Nghị định hướng dẫn thi hành: <b>Nghị định 96/2026/NĐ-CP</b> (ban hành 31/3/2026).</div>
+    `
+  },
+  {
+    id: "tham-quyen",
+    cat: "luat",
+    code: "Điều 24, Luật 143/2025/QH15",
+    url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx",
+    title: "Thẩm quyền chấp thuận chủ trương đầu tư",
+    date: "Áp dụng từ 01/03/2026",
+    summary: "Phân cấp mạnh hơn so với 2020: chỉ dự án đặc biệt quan trọng, cần cơ chế chính sách đặc thù mới trình Quốc hội / Thủ tướng; phần lớn dự án còn lại do cấp tỉnh quyết định.",
+    body: `
+      <ul>
+        <li><b>Quốc hội:</b> dự án quan trọng quốc gia, cần cơ chế/chính sách đặc thù (Điều 24.1).</li>
+        <li><b>Thủ tướng Chính phủ:</b> các dự án quy mô lớn, tác động kinh tế – xã hội lớn theo Điều 24 (khoản 1, 2, 4, 6, 7, 19); dự án di dân tái định cư từ 20.000 người (miền núi) hoặc 50.000 người (vùng khác) trở lên.</li>
+        <li><b>Chủ tịch UBND cấp tỉnh:</b> phần lớn dự án còn lại (khoản 8–18 Điều 24), gồm dự án Nhà nước giao đất/cho thuê đất không qua đấu giá, hoặc chuyển mục đích sử dụng đất.</li>
+      </ul>
+      <div class="note">Xu hướng: tăng phân cấp cho địa phương — cần cập nhật quy trình làm việc với nhà đầu tư theo đúng cấp thẩm quyền mới, tránh trình sai cấp gây chậm hồ sơ.</div>
+    `
+  },
+  {
+    id: "irc-erc",
+    cat: "luat",
+    code: "Thủ tục IRC / ERC",
+    url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx",
+    title: "Trình tự cấp phép cho nhà đầu tư nước ngoài: ERC trước, IRC sau",
+    date: "Điểm mới từ 01/03/2026",
+    summary: "Nhà đầu tư nước ngoài lập pháp nhân bằng Giấy chứng nhận đăng ký doanh nghiệp (ERC) trước, sau đó thực hiện thủ tục xin Giấy chứng nhận đăng ký đầu tư (IRC) — đảo ngược trình tự so với Luật 2020 (IRC trước, ERC sau).",
+    body: `
+      <ul>
+        <li>Đây là thay đổi có ảnh hưởng lớn đến quy trình hỗ trợ nhà đầu tư của cơ quan xúc tiến đầu tư — cần cập nhật lại tài liệu hướng dẫn, checklist hồ sơ và thời gian xử lý dự kiến cho nhà đầu tư nước ngoài.</li>
+        <li>Với dự án phải chấp thuận chủ trương đầu tư, cần xác định rõ mốc thực hiện thủ tục chấp thuận chủ trương diễn ra trước, trong hay sau bước ERC/IRC theo hướng dẫn tại Nghị định 96/2026/NĐ-CP.</li>
+      </ul>
+      <div class="note">Chi tiết quy trình, biểu mẫu, thời hạn xử lý: xem Nghị định 96/2026/NĐ-CP và văn bản hướng dẫn của Bộ Tài chính (cơ quan quản lý đầu tư sau hợp nhất chức năng).</div>
+    `
+  },
+  {
+    id: "nghi-dinh-96",
+    cat: "nd",
+    code: "Nghị định 96/2026/NĐ-CP",
+    url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Nghi-dinh-96-2026-ND-CP-huong-dan-Luat-Dau-tu-690303.aspx",
+    title: "Nghị định hướng dẫn thi hành Luật Đầu tư 2025",
+    date: "Ban hành 31/03/2026",
+    summary: "Quy định chi tiết điều kiện đầu tư kinh doanh, tiếp cận thị trường với NĐT nước ngoài, bảo đảm đầu tư, ưu đãi/hỗ trợ đầu tư, thủ tục đầu tư, xúc tiến đầu tư và quản lý nhà nước.",
+    body: `
+      <h4>Phạm vi điều chỉnh chính</h4>
+      <ul>
+        <li>Điều kiện đầu tư kinh doanh; ngành nghề và điều kiện tiếp cận thị trường đối với nhà đầu tư nước ngoài.</li>
+        <li>Các biện pháp bảo đảm đầu tư.</li>
+        <li>Ưu đãi và hỗ trợ đầu tư (bao gồm ưu đãi đặc biệt).</li>
+        <li>Trình tự, thủ tục thực hiện dự án đầu tư.</li>
+        <li><b>Xúc tiến đầu tư</b> — nội dung trực tiếp liên quan hoạt động của cơ quan xúc tiến đầu tư địa phương/quốc gia.</li>
+        <li>Quản lý nhà nước đối với hoạt động đầu tư kinh doanh.</li>
+      </ul>
+      <div class="note">Đây là văn bản trung tâm cần bám sát khi soạn tài liệu xúc tiến đầu tư, tài liệu mời gọi đầu tư theo ngành/địa bàn.</div>
+    `
+  },
+  {
+    id: "nganh-uu-dai",
+    cat: "uudai",
+    code: "Danh mục ngành, nghề ưu đãi đầu tư",
+    url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Nghi-dinh-96-2026-ND-CP-huong-dan-Luat-Dau-tu-690303.aspx",
+    title: "Ngành, nghề ưu đãi đầu tư theo Nghị định 96/2026/NĐ-CP",
+    date: "Áp dụng từ 31/03/2026",
+    summary: "Ưu tiên thu hút đầu tư vào công nghệ cao, chuyển đổi số, kinh tế xanh – tuần hoàn, năng lượng tái tạo và các lĩnh vực chiến lược khác.",
+    body: `
+      <ul>
+        <li>Phát triển khoa học, công nghệ, đổi mới sáng tạo, chuyển đổi số, công nghiệp công nghệ số và công nghiệp bán dẫn.</li>
+        <li>Phát triển kinh tế xanh, kinh tế tuần hoàn.</li>
+        <li>Phát triển năng lượng tái tạo, năng lượng mới, năng lượng sạch.</li>
+        <li>Các mục tiêu ưu tiên khác theo danh mục chi tiết ban hành kèm Nghị định 96/2026/NĐ-CP.</li>
+      </ul>
+      <div class="note">Khi tư vấn nhà đầu tư theo ngành cụ thể, cần đối chiếu đúng mã ngành trong Phụ lục danh mục ban hành kèm Nghị định — bản tóm tắt này không thay thế văn bản gốc.</div>
+    `
+  },
+  {
+    id: "uu-dai-dac-biet",
+    cat: "uudai",
+    code: "Điều 21, Nghị định 96/2026/NĐ-CP",
+    url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Nghi-dinh-96-2026-ND-CP-huong-dan-Luat-Dau-tu-690303.aspx",
+    title: "Ưu đãi, hỗ trợ đầu tư đặc biệt",
+    date: "Áp dụng từ 31/03/2026",
+    summary: "Mức ưu đãi đặc biệt (thuế TNDN, tiền thuê đất/mặt nước) dẫn chiếu theo Luật Thuế TNDN 2025 và pháp luật đất đai, không quy định cố định trong nghị định này.",
+    body: `
+      <ul>
+        <li>Ưu đãi thuế thu nhập doanh nghiệp: áp dụng mức thuế suất thấp hơn mức phổ thông trong thời hạn nhất định hoặc toàn bộ thời gian thực hiện dự án; miễn, giảm thuế theo pháp luật thuế TNDN.</li>
+        <li>Ưu đãi tiền thuê đất, thuê mặt nước: theo pháp luật đất đai.</li>
+        <li><b>Nhóm ưu tiên cao nhất:</b> dự án chip bán dẫn, trí tuệ nhân tạo (AI), năng lượng xanh — ví dụ dự án R&D chip bán dẫn hoặc trung tâm dữ liệu AI vốn đầu tư từ 6.000 tỷ đồng, giải ngân tối thiểu trong 5 năm, được hưởng mức ưu đãi cao nhất về thuế TNDN, thuế nhập khẩu và tiền thuê đất.</li>
+      </ul>
+      <div class="note">Mức ưu đãi cụ thể (% thuế suất, số năm miễn/giảm) cần tra theo Luật Thuế thu nhập doanh nghiệp 2025 và văn bản hướng dẫn — không tự tính khi tư vấn nhà đầu tư nếu chưa đối chiếu văn bản gốc.</div>
+    `
+  },
+  {
+    id: "dia-ban-uu-dai",
+    cat: "diaban",
+    code: "Địa bàn ưu đãi đầu tư",
+    url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Nghi-dinh-96-2026-ND-CP-huong-dan-Luat-Dau-tu-690303.aspx",
+    title: "Địa bàn ưu đãi đầu tư sau sáp nhập đơn vị hành chính",
+    date: "Cập nhật theo mô hình chính quyền 2 cấp từ 01/07/2025",
+    summary: "Việc sắp xếp đơn vị hành chính (còn cấp tỉnh và cấp xã, bỏ cấp huyện) khiến cách xác định địa bàn ưu đãi theo huyện cũ không còn phù hợp — danh mục địa bàn ưu đãi được cập nhật lại.",
+    body: `
+      <ul>
+        <li>Từ 01/7/2025, Việt Nam vận hành chính quyền địa phương 2 cấp (tỉnh và xã), không còn cấp huyện — ảnh hưởng trực tiếp đến việc xác định "địa bàn có điều kiện kinh tế – xã hội khó khăn/đặc biệt khó khăn" vốn trước đây gắn với đơn vị cấp huyện.</li>
+        <li>Nguyên tắc xác định và Danh mục địa bàn ưu đãi đầu tư được sửa đổi để phù hợp với địa giới hành chính mới và mục tiêu ưu đãi có trọng tâm, trọng điểm.</li>
+        <li>Khi giới thiệu địa bàn cho nhà đầu tư, cần dùng danh mục địa bàn ưu đãi mới nhất (theo tên đơn vị hành chính hiện hành), không dùng danh mục cũ theo huyện trước sáp nhập.</li>
+      </ul>
+      <div class="note">Danh mục địa bàn cụ thể theo từng tỉnh/xã: đối chiếu Phụ lục kèm Nghị định 96/2026/NĐ-CP hoặc cổng thông tin Bộ Tài chính.</div>
+    `
+  },
+  {
+    id: "dieu-kien-kinh-doanh",
+    cat: "luat",
+    code: "Phụ lục IV, Luật 143/2025/QH15",
+    url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx",
+    title: "Ngành, nghề đầu tư kinh doanh có điều kiện",
+    date: "Áp dụng từ 01/03/2026 (danh mục sửa đổi từ 01/07/2026)",
+    summary: "Danh mục rút gọn còn 198 ngành, nghề — cần kiểm tra dự án có thuộc danh mục để xác định điều kiện tiếp cận thị trường, đặc biệt với nhà đầu tư nước ngoài.",
+    body: `
+      <ul>
+        <li>Số lượng ngành, nghề kinh doanh có điều kiện giảm đáng kể so với Luật Đầu tư 2020, hướng tới cắt giảm thủ tục, minh bạch điều kiện gia nhập thị trường.</li>
+        <li>Danh mục điều kiện tiếp cận thị trường riêng cho nhà đầu tư nước ngoài áp dụng cùng với danh mục ngành nghề có điều kiện chung.</li>
+      </ul>
+      <div class="note">Khi xúc tiến một dự án cụ thể, luôn kiểm tra ngành nghề mục tiêu có nằm trong Phụ lục IV hay không trước khi tư vấn về điều kiện, thời gian cấp phép.</div>
+    `
+  },
+  {
+    id: "luat-doanh-nghiep",
+    cat: "lienquan",
+    code: "Luật số 59/2020/QH14",
+    url: "https://thuvienphapluat.vn/van-ban/Doanh-nghiep/Luat-Doanh-nghiep-so-59-2020-QH14-427301.aspx",
+    title: "Luật Doanh nghiệp 2020",
+    date: "Liên quan trực tiếp bước thành lập pháp nhân (ERC)",
+    summary: "Quy định thành lập, tổ chức quản lý, tổ chức lại, giải thể doanh nghiệp — nền tảng cho bước xin Giấy chứng nhận đăng ký doanh nghiệp trước khi xin IRC theo Luật Đầu tư 2025.",
+    body: `
+      <ul>
+        <li>Áp dụng cho bước ERC — nay được thực hiện trước bước IRC đối với nhà đầu tư nước ngoài theo Luật Đầu tư 2025.</li>
+        <li>Quy định về loại hình doanh nghiệp, người đại diện theo pháp luật, vốn điều lệ, ngành nghề đăng ký kinh doanh.</li>
+      </ul>
+    `
+  },
+  {
+    id: "luat-dat-dai",
+    cat: "lienquan",
+    code: "Luật Đất đai 2024",
+    url: "https://thuvienphapluat.vn/van-ban/Bat-dong-san/Luat-Dat-dai-2024-31-2024-QH15-523642.aspx",
+    title: "Luật Đất đai — giao đất, cho thuê đất, chuyển mục đích sử dụng đất",
+    date: "Liên quan trực tiếp triển khai dự án sau cấp phép",
+    summary: "Chi phối thẩm quyền chấp thuận chủ trương đầu tư (khi dự án gắn với giao đất/cho thuê đất không qua đấu giá) và mức ưu đãi tiền thuê đất, thuê mặt nước cho dự án đầu tư.",
+    body: `
+      <ul>
+        <li>Dự án thuộc diện Nhà nước giao đất, cho thuê đất không qua đấu giá, đấu thầu, hoặc chuyển mục đích sử dụng đất thuộc thẩm quyền chấp thuận chủ trương của UBND cấp tỉnh (Điều 24 Luật Đầu tư 2025).</li>
+        <li>Mức ưu đãi tiền thuê đất/thuê mặt nước cho dự án ưu đãi đặc biệt áp dụng theo pháp luật đất đai hiện hành.</li>
+      </ul>
+    `
+  },
+  {
+    id: "luat-thue-tndn",
+    cat: "lienquan",
+    code: "Luật số 67/2025/QH15",
+    url: "https://thuvienphapluat.vn/van-ban/Doanh-nghiep/Luat-Thue-thu-nhap-doanh-nghiep-2025-so-67-2025-QH15-580594.aspx",
+    title: "Luật Thuế TNDN 2025 (số 67/2025/QH15) — căn cứ áp dụng ưu đãi thuế",
+    date: "Căn cứ tính ưu đãi thuế TNDN",
+    summary: "Mức thuế suất ưu đãi, thời gian miễn/giảm thuế cho dự án đầu tư (kể cả dự án hưởng ưu đãi đặc biệt) được quy định tại luật chuyên ngành này, không nằm trong Luật Đầu tư hay Nghị định 96/2026/NĐ-CP.",
+    body: `
+      <p>Khi trao đổi với nhà đầu tư về lợi ích thuế cụ thể, cần dẫn chiếu đúng điều khoản của Luật Thuế TNDN 2025 thay vì suy diễn từ Luật Đầu tư — tránh cam kết sai mức ưu đãi.</p>
+    `
+  },
+  {
+    id: "quy-trinh-xuc-tien",
+    cat: "nd",
+    code: "Quy trình tham khảo",
+    title: "Các bước hỗ trợ nhà đầu tư trong hoạt động xúc tiến đầu tư",
+    date: "Tổng hợp quy trình thực tiễn",
+    summary: "Khung 5 bước phổ biến khi hỗ trợ nhà đầu tư, từ tiếp cận đến triển khai dự án, đối chiếu với các mốc pháp lý ở trên.",
+    body: `
+      <ul>
+        <li><b>1. Tiếp cận & khảo sát nhu cầu:</b> xác định ngành nghề, quy mô vốn, địa bàn dự kiến — đối chiếu ngay với danh mục ngành nghề có điều kiện (Phụ lục IV) và ngành nghề ưu đãi.</li>
+        <li><b>2. Giới thiệu địa bàn & chính sách ưu đãi:</b> dùng danh mục địa bàn ưu đãi cập nhật theo đơn vị hành chính mới; xác định dự án có thuộc diện ưu đãi đặc biệt hay không.</li>
+        <li><b>3. Xác định thẩm quyền & thủ tục:</b> xác định dự án thuộc thẩm quyền Quốc hội / Thủ tướng / UBND cấp tỉnh; hướng dẫn trình tự ERC → IRC (với NĐT nước ngoài).</li>
+        <li><b>4. Hỗ trợ hồ sơ, cấp phép:</b> phối hợp cơ quan đăng ký đầu tư, đăng ký kinh doanh; theo dõi thời hạn xử lý theo Nghị định 96/2026/NĐ-CP.</li>
+        <li><b>5. Hỗ trợ triển khai sau cấp phép:</b> đất đai (giao đất/thuê đất), xây dựng, lao động, ưu đãi thuế — phối hợp các luật chuyên ngành liên quan.</li>
+      </ul>
+    `
+  }
+];
+
+const CAT_LABEL = { luat: "Luật gốc", nd: "Nghị định/Thủ tục", uudai: "Ưu đãi đầu tư", diaban: "Địa bàn", lienquan: "Luật liên quan" };
+
+const LINK_ICON = `<svg viewBox="0 0 24 24" fill="none"><path d="M14 5h5v5M19 5l-8 8M9 5H6a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+
+function refBadge(l) {
+  if (l.url) {
+    return `<a class="ref-badge" href="${l.url}" target="_blank" rel="noopener noreferrer" title="Mở văn bản gốc">${l.ref}${LINK_ICON}</a>`;
+  }
+  return `<span class="ref-badge">${l.ref}</span>`;
+}
+
+function codeBadge(item, q) {
+  const label = highlight(item.code, q);
+  if (item.url) {
+    return `<a class="card-code" href="${item.url}" target="_blank" rel="noopener noreferrer" title="Mở văn bản gốc">${label}${LINK_ICON}</a>`;
+  }
+  return `<span class="card-code">${label}</span>`;
+}
+
+const listEl = document.getElementById('list');
+const chipRow = document.getElementById('chipRow');
+const searchInput = document.getElementById('searchInput');
+const resultCount = document.getElementById('resultCount');
+const emptyState = document.getElementById('emptyState');
+
+let activeCats = new Set();
+let openIds = new Set();
+
+function buildChips() {
+  Object.keys(CAT_LABEL).forEach(cat => {
+    const btn = document.createElement('button');
+    btn.className = 'chip';
+    btn.dataset.cat = cat;
+    btn.dataset.active = 'false';
+    btn.innerHTML = `<span class="dot"></span>${CAT_LABEL[cat]}`;
+    btn.addEventListener('click', () => {
+      if (activeCats.has(cat)) activeCats.delete(cat); else activeCats.add(cat);
+      btn.dataset.active = activeCats.has(cat) ? 'true' : 'false';
+      render();
+    });
+    chipRow.appendChild(btn);
+  });
+}
+
+function highlight(text, q) {
+  if (!q) return text;
+  const escaped = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return text.replace(new RegExp(`(${escaped})`, 'ig'), '<mark>$1</mark>');
+}
+
+function matches(item, q) {
+  if (!q) return true;
+  const hay = (item.title + ' ' + item.summary + ' ' + item.code + ' ' + item.body).toLowerCase();
+  return hay.includes(q.toLowerCase());
+}
+
+function render() {
+  const q = searchInput.value.trim();
+  const filtered = DATA.filter(item => {
+    const catOk = activeCats.size === 0 || activeCats.has(item.cat);
+    return catOk && matches(item, q);
+  });
+
+  listEl.innerHTML = '';
+  emptyState.style.display = filtered.length === 0 ? 'block' : 'none';
+  resultCount.textContent = q || activeCats.size ? `${filtered.length} / ${DATA.length} mục` : `${DATA.length} mục`;
+
+  filtered.forEach(item => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.dataset.open = openIds.has(item.id) ? 'true' : 'false';
+
+    const head = document.createElement('div');
+    head.className = 'card-head';
+    head.tabIndex = 0;
+    head.setAttribute('role', 'button');
+    head.setAttribute('aria-expanded', openIds.has(item.id) ? 'true' : 'false');
+    head.innerHTML = `
+      <span class="badge ${item.cat}">${CAT_LABEL[item.cat]}</span>
+      <div class="card-main">
+        <div class="card-title-row">
+          <span class="card-title">${highlight(item.title, q)}</span>
+          ${codeBadge(item, q)}
+        </div>
+        <div class="card-summary">${highlight(item.summary, q)}</div>
+        ${item.date ? `<div class="card-meta">${item.date}</div>` : ''}
+      </div>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    `;
+    const toggle = () => {
+      const isOpen = card.dataset.open === 'true';
+      card.dataset.open = isOpen ? 'false' : 'true';
+      head.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
+      if (isOpen) openIds.delete(item.id); else openIds.add(item.id);
+    };
+    head.addEventListener('click', e => { if (e.target.closest('a')) return; toggle(); });
+    head.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); } });
+
+    const body = document.createElement('div');
+    body.className = 'card-body';
+    body.innerHTML = `<div class="card-body-inner">${item.body}</div>`;
+
+    card.appendChild(head);
+    card.appendChild(body);
+    listEl.appendChild(card);
+  });
+}
+
+searchInput.addEventListener('input', render);
+buildChips();
+render();
+
+/* ---------------- Quy trình thực hiện dự án ---------------- */
+
+const PROCESS_DATA = [
+  {
+    title: "Tiếp cận nhà đầu tư & rà soát ngành, nghề",
+    cat: "luat",
+    summary: "Xác định ngành nghề mục tiêu của dự án, kiểm tra ngay có thuộc danh mục ngành nghề có điều kiện hoặc hạn chế tiếp cận thị trường với nhà đầu tư nước ngoài hay không.",
+    authority: "Cơ quan xúc tiến đầu tư",
+    duration: null,
+    tasks: [
+      "Ghi nhận ngành nghề, quy mô vốn, địa điểm dự kiến của nhà đầu tư.",
+      "Đối chiếu ngành nghề mục tiêu với danh mục ngành, nghề đầu tư kinh doanh có điều kiện.",
+      "Nếu là nhà đầu tư nước ngoài: kiểm tra thêm điều kiện tiếp cận thị trường riêng."
+    ],
+    legal: [
+      { ref: "Phụ lục IV, Luật Đầu tư 2025 (số 143/2025/QH15)", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Danh mục 198 ngành, nghề đầu tư kinh doanh có điều kiện — rút gọn so với Luật 2020." },
+      { ref: "Nghị định 96/2026/NĐ-CP", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Nghi-dinh-96-2026-ND-CP-huong-dan-Luat-Dau-tu-690303.aspx", detail: "Quy định chi tiết ngành, nghề và điều kiện tiếp cận thị trường đối với nhà đầu tư nước ngoài." }
+    ]
+  },
+  {
+    title: "Giới thiệu địa bàn & chính sách ưu đãi đầu tư",
+    cat: "uudai",
+    summary: "Xác định dự án có thuộc địa bàn ưu đãi, ngành nghề ưu đãi hoặc diện ưu đãi đặc biệt (bán dẫn, AI, năng lượng xanh…) hay không để tư vấn đúng chính sách.",
+    authority: "Cơ quan xúc tiến đầu tư",
+    duration: null,
+    tasks: [
+      "Tra danh mục địa bàn ưu đãi đầu tư theo đơn vị hành chính hiện hành (tỉnh/xã, không còn cấp huyện).",
+      "Đối chiếu ngành nghề dự án với danh mục ngành, nghề ưu đãi đầu tư.",
+      "Sơ bộ xác định dự án có đủ điều kiện hưởng ưu đãi đặc biệt hay không (vốn, tiến độ giải ngân…)."
+    ],
+    legal: [
+      { ref: "Danh mục địa bàn ưu đãi, Nghị định 96/2026/NĐ-CP", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Nghi-dinh-96-2026-ND-CP-huong-dan-Luat-Dau-tu-690303.aspx", detail: "Nguyên tắc xác định và danh mục địa bàn ưu đãi, cập nhật theo mô hình chính quyền 2 cấp từ 01/7/2025." },
+      { ref: "Điều 21, Nghị định 96/2026/NĐ-CP", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Nghi-dinh-96-2026-ND-CP-huong-dan-Luat-Dau-tu-690303.aspx", detail: "Ưu đãi, hỗ trợ đầu tư đặc biệt — mức ưu đãi thuế TNDN, tiền thuê đất dẫn chiếu theo luật chuyên ngành." }
+    ]
+  },
+  {
+    title: "Xác định thẩm quyền chấp thuận chủ trương đầu tư",
+    cat: "luat",
+    summary: "Xác định dự án thuộc thẩm quyền Quốc hội, Thủ tướng Chính phủ hay Chủ tịch UBND cấp tỉnh để trình đúng cấp, tránh chậm hồ sơ do trình sai thẩm quyền.",
+    authority: "Cơ quan xúc tiến đầu tư / Sở Tài chính",
+    duration: null,
+    tasks: [
+      "Kiểm tra dự án có thuộc diện phải chấp thuận chủ trương đầu tư hay không.",
+      "Nếu có, xác định đúng cấp thẩm quyền theo quy mô, tính chất dự án."
+    ],
+    legal: [
+      { ref: "Điều 24, Luật Đầu tư 2025", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Quốc hội: dự án quan trọng quốc gia, cần cơ chế/chính sách đặc thù. Thủ tướng: khoản 1, 2, 4, 6, 7, 19 — dự án lớn, tái định cư ≥20.000 người (miền núi)/50.000 người (vùng khác). Chủ tịch UBND cấp tỉnh: khoản 8–18, gồm dự án Nhà nước giao/cho thuê đất không qua đấu giá." }
+    ]
+  },
+  {
+    title: "Hồ sơ chấp thuận chủ trương đầu tư (nếu thuộc diện)",
+    cat: "nd",
+    summary: "Với dự án thuộc diện phải chấp thuận chủ trương, chuẩn bị hồ sơ và theo dõi thời hạn thẩm định liên ngành. Dự án không thuộc diện này bỏ qua bước 4, chuyển thẳng bước 5.",
+    authority: "Sở Tài chính / Bộ Tài chính / Ban quản lý KCN, KCX, KCNC, KKT",
+    duration: "26 ngày (thẩm quyền UBND cấp tỉnh) · 38 ngày (thẩm quyền Thủ tướng Chính phủ)",
+    tasks: [
+      "Soạn văn bản đề nghị thực hiện dự án (kèm cam kết chịu chi phí, rủi ro nếu không được chấp thuận).",
+      "Chuẩn bị tài liệu pháp lý và năng lực tài chính của nhà đầu tư.",
+      "Lập đề xuất dự án đầu tư (mục tiêu, quy mô, vốn, địa điểm, tiến độ).",
+      "Nộp hồ sơ và theo dõi các mốc lấy ý kiến thẩm định liên ngành."
+    ],
+    legal: [
+      { ref: "Điều 32, Nghị định 96/2026/NĐ-CP", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Nghi-dinh-96-2026-ND-CP-huong-dan-Luat-Dau-tu-690303.aspx", detail: "Hồ sơ đề nghị chấp thuận chủ trương đầu tư dự án do nhà đầu tư đề xuất." }
+    ],
+    note: "Quy trình thẩm định (thẩm quyền Thủ tướng): 3 ngày gửi lấy ý kiến bộ ngành → 10 ngày các cơ quan có ý kiến → 20 ngày cơ quan chủ trì thẩm định, lập báo cáo → 5 ngày Thủ tướng chấp thuận."
+  },
+  {
+    title: "Thành lập tổ chức kinh tế — Giấy chứng nhận đăng ký doanh nghiệp (ERC)",
+    cat: "lienquan",
+    summary: "Với nhà đầu tư nước ngoài, bước lập pháp nhân (ERC) nay thực hiện trước bước xin Giấy chứng nhận đăng ký đầu tư (IRC) — đảo trình tự so với Luật Đầu tư 2020.",
+    authority: "Cơ quan đăng ký kinh doanh",
+    duration: null,
+    tasks: [
+      "Xác định loại hình doanh nghiệp, vốn điều lệ, người đại diện theo pháp luật.",
+      "Chuẩn bị và nộp hồ sơ đăng ký doanh nghiệp."
+    ],
+    legal: [
+      { ref: "Luật Doanh nghiệp 2020 (số 59/2020/QH14)", url: "https://thuvienphapluat.vn/van-ban/Doanh-nghiep/Luat-Doanh-nghiep-so-59-2020-QH14-427301.aspx", detail: "Quy định thành lập, tổ chức quản lý doanh nghiệp — nền tảng của bước ERC." },
+      { ref: "Luật Đầu tư 2025 (điểm mới)", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Nhà đầu tư nước ngoài lập pháp nhân qua ERC trước, sau đó mới xin IRC." }
+    ]
+  },
+  {
+    title: "Cấp Giấy chứng nhận đăng ký đầu tư (IRC)",
+    cat: "luat",
+    summary: "Áp dụng với dự án của nhà đầu tư nước ngoài và một số tổ chức kinh tế theo luật định. Đây là bước xác lập chính thức dự án đầu tư.",
+    authority: "Sở Tài chính / Ban quản lý KCN, KCX, KCNC, KKT",
+    duration: "15 ngày làm việc kể từ ngày nhận đủ hồ sơ hợp lệ",
+    tasks: [
+      "Nộp đề xuất dự án đầu tư: mục tiêu, quy mô, vốn đầu tư và phương án huy động vốn, địa điểm, tiến độ, hiện trạng sử dụng đất/rừng/biển (nếu có).",
+      "Cơ quan đăng ký đầu tư đánh giá hồ sơ và cấp Giấy chứng nhận đăng ký đầu tư."
+    ],
+    legal: [
+      { ref: "Điều 20, Luật Đầu tư 2025", url: "https://hethongphapluat.com/van-ban-hop-nhat-09-vbhn-vpqh-nam-2025-hop-nhat-luat-dau-tu-do-van-phong-quoc-hoi-ban-hanh/dieu-20", detail: "Xác định đối tượng phải cấp IRC: dự án của nhà đầu tư nước ngoài; dự án của tổ chức kinh tế theo khoản 1 Điều 20." }
+    ]
+  },
+  {
+    title: "Thủ tục đất đai: giao đất, cho thuê đất, chuyển mục đích sử dụng đất",
+    cat: "lienquan",
+    summary: "Xác định phương thức tiếp cận đất đai phù hợp với hình thức lựa chọn nhà đầu tư và thực hiện các thủ tục đất đai để có mặt bằng triển khai dự án.",
+    authority: "Sở Nông nghiệp và Môi trường / UBND cấp tỉnh",
+    duration: null,
+    tasks: [
+      "Xác định phương thức: giao đất, cho thuê đất (đấu giá/không đấu giá), hoặc chuyển mục đích sử dụng đất.",
+      "Thực hiện bồi thường, hỗ trợ, tái định cư nếu dự án có thu hồi đất.",
+      "Ký hợp đồng thuê đất / nhận quyết định giao đất."
+    ],
+    legal: [
+      { ref: "Chương IX (Điều 116–127), Luật Đất đai 2024 (số 31/2024/QH15)", url: "https://hethongphapluat.vn/luat-dat-dai-2024/dieu-116", detail: "Quy định về giao đất, cho thuê đất, chuyển mục đích sử dụng đất để thực hiện dự án đầu tư." }
+    ]
+  },
+  {
+    title: "Đánh giá tác động môi trường / giấy phép môi trường",
+    cat: "lienquan",
+    summary: "Xác định dự án có thuộc nhóm phải lập báo cáo đánh giá tác động môi trường (ĐTM) hoặc xin giấy phép môi trường trước khi vận hành chính thức.",
+    authority: "Sở Nông nghiệp và Môi trường / Bộ Nông nghiệp và Môi trường (tuỳ quy mô)",
+    duration: null,
+    tasks: [
+      "Xác định dự án thuộc nhóm I, II hay III theo mức độ tác động môi trường.",
+      "Lập báo cáo ĐTM nếu thuộc diện bắt buộc (dự án nhóm I).",
+      "Xin giấy phép môi trường trước khi vận hành chính thức nếu phát sinh nước thải, khí thải, chất thải nguy hại."
+    ],
+    legal: [
+      { ref: "Điều 30, Luật Bảo vệ môi trường 2020 (số 72/2020/QH14)", url: "https://hethongphapluat.com/luat-bao-ve-moi-truong-2020/dieu-30", detail: "Đối tượng phải thực hiện đánh giá tác động môi trường — dự án đầu tư nhóm I." },
+      { ref: "Điều 32, Luật Bảo vệ môi trường 2020", url: "https://www.luatmoitruong.vn/luat-bao-ve-moi-truong/chuong-iv.-danh-gia-moi-truong-chien-luoc-danh-gia-tac-dong-moi-truong-giay-phep-moi-truong/muc-3.-danh-gia-tac-dong-moi-truong/dieu-32.-noi-dung-cua-bao-cao-danh-gia-tac-dong-moi-truong", detail: "Nội dung báo cáo đánh giá tác động môi trường: xuất xứ dự án, căn cứ pháp lý/kỹ thuật, các tác động môi trường chính." }
+    ]
+  },
+  {
+    title: "Giấy phép xây dựng & triển khai thi công",
+    cat: "lienquan",
+    summary: "Hoàn thiện thiết kế, xin giấy phép xây dựng (trừ trường hợp được miễn) và triển khai thi công công trình của dự án.",
+    authority: "Sở Xây dựng / cơ quan chuyên môn về xây dựng",
+    duration: null,
+    tasks: [
+      "Khảo sát xây dựng, lập và thẩm định thiết kế, dự toán xây dựng.",
+      "Xin giấy phép xây dựng (nếu công trình không thuộc diện miễn phép).",
+      "Ký hợp đồng thi công, giám sát thi công xây dựng công trình."
+    ],
+    legal: [
+      { ref: "Điều 89, Luật Xây dựng 2014 (sửa đổi 2020, số 62/2020/QH14)", url: "https://hethongphapluat.vn/luat-xay-dung-2014/dieu-89", detail: "Công trình xây dựng phải có giấy phép xây dựng, trừ các trường hợp được miễn theo khoản 2 (công trình bí mật nhà nước, xây dựng khẩn cấp…)." },
+      { ref: "Điều 95, Luật Xây dựng 2014 (sửa đổi 2020)", url: "https://hethongphapluat.vn/luat-xay-dung-2014/dieu-95", detail: "Hồ sơ đề nghị cấp giấy phép xây dựng, nộp trực tiếp hoặc qua cổng dịch vụ công trực tuyến." }
+    ]
+  },
+  {
+    title: "Đăng ký thuế, hưởng ưu đãi & giấy phép lao động nước ngoài",
+    cat: "lienquan",
+    summary: "Hoàn tất đăng ký thuế và thủ tục hưởng ưu đãi (nếu có), đồng thời xin giấy phép lao động cho chuyên gia, nhà quản lý nước ngoài trước khi đi vào vận hành.",
+    authority: "Cơ quan thuế / Sở Nội vụ (lao động)",
+    duration: "Giấy phép lao động: hiệu lực tối đa 2 năm, gia hạn 1 lần tối đa 2 năm",
+    tasks: [
+      "Đăng ký mã số thuế, kê khai để áp dụng ưu đãi thuế TNDN nếu dự án thuộc diện ưu đãi.",
+      "Chuẩn bị hồ sơ và xin giấy phép lao động cho người lao động nước ngoài (trừ trường hợp được miễn)."
+    ],
+    legal: [
+      { ref: "Luật Thuế TNDN 2025 (số 67/2025/QH15)", url: "https://thuvienphapluat.vn/van-ban/Doanh-nghiep/Luat-Thue-thu-nhap-doanh-nghiep-2025-so-67-2025-QH15-580594.aspx", detail: "Căn cứ áp dụng mức thuế suất ưu đãi, thời gian miễn/giảm thuế cho dự án đầu tư." },
+      { ref: "Điều 151, Bộ luật Lao động 2019", url: "https://hethongphapluat.com/bo-luat-lao-dong-2019/dieu-151", detail: "Người lao động nước ngoài làm việc tại Việt Nam phải có giấy phép lao động, trừ trường hợp được miễn." },
+      { ref: "Nghị định 152/2020/NĐ-CP", url: "https://thuvienphapluat.vn/van-ban/Lao-dong-Tien-luong/Nghi-dinh-152-2020-ND-CP-quan-ly-nguoi-lao-dong-nuoc-ngoai-lam-viec-tai-Viet-Nam-280261.aspx", detail: "Hồ sơ, trình tự cấp giấy phép lao động cho người nước ngoài." }
+    ]
+  },
+  {
+    title: "Giám sát, điều chỉnh & báo cáo trong quá trình thực hiện",
+    cat: "luat",
+    summary: "Theo dõi tiến độ triển khai so với cam kết tại IRC/chủ trương đầu tư; thực hiện điều chỉnh khi dự án thay đổi thuộc các trường hợp bắt buộc theo luật.",
+    authority: "Cơ quan đăng ký đầu tư",
+    duration: null,
+    tasks: [
+      "Theo dõi tiến độ giải ngân, xây dựng so với cam kết trong hồ sơ dự án.",
+      "Thực hiện điều chỉnh Giấy chứng nhận đăng ký đầu tư/chủ trương đầu tư khi thuộc 1 trong 5 trường hợp bắt buộc.",
+      "Báo cáo giám sát, đánh giá đầu tư định kỳ theo quy định."
+    ],
+    legal: [
+      { ref: "Điều 33, Luật Đầu tư 2025", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Quy định 5 trường hợp phải điều chỉnh chủ trương đầu tư — đã bỏ 2 trường hợp so với Luật 2020 (tăng vốn ≥20%; thay đổi công nghệ đã thẩm định)." },
+      { ref: "Điều 34, Luật Đầu tư 2025", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Chuyển nhượng dự án đầu tư." },
+      { ref: "Điều 35, Luật Đầu tư 2025", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Chấm dứt hoạt động dự án đầu tư — nhà đầu tư thông báo bằng văn bản cho cơ quan đăng ký đầu tư." }
+    ]
+  }
+];
+
+const stepsEl = document.getElementById('steps');
+let openSteps = new Set();
+
+function renderSteps() {
+  stepsEl.innerHTML = '';
+  PROCESS_DATA.forEach((step, i) => {
+    const row = document.createElement('div');
+    row.className = 'step';
+    row.dataset.open = openSteps.has(i) ? 'true' : 'false';
+
+    const rail = document.createElement('div');
+    rail.className = 'step-rail';
+    rail.innerHTML = `<div class="step-num">${i + 1}</div><div class="step-line"></div>`;
+
+    const card = document.createElement('div');
+    card.style.flex = '1';
+    card.style.minWidth = '0';
+
+    const cardInner = document.createElement('div');
+    cardInner.className = 'step-card';
+
+    const head = document.createElement('div');
+    head.className = 'step-head';
+    head.tabIndex = 0;
+    head.setAttribute('role', 'button');
+    head.setAttribute('aria-expanded', openSteps.has(i) ? 'true' : 'false');
+    head.innerHTML = `
+      <div class="step-main">
+        <div class="step-title-row">
+          <span class="badge ${step.cat}">${CAT_LABEL[step.cat]}</span>
+          <span class="step-title">${step.title}</span>
+        </div>
+        <div class="step-summary">${step.summary}</div>
+        <div class="step-tags">
+          ${step.authority ? `<span class="step-tag meta-authority">${step.authority}</span>` : ''}
+          ${step.duration ? `<span class="step-tag meta-duration">${step.duration}</span>` : ''}
+        </div>
+      </div>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    `;
+    const toggle = () => {
+      const isOpen = row.dataset.open === 'true';
+      row.dataset.open = isOpen ? 'false' : 'true';
+      head.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
+      if (isOpen) openSteps.delete(i); else openSteps.add(i);
+    };
+    head.addEventListener('click', toggle);
+    head.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); } });
+
+    const body = document.createElement('div');
+    body.className = 'step-body';
+    body.innerHTML = `
+      <div class="step-body-inner">
+        <h4>Công việc chính</h4>
+        <ul>${step.tasks.map(t => `<li>${t}</li>`).join('')}</ul>
+        <h4>Căn cứ pháp lý cụ thể</h4>
+        <div class="legal-list">
+          ${step.legal.map(l => `<div class="legal-item">${refBadge(l)}<span class="ref-detail">${l.detail}</span></div>`).join('')}
+        </div>
+        ${step.note ? `<div class="note">${step.note}</div>` : ''}
+      </div>
+    `;
+
+    cardInner.appendChild(head);
+    cardInner.appendChild(body);
+    card.appendChild(cardInner);
+    row.appendChild(rail);
+    row.appendChild(card);
+    stepsEl.appendChild(row);
+  });
+}
+renderSteps();
+
+/* ---------------- Tab switching ---------------- */
+const tabs = document.querySelectorAll('.tab');
+const lookupView = document.getElementById('lookupView');
+const processView = document.getElementById('processView');
+tabs.forEach(btn => {
+  btn.addEventListener('click', () => {
+    tabs.forEach(b => b.dataset.active = 'false');
+    btn.dataset.active = 'true';
+    const view = btn.dataset.view;
+    lookupView.style.display = view === 'lookup' ? 'block' : 'none';
+    processView.style.display = view === 'process' ? 'block' : 'none';
+  });
+});
+</script>
+
+</body>
+</html>
