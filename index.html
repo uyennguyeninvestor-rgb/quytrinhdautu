@@ -351,6 +351,21 @@
     margin-top: 5px;
     font-weight: 600;
   }
+  .card[data-child="true"] {
+    margin-left: 28px;
+    border-left: 3px solid var(--border);
+  }
+  .parent-breadcrumb {
+    font-size: 11.5px;
+    color: var(--text-muted);
+    margin-bottom: 3px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  @media (max-width: 560px) {
+    .card[data-child="true"] { margin-left: 12px; }
+  }
   .chevron {
     flex-shrink: 0;
     width: 18px;
@@ -518,6 +533,9 @@
     border-radius: 8px;
     padding: 9px 12px;
   }
+  .legal-item {
+    flex-wrap: wrap;
+  }
   .legal-item .ref-badge {
     flex-shrink: 0;
     font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
@@ -528,9 +546,212 @@
     border-radius: 5px;
     padding: 3px 7px;
     height: fit-content;
-    white-space: nowrap;
+    white-space: normal;
+    max-width: 100%;
   }
-  .legal-item .ref-detail { font-size: 13.5px; }
+  .legal-item .ref-detail { font-size: 13.5px; flex: 1; min-width: 200px; }
+  button.ref-badge {
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  button.ref-badge:hover { text-decoration: underline; }
+  .quote-chevron { width: 10px; height: 10px; flex-shrink: 0; transition: transform .15s ease; }
+  button.ref-badge[aria-expanded="true"] .quote-chevron { transform: rotate(180deg); }
+  .ref-quote {
+    display: none;
+    width: 100%;
+    margin-top: 8px;
+    padding: 12px 14px;
+    background: var(--surface);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+  }
+  .ref-quote.open { display: block; }
+  .ref-quote p {
+    font-family: Georgia, "Times New Roman", serif;
+    font-style: italic;
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--text);
+    margin: 0 0 8px;
+  }
+  .ref-quote a {
+    font-size: 12px;
+    color: var(--accent);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+  }
+  .ref-quote a:hover { text-decoration: underline; }
+  .ref-quote a svg { width: 10px; height: 10px; stroke: currentColor; }
+
+  /* ---- Địa bàn ưu đãi (Đồng Tháp) ---- */
+  .commune-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 2px 0 16px;
+  }
+  .commune-chip {
+    font-size: 12.5px;
+    padding: 4px 9px;
+    border-radius: 7px;
+    background: var(--surface-alt);
+    color: var(--text-muted);
+    white-space: nowrap;
+    transition: opacity .12s ease;
+  }
+  .commune-chip[data-match="true"] {
+    background: var(--accent-warm-soft);
+    color: var(--accent-warm);
+    font-weight: 700;
+  }
+  .commune-chip[data-dim="true"] { opacity: 0.35; }
+
+  /* ---- Sơ đồ tra cứu nhanh (wizard) ---- */
+  .wizard-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 4px;
+  }
+  .wizard-check {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 13.5px;
+    padding: 5px 0;
+    cursor: pointer;
+  }
+  .wizard-check input { margin-top: 3px; flex-shrink: 0; accent-color: var(--accent); }
+  .wizard-inline-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+    margin: 8px 0;
+    font-size: 13.5px;
+  }
+  .wizard-inline-row input[type="number"] {
+    width: 110px;
+    padding: 6px 9px;
+    border-radius: 7px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    font-family: inherit;
+    font-size: 13.5px;
+  }
+  .wizard-inline-row select {
+    padding: 6px 9px;
+    border-radius: 7px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    font-family: inherit;
+    font-size: 13.5px;
+  }
+  .result-panel {
+    background: var(--accent-soft);
+    border: 1px solid var(--accent);
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin: 12px 0;
+  }
+  .result-panel .result-line {
+    font-size: 14.5px;
+    color: var(--text);
+  }
+  .result-panel .result-line b { color: var(--accent); }
+  .result-panel.empty {
+    background: var(--surface-alt);
+    border-color: var(--border);
+    color: var(--text-muted);
+    font-size: 13px;
+  }
+  .wizard-summary {
+    background: var(--surface);
+    border: 1px solid var(--accent);
+    border-radius: 12px;
+    padding: 16px 18px;
+    margin-top: 4px;
+    box-shadow: var(--shadow);
+  }
+  .wizard-summary h4 {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 15px;
+    margin: 0 0 10px;
+    color: var(--text);
+  }
+  .wizard-summary .summary-row {
+    display: flex;
+    gap: 8px;
+    font-size: 13.5px;
+    padding: 4px 0;
+    border-bottom: 1px dashed var(--border);
+  }
+  .wizard-summary .summary-row:last-child { border-bottom: none; }
+  .wizard-summary .summary-row .label { color: var(--text-muted); min-width: 130px; flex-shrink: 0; }
+  .tag-search-box { margin-bottom: 10px; }
+  .selected-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 10px;
+  }
+  .sel-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    border-radius: 999px;
+    padding: 5px 8px 5px 12px;
+    font-size: 12.5px;
+    font-weight: 600;
+  }
+  .sel-chip button {
+    appearance: none;
+    border: none;
+    background: none;
+    color: inherit;
+    font-size: 15px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0 2px;
+    opacity: 0.7;
+  }
+  .sel-chip button:hover { opacity: 1; }
+  .tag-suggestions {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 10px;
+    max-height: 260px;
+    overflow-y: auto;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 6px;
+    background: var(--surface);
+  }
+  .suggestion-btn {
+    appearance: none;
+    border: none;
+    background: none;
+    text-align: left;
+    padding: 8px 10px;
+    border-radius: 7px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 13.5px;
+    color: var(--text);
+  }
+  .suggestion-btn:hover { background: var(--surface-alt); }
 
   footer {
     margin-top: 34px;
@@ -562,6 +783,8 @@
   <nav class="tabs" id="tabs">
     <button class="tab" data-view="lookup" data-active="true">Tra cứu văn bản</button>
     <button class="tab" data-view="process" data-active="false">Quy trình thực hiện dự án</button>
+    <button class="tab" data-view="incentive" data-active="false">Ưu đãi theo địa bàn (Đồng Tháp)</button>
+    <button class="tab" data-view="wizard" data-active="false">Sơ đồ tra cứu nhanh dự án</button>
   </nav>
 
   <div id="lookupView">
@@ -581,13 +804,33 @@
   </div>
 
   <div id="processView" style="display:none">
-    <p class="process-intro">Quy trình chung tham khảo khi hướng dẫn nhà đầu tư triển khai một dự án cụ thể, từ tiếp cận đến vận hành. Bấm vào từng bước để xem điều luật cụ thể áp dụng. Trình tự có thể thay đổi tuỳ loại dự án (ví dụ dự án không thuộc diện chấp thuận chủ trương thì bỏ qua bước 4).</p>
+    <p class="process-intro">Quy trình chung tham khảo khi hướng dẫn nhà đầu tư triển khai một dự án cụ thể, từ tiếp cận đến vận hành. Bấm vào từng bước để xem điều luật cụ thể áp dụng. Trình tự có thể thay đổi tuỳ loại dự án (ví dụ dự án không thuộc diện chấp thuận chủ trương thì bỏ qua bước 4). <b>Cần trả lời nhanh cho dự án cụ thể (thẩm quyền/địa bàn/ngành nghề)?</b> Dùng tab "Sơ đồ tra cứu nhanh dự án".</p>
     <div id="steps"></div>
+  </div>
+
+  <div id="incentiveView" style="display:none">
+    <p class="process-intro">Mức ưu đãi đầu tư áp dụng theo địa bàn cấp xã tại <b>tỉnh Đồng Tháp</b>, tổng hợp theo Quyết định số 1717/QĐ-UBND ngày 12/6/2026 của UBND tỉnh Đồng Tháp về xác định và công bố địa bàn ưu đãi đầu tư cấp xã. Gõ tên xã/phường để biết địa bàn đó thuộc diện ưu đãi nào.</p>
+    <div class="search-row">
+      <div class="search-box">
+        <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke-width="2"/><path d="M21 21l-4.3-4.3" stroke-width="2" stroke-linecap="round"/></svg>
+        <input id="communeSearch" type="text" placeholder="Tìm xã/phường: VD Tháp Mười, Lai Vung, Hồng Ngự…" autocomplete="off" />
+      </div>
+      <span class="result-count" id="communeResultCount"></span>
+    </div>
+    <div id="incentiveList" style="margin-top:14px"></div>
+    <div class="note">
+      <b>Về nguồn dữ liệu địa bàn:</b> danh sách xã/phường tổng hợp từ tài liệu nội bộ; bản thân tài liệu ghi cả hai trạng thái (đã ký ban hành / trích từ dự thảo) nên <b>cần đối chiếu Quyết định 1717/QĐ-UBND bản chính thức</b> trước khi cam kết với nhà đầu tư. Riêng căn cứ miễn tiền thuê đất/tiền sử dụng đất là <b>Điều 39 Nghị định 103/2024/NĐ-CP</b> (sửa đổi bởi Nghị định 291/2025/NĐ-CP) — <b>không phải</b> Nghị định 50/2026/NĐ-CP (văn bản này chỉ hướng dẫn Nghị quyết 254/2025/QH15 về xử lý vướng mắc tính tiền sử dụng đất/tiền thuê đất khi chuyển mục đích sử dụng đất, không phải căn cứ miễn giảm theo địa bàn).
+    </div>
+  </div>
+
+  <div id="wizardView" style="display:none">
+    <p class="process-intro">Trả lời đúng 3 câu nhà đầu tư thường hỏi ở lần gặp đầu tiên — theo thứ tự: <b>quy mô/đặc điểm dự án</b> (xác định thẩm quyền), <b>địa bàn thực hiện</b> (có ưu đãi không) và <b>ngành nghề</b> (có thuộc diện ưu đãi không). Mỗi bước ra kết quả ngay; bấm vào mã điều luật để xem nguyên văn.</p>
+    <div id="wizardSteps"></div>
   </div>
 
   <footer>
     <div><b style="color:var(--text)">Lưu ý:</b> Nội dung tóm tắt phục vụ tra cứu nhanh nội bộ, biên soạn tháng 7/2026 dựa trên Luật Đầu tư số 143/2025/QH15 (hiệu lực 01/3/2026) và Nghị định 96/2026/NĐ-CP. Các mã văn bản/điều luật có biểu tượng liên kết dẫn thẳng đến trang văn bản gốc (thuvienphapluat.vn, hethongphapluat.com, vanban.chinhphu.vn…) — một số dẫn đúng tới điều cụ thể, số khác dẫn tới toàn văn của luật/nghị định do chưa có bản deep-link theo điều. Trước khi áp dụng vào hồ sơ, quyết định hoặc tư vấn nhà đầu tư, vẫn cần đối chiếu văn bản gốc vì các nghị định, thông tư hướng dẫn chi tiết có thể tiếp tục được sửa đổi.</div>
-    <div>Cập nhật lần cuối: 17/07/2026</div>
+    <div>Cập nhật lần cuối: 23/07/2026</div>
   </footer>
 </div>
 
@@ -617,19 +860,24 @@ const DATA = [
   {
     id: "tham-quyen",
     cat: "luat",
-    code: "Điều 24, Luật 143/2025/QH15",
+    code: "Điều 24–25, Luật 143/2025/QH15",
     url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx",
     title: "Thẩm quyền chấp thuận chủ trương đầu tư",
     date: "Áp dụng từ 01/03/2026",
-    summary: "Phân cấp mạnh hơn so với 2020: chỉ dự án đặc biệt quan trọng, cần cơ chế chính sách đặc thù mới trình Quốc hội / Thủ tướng; phần lớn dự án còn lại do cấp tỉnh quyết định.",
+    summary: "Điều 24 liệt kê 20 khoản dự án thuộc diện phải chấp thuận chủ trương đầu tư; Điều 25 phân định thẩm quyền quyết định theo từng khoản của Điều 24.",
     body: `
       <ul>
-        <li><b>Quốc hội:</b> dự án quan trọng quốc gia, cần cơ chế/chính sách đặc thù (Điều 24.1).</li>
-        <li><b>Thủ tướng Chính phủ:</b> các dự án quy mô lớn, tác động kinh tế – xã hội lớn theo Điều 24 (khoản 1, 2, 4, 6, 7, 19); dự án di dân tái định cư từ 20.000 người (miền núi) hoặc 50.000 người (vùng khác) trở lên.</li>
-        <li><b>Chủ tịch UBND cấp tỉnh:</b> phần lớn dự án còn lại (khoản 8–18 Điều 24), gồm dự án Nhà nước giao đất/cho thuê đất không qua đấu giá, hoặc chuyển mục đích sử dụng đất.</li>
+        <li><b>Quốc hội:</b> dự án theo khoản 20 Điều 24 (yêu cầu áp dụng cơ chế, chính sách đặc biệt khác quy định của luật, nghị quyết Quốc hội).</li>
+        <li><b>Thủ tướng Chính phủ:</b> dự án theo khoản 1, 2, 4, 6, 7, 19 Điều 24; dự án tái định cư (khoản 3) từ 20.000 người trở lên ở miền núi / 50.000 người trở lên ở vùng khác; một số dự án liên quan di tích quốc gia đặc biệt (khoản 5).</li>
+        <li><b>Chủ tịch UBND cấp tỉnh:</b> dự án theo khoản 8–18 Điều 24 (gồm giao đất/cho thuê đất không đấu giá, đấu thầu chọn NĐT có sử dụng đất, chuyển mục đích sử dụng đất…); dự án tái định cư (khoản 3) từ 10.000 người ở miền núi / 20.000 người ở vùng khác.</li>
+        <li><b>Ban quản lý KCN, KCX, KCNC, KKT:</b> thay Chủ tịch UBND cấp tỉnh quyết định đối với dự án thuộc khoản 3 Điều 25 (tức thuộc thẩm quyền cấp tỉnh) nếu dự án nằm trong khu công nghiệp/khu chế xuất/khu công nghệ cao/khu kinh tế phù hợp quy hoạch đã duyệt (Điều 25 khoản 4).</li>
       </ul>
-      <div class="note">Xu hướng: tăng phân cấp cho địa phương — cần cập nhật quy trình làm việc với nhà đầu tư theo đúng cấp thẩm quyền mới, tránh trình sai cấp gây chậm hồ sơ.</div>
-    `
+      <div class="note">Nếu dự án không rơi vào khoản nào của Điều 24 → không phải chấp thuận chủ trương đầu tư, chuyển thẳng sang xác định có phải cấp Giấy chứng nhận đăng ký đầu tư (Điều 26) hay không.</div>
+    `,
+    legal: [
+      { ref: "Điều 24, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Liệt kê 20 khoản dự án thuộc diện phải chấp thuận chủ trương đầu tư.", quote: "1. Dự án đầu tư có yêu cầu chuyển mục đích sử dụng đất rừng đặc dụng, rừng phòng hộ đầu nguồn, rừng phòng hộ biên giới từ 50 ha trở lên... 2. Dự án đầu tư có yêu cầu chuyển mục đích sử dụng đất trồng hai vụ lúa nước trở lên trong năm với quy mô từ 500 ha trở lên. 3. Dự án đầu tư có yêu cầu di dân tái định cư từ 10.000 người trở lên ở miền núi, từ 20.000 người trở lên ở vùng khác. 4. Dự án đầu tư có kinh doanh đặt cược, ca-si-nô (casino)... 6. Dự án đầu tư nhà máy điện hạt nhân. 7. Dự án đầu tư của nhà đầu tư nước ngoài trong lĩnh vực kinh doanh dịch vụ viễn thông có hạ tầng mạng, trồng rừng, xuất bản, báo chí. 8. Dự án đầu tư mà nhà đầu tư có đề nghị Nhà nước giao đất, cho thuê đất không đấu giá quyền sử dụng đất, đấu thầu lựa chọn nhà đầu tư thực hiện dự án có sử dụng đất; dự án có đề nghị chuyển mục đích sử dụng đất... (đến khoản 18: hạ tầng KCN/KCX, cảng biển, cảng hàng không, chế biến dầu khí…) 19. Dự án đầu tư khác thuộc diện chấp thuận chủ trương đầu tư của Thủ tướng Chính phủ theo quy định của pháp luật. 20. Dự án đầu tư có yêu cầu áp dụng cơ chế, chính sách đặc biệt, khác với quy định của luật, nghị quyết của Quốc hội." },
+      { ref: "Điều 25, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Phân định thẩm quyền: Quốc hội / Thủ tướng Chính phủ / Chủ tịch UBND cấp tỉnh / Ban quản lý KCN-KCX-KCNC-KKT.", quote: "1. Quốc hội chấp thuận chủ trương đầu tư đối với dự án đầu tư quy định tại khoản 20 Điều 24 của Luật này. 2. Trừ trường hợp quy định tại khoản 1 Điều này, Thủ tướng Chính phủ chấp thuận chủ trương đầu tư đối với: a) Dự án đầu tư quy định tại các khoản 1, 2, 4, 6, 7 và 19 Điều 24; b) Dự án tái định cư từ 20.000 người trở lên ở miền núi, từ 50.000 người trở lên ở vùng khác... 3. Trừ các dự án quy định tại khoản 1 và khoản 2 Điều này, Chủ tịch Ủy ban nhân dân cấp tỉnh chấp thuận chủ trương đầu tư đối với: a) Dự án đầu tư quy định tại các khoản 8, 9, 10, 11, 12, 13, 14, 15, 16, 17 và 18 Điều 24... 4. Đối với dự án đầu tư quy định tại khoản 3 Điều này thực hiện tại khu công nghiệp, khu chế xuất, khu công nghệ cao, khu công nghệ số tập trung, khu kinh tế phù hợp với quy hoạch đã được cấp có thẩm quyền phê duyệt thì Ban quản lý khu công nghiệp, khu chế xuất, khu công nghệ cao, khu kinh tế chấp thuận chủ trương đầu tư." }
+    ]
   },
   {
     id: "irc-erc",
@@ -650,6 +898,7 @@ const DATA = [
   {
     id: "nghi-dinh-96",
     cat: "nd",
+    parentLaw: "luat-2025",
     code: "Nghị định 96/2026/NĐ-CP",
     url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Nghi-dinh-96-2026-ND-CP-huong-dan-Luat-Dau-tu-690303.aspx",
     title: "Nghị định hướng dẫn thi hành Luật Đầu tư 2025",
@@ -670,60 +919,69 @@ const DATA = [
   },
   {
     id: "nganh-uu-dai",
-    cat: "uudai",
-    code: "Danh mục ngành, nghề ưu đãi đầu tư",
-    url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Nghi-dinh-96-2026-ND-CP-huong-dan-Luat-Dau-tu-690303.aspx",
-    title: "Ngành, nghề ưu đãi đầu tư theo Nghị định 96/2026/NĐ-CP",
-    date: "Áp dụng từ 31/03/2026",
-    summary: "Ưu tiên thu hút đầu tư vào công nghệ cao, chuyển đổi số, kinh tế xanh – tuần hoàn, năng lượng tái tạo và các lĩnh vực chiến lược khác.",
+    cat: "luat",
+    code: "Điều 15, Luật 143/2025/QH15",
+    url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx",
+    title: "Ngành, nghề ưu đãi đầu tư và địa bàn ưu đãi đầu tư",
+    date: "Áp dụng từ 01/03/2026",
+    summary: "Điều 15 Luật Đầu tư 2025 gộp chung trong 1 điều: khoản 1 liệt kê 9 nhóm ngành nghề ưu đãi (a–i), khoản 2 xác định 2 nhóm địa bàn ưu đãi. Chính phủ ban hành danh mục chi tiết kèm theo tại Nghị định 96/2026/NĐ-CP.",
     body: `
+      <h4>9 nhóm ngành, nghề ưu đãi đầu tư (khoản 1)</h4>
       <ul>
-        <li>Phát triển khoa học, công nghệ, đổi mới sáng tạo, chuyển đổi số, công nghiệp công nghệ số và công nghiệp bán dẫn.</li>
-        <li>Phát triển kinh tế xanh, kinh tế tuần hoàn.</li>
-        <li>Phát triển năng lượng tái tạo, năng lượng mới, năng lượng sạch.</li>
-        <li>Các mục tiêu ưu tiên khác theo danh mục chi tiết ban hành kèm Nghị định 96/2026/NĐ-CP.</li>
+        <li>a) Khoa học, công nghệ, đổi mới sáng tạo, chuyển đổi số, công nghiệp công nghệ số và công nghiệp bán dẫn.</li>
+        <li>b) Kinh tế xanh, kinh tế tuần hoàn, kinh tế chia sẻ, kinh tế số, các mô hình kinh tế mới.</li>
+        <li>c) Cụm liên kết ngành, chuỗi giá trị, quản trị hiện đại, giá trị gia tăng cao, kết nối chuỗi sản xuất — cung ứng toàn cầu.</li>
+        <li>d) Năng lượng tái tạo, năng lượng mới, năng lượng sạch; bảo đảm an ninh năng lượng quốc gia.</li>
+        <li>đ) Nông nghiệp, lâm nghiệp; bảo vệ môi trường, tài nguyên thiên nhiên, kinh tế biển.</li>
+        <li>e) Xây dựng và phát triển kết cấu hạ tầng.</li>
+        <li>g) Giáo dục, đào tạo, y tế, thể dục thể thao thành tích cao, văn hóa dân tộc.</li>
+        <li>h) Hóa chất trọng điểm, cơ khí trọng điểm, công nghiệp hỗ trợ, công nghiệp dược.</li>
+        <li>i) Các mục tiêu khác theo quy định của Chính phủ.</li>
       </ul>
-      <div class="note">Khi tư vấn nhà đầu tư theo ngành cụ thể, cần đối chiếu đúng mã ngành trong Phụ lục danh mục ban hành kèm Nghị định — bản tóm tắt này không thay thế văn bản gốc.</div>
-    `
+      <h4>2 nhóm địa bàn ưu đãi đầu tư (khoản 2)</h4>
+      <ul>
+        <li>a) Địa bàn có điều kiện kinh tế – xã hội khó khăn / đặc biệt khó khăn.</li>
+        <li>b) Khu công nghiệp, cụm công nghiệp, khu chế xuất, khu công nghệ cao, khu nông nghiệp ứng dụng công nghệ cao, khu công nghệ số tập trung, khu thương mại tự do, trung tâm tài chính quốc tế, khu kinh tế.</li>
+      </ul>
+      <div class="note">Danh mục ngành, nghề và danh mục địa bàn ưu đãi đầu tư cụ thể do Chính phủ ban hành kèm Nghị định 96/2026/NĐ-CP — khi tư vấn theo ngành cụ thể cần đối chiếu đúng mã ngành trong Phụ lục, bản tóm tắt này không thay thế văn bản gốc.</div>
+    `,
+    legal: [
+      { ref: "Điều 15, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Ngành, nghề ưu đãi đầu tư và địa bàn ưu đãi đầu tư.", quote: "1. Ngành, nghề ưu đãi đầu tư là các ngành, nghề được ưu tiên thu hút đầu tư để thực hiện các mục tiêu sau đây: a) Phát triển khoa học, công nghệ, đổi mới sáng tạo, chuyển đổi số, công nghiệp công nghệ số và công nghiệp bán dẫn; b) Phát triển kinh tế xanh, kinh tế tuần hoàn, kinh tế chia sẻ, kinh tế số, phát triển các mô hình kinh tế mới... 2. Địa bàn ưu đãi đầu tư bao gồm: a) Địa bàn có điều kiện kinh tế - xã hội khó khăn, địa bàn có điều kiện kinh tế - xã hội đặc biệt khó khăn; b) Khu công nghiệp, cụm công nghiệp, khu chế xuất, khu công nghệ cao, khu nông nghiệp ứng dụng công nghệ cao, khu công nghệ số tập trung, khu thương mại tự do, trung tâm tài chính quốc tế, khu kinh tế. 3. Căn cứ ngành, nghề, địa bàn ưu đãi đầu tư quy định tại khoản 1 và khoản 2 Điều này, Chính phủ ban hành, sửa đổi, bổ sung Danh mục ngành, nghề ưu đãi đầu tư và Danh mục địa bàn ưu đãi đầu tư; xác định ngành, nghề đặc biệt ưu đãi đầu tư trong Danh mục ngành, nghề ưu đãi đầu tư." },
+      { ref: "Điều 14, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Đối tượng và hình thức ưu đãi, hỗ trợ đầu tư (mức phổ thông, chưa phải ưu đãi đặc biệt).", quote: "1. Đối tượng được hưởng ưu đãi đầu tư bao gồm: a) Dự án đầu tư thuộc ngành, nghề ưu đãi đầu tư quy định tại Điều 15 của Luật này; b) Dự án đầu tư tại địa bàn ưu đãi đầu tư quy định tại Điều 15 của Luật này; c) Dự án đầu tư có quy mô vốn lớn, dự án đầu tư sử dụng nhiều lao động hoặc dự án đầu tư trọng điểm, quan trọng quốc gia... 2. Hình thức ưu đãi đầu tư bao gồm: a) Ưu đãi thuế thu nhập doanh nghiệp...; b) Miễn thuế nhập khẩu đối với hàng hóa nhập khẩu để tạo tài sản cố định; nguyên liệu, vật tư, linh kiện nhập khẩu để sản xuất...; c) Miễn, giảm tiền sử dụng đất, tiền thuê đất, thuế sử dụng đất; d) Khấu hao nhanh, tăng mức chi phí được trừ khi tính thu nhập chịu thuế; đ) Hình thức ưu đãi đầu tư khác theo quy định của Chính phủ." }
+    ]
   },
   {
     id: "uu-dai-dac-biet",
-    cat: "uudai",
-    code: "Điều 21, Nghị định 96/2026/NĐ-CP",
-    url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Nghi-dinh-96-2026-ND-CP-huong-dan-Luat-Dau-tu-690303.aspx",
-    title: "Ưu đãi, hỗ trợ đầu tư đặc biệt",
-    date: "Áp dụng từ 31/03/2026",
-    summary: "Mức ưu đãi đặc biệt (thuế TNDN, tiền thuê đất/mặt nước) dẫn chiếu theo Luật Thuế TNDN 2025 và pháp luật đất đai, không quy định cố định trong nghị định này.",
+    cat: "luat",
+    code: "Điều 17, Luật 143/2025/QH15",
+    url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx",
+    title: "Ưu đãi và hỗ trợ đầu tư đặc biệt",
+    date: "Áp dụng từ 01/03/2026",
+    summary: "Dành riêng cho dự án tác động lớn đến kinh tế – xã hội: trung tâm đổi mới sáng tạo/R&D, hạ tầng số/data center/5G, chip bán dẫn, AI, và dự án khác thuộc ngành đặc biệt ưu đãi — quy mô vốn, thời hạn giải ngân do Chính phủ quy định cụ thể.",
     body: `
+      <h4>Đối tượng áp dụng (khoản 2)</h4>
       <ul>
-        <li>Ưu đãi thuế thu nhập doanh nghiệp: áp dụng mức thuế suất thấp hơn mức phổ thông trong thời hạn nhất định hoặc toàn bộ thời gian thực hiện dự án; miễn, giảm thuế theo pháp luật thuế TNDN.</li>
-        <li>Ưu đãi tiền thuê đất, thuê mặt nước: theo pháp luật đất đai.</li>
-        <li><b>Nhóm ưu tiên cao nhất:</b> dự án chip bán dẫn, trí tuệ nhân tạo (AI), năng lượng xanh — ví dụ dự án R&D chip bán dẫn hoặc trung tâm dữ liệu AI vốn đầu tư từ 6.000 tỷ đồng, giải ngân tối thiểu trong 5 năm, được hưởng mức ưu đãi cao nhất về thuế TNDN, thuế nhập khẩu và tiền thuê đất.</li>
+        <li>a) Dự án thành lập mới trung tâm đổi mới sáng tạo, trung tâm R&D, hạ tầng trung tâm dữ liệu lớn, điện toán đám mây, hạ tầng di động từ 5G trở lên, hạ tầng số khác trong lĩnh vực công nghệ chiến lược theo quyết định của Thủ tướng; trung tâm đổi mới sáng tạo quốc gia.</li>
+        <li>b) Dự án sản xuất sản phẩm công nghệ số trọng điểm, R&D/thiết kế/sản xuất/đóng gói/kiểm thử chip bán dẫn, xây dựng trung tâm dữ liệu trí tuệ nhân tạo (AI).</li>
+        <li>c) Dự án khác (mới hoặc mở rộng) thuộc ngành, nghề <b>đặc biệt ưu đãi đầu tư</b> — quy mô vốn và thời hạn giải ngân theo quy định của Chính phủ.</li>
       </ul>
-      <div class="note">Mức ưu đãi cụ thể (% thuế suất, số năm miễn/giảm) cần tra theo Luật Thuế thu nhập doanh nghiệp 2025 và văn bản hướng dẫn — không tự tính khi tư vấn nhà đầu tư nếu chưa đối chiếu văn bản gốc.</div>
-    `
-  },
-  {
-    id: "dia-ban-uu-dai",
-    cat: "diaban",
-    code: "Địa bàn ưu đãi đầu tư",
-    url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Nghi-dinh-96-2026-ND-CP-huong-dan-Luat-Dau-tu-690303.aspx",
-    title: "Địa bàn ưu đãi đầu tư sau sáp nhập đơn vị hành chính",
-    date: "Cập nhật theo mô hình chính quyền 2 cấp từ 01/07/2025",
-    summary: "Việc sắp xếp đơn vị hành chính (còn cấp tỉnh và cấp xã, bỏ cấp huyện) khiến cách xác định địa bàn ưu đãi theo huyện cũ không còn phù hợp — danh mục địa bàn ưu đãi được cập nhật lại.",
-    body: `
+      <h4>Mức ưu đãi & loại trừ</h4>
       <ul>
-        <li>Từ 01/7/2025, Việt Nam vận hành chính quyền địa phương 2 cấp (tỉnh và xã), không còn cấp huyện — ảnh hưởng trực tiếp đến việc xác định "địa bàn có điều kiện kinh tế – xã hội khó khăn/đặc biệt khó khăn" vốn trước đây gắn với đơn vị cấp huyện.</li>
-        <li>Nguyên tắc xác định và Danh mục địa bàn ưu đãi đầu tư được sửa đổi để phù hợp với địa giới hành chính mới và mục tiêu ưu đãi có trọng tâm, trọng điểm.</li>
-        <li>Khi giới thiệu địa bàn cho nhà đầu tư, cần dùng danh mục địa bàn ưu đãi mới nhất (theo tên đơn vị hành chính hiện hành), không dùng danh mục cũ theo huyện trước sáp nhập.</li>
+        <li>Mức ưu đãi và thời hạn áp dụng: theo <b>Luật Thuế thu nhập doanh nghiệp</b> và <b>pháp luật về đất đai</b> — không quy định con số cố định ngay trong Điều này.</li>
+        <li><b>Không áp dụng</b> cho: dự án đã được cấp Giấy chứng nhận đầu tư/IRC hoặc quyết định chủ trương đầu tư <em>trước ngày Luật này có hiệu lực</em> (01/3/2026).</li>
+        <li>Thủ tướng Chính phủ có thể quyết định ưu đãi khác trong trường hợp cần khuyến khích một dự án đặc thù.</li>
       </ul>
-      <div class="note">Danh mục địa bàn cụ thể theo từng tỉnh/xã: đối chiếu Phụ lục kèm Nghị định 96/2026/NĐ-CP hoặc cổng thông tin Bộ Tài chính.</div>
-    `
+      <div class="note">Mức ưu đãi cụ thể (% thuế suất, số năm miễn/giảm, ngưỡng vốn) cần tra theo Luật Thuế thu nhập doanh nghiệp 2025, pháp luật đất đai và Nghị định 96/2026/NĐ-CP — không tự tính khi tư vấn nhà đầu tư nếu chưa đối chiếu văn bản gốc.</div>
+    `,
+    legal: [
+      { ref: "Điều 17, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Ưu đãi và hỗ trợ đầu tư đặc biệt — đối tượng, mức ưu đãi, trường hợp loại trừ.", quote: "1. Chính phủ quy định việc áp dụng ưu đãi, hỗ trợ đầu tư đặc biệt nhằm khuyến khích phát triển một số dự án đầu tư có tác động lớn đến phát triển kinh tế - xã hội... 3. Mức ưu đãi và thời hạn áp dụng ưu đãi đặc biệt thực hiện theo quy định của Luật Thuế thu nhập doanh nghiệp và pháp luật về đất đai... 5. Ưu đãi, hỗ trợ đầu tư đặc biệt quy định tại Điều này không áp dụng đối với các trường hợp sau đây: a) Dự án đầu tư đã được cấp Giấy chứng nhận đầu tư, Giấy chứng nhận đăng ký đầu tư hoặc quyết định chủ trương đầu tư trước ngày Luật này có hiệu lực thi hành..." },
+      { ref: "Điều 21, Nghị định 96/2026/NĐ-CP", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Nghi-dinh-96-2026-ND-CP-huong-dan-Luat-Dau-tu-690303.aspx", detail: "Hướng dẫn chi tiết thi hành Điều 17 Luật Đầu tư 2025 về ưu đãi, hỗ trợ đầu tư đặc biệt." }
+    ]
   },
   {
     id: "dieu-kien-kinh-doanh",
     cat: "luat",
-    code: "Phụ lục IV, Luật 143/2025/QH15",
+    code: "Điều 7, Phụ lục IV — Luật 143/2025/QH15",
     url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx",
     title: "Ngành, nghề đầu tư kinh doanh có điều kiện",
     date: "Áp dụng từ 01/03/2026 (danh mục sửa đổi từ 01/07/2026)",
@@ -731,10 +989,15 @@ const DATA = [
     body: `
       <ul>
         <li>Số lượng ngành, nghề kinh doanh có điều kiện giảm đáng kể so với Luật Đầu tư 2020, hướng tới cắt giảm thủ tục, minh bạch điều kiện gia nhập thị trường.</li>
-        <li>Danh mục điều kiện tiếp cận thị trường riêng cho nhà đầu tư nước ngoài áp dụng cùng với danh mục ngành nghề có điều kiện chung.</li>
+        <li>Danh mục điều kiện tiếp cận thị trường riêng cho nhà đầu tư nước ngoài áp dụng cùng với danh mục ngành nghề có điều kiện chung (Điều 8).</li>
+        <li>Điều 6 quy định riêng Danh mục ngành, nghề <b>cấm</b> đầu tư kinh doanh (Phụ lục I – ma túy, Phụ lục II – hóa chất/khoáng vật, Phụ lục III – mẫu vật động thực vật hoang dã…) — khác với danh mục có điều kiện tại Điều 7.</li>
       </ul>
       <div class="note">Khi xúc tiến một dự án cụ thể, luôn kiểm tra ngành nghề mục tiêu có nằm trong Phụ lục IV hay không trước khi tư vấn về điều kiện, thời gian cấp phép.</div>
-    `
+    `,
+    legal: [
+      { ref: "Điều 7, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Ngành, nghề đầu tư kinh doanh có điều kiện — danh mục tại Phụ lục IV.", quote: "1. Ngành, nghề đầu tư kinh doanh có điều kiện là ngành, nghề kinh doanh trên lãnh thổ Việt Nam mà việc thực hiện hoạt động đầu tư kinh doanh trong ngành, nghề đó phải đáp ứng điều kiện cần thiết vì lý do quốc phòng, an ninh quốc gia, trật tự, an toàn xã hội, đạo đức xã hội, sức khỏe của cộng đồng. Danh mục ngành, nghề đầu tư kinh doanh có điều kiện được quy định tại Phụ lục IV ban hành kèm theo Luật này." },
+      { ref: "Điều 6, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Ngành, nghề cấm đầu tư kinh doanh — Phụ lục I, II, III.", quote: "1. Cấm các hoạt động đầu tư kinh doanh sau đây: a) Kinh doanh các chất ma túy quy định tại Phụ lục I ban hành kèm theo Luật này; b) Kinh doanh các loại hóa chất, khoáng vật quy định tại Phụ lục II ban hành kèm theo Luật này; c) Kinh doanh mẫu vật các loài thực vật, động vật hoang dã có nguồn gốc khai thác từ tự nhiên quy định tại Phụ lục III..." }
+    ]
   },
   {
     id: "luat-doanh-nghiep",
@@ -767,6 +1030,84 @@ const DATA = [
     `
   },
   {
+    id: "nd-320-2025",
+    cat: "nd",
+    parentLaw: "luat-thue-tndn",
+    code: "Nghị định 320/2025/NĐ-CP",
+    url: "https://thuvienphapluat.vn/van-ban/Doanh-nghiep/Nghi-dinh-320-2025-ND-CP-huong-dan-Luat-Thue-thu-nhap-doanh-nghiep-665051.aspx",
+    title: "Nghị định 320/2025/NĐ-CP — hướng dẫn Luật Thuế TNDN, mức thuế suất ưu đãi",
+    date: "Hiệu lực từ 15/12/2025",
+    summary: "Điều 19, Điều 20 quy định cụ thể mức thuế suất ưu đãi và thời gian miễn/giảm thuế TNDN theo địa bàn, ngành nghề ưu đãi đầu tư — đây là căn cứ trực tiếp, không phải Luật Đầu tư hay Nghị định 96/2026/NĐ-CP.",
+    body: `
+      <ul>
+        <li>Quy định chi tiết: xác định thu nhập chịu thuế, thuế suất phổ thông và thuế suất ưu đãi, điều kiện áp dụng ưu đãi, miễn/giảm thuế theo địa bàn và ngành nghề.</li>
+        <li>Ví dụ mức áp dụng tại địa bàn đặc biệt khó khăn: thuế suất ưu đãi 10% trong 15 năm (phổ thông 20%), miễn thuế 4 năm đầu, giảm 50% số thuế phải nộp trong 9 năm tiếp theo.</li>
+        <li>Địa bàn khó khăn: thuế suất ưu đãi 17% trong 10 năm, số năm miễn/giảm thấp hơn địa bàn đặc biệt khó khăn.</li>
+      </ul>
+      <div class="note">Xem chi tiết áp dụng theo từng địa bàn tại tab <b>"Ưu đãi theo địa bàn (Đồng Tháp)"</b>.</div>
+    `
+  },
+  {
+    id: "nd-103-2024",
+    cat: "nd",
+    parentLaw: "luat-dat-dai",
+    code: "Điều 39, Nghị định 103/2024/NĐ-CP",
+    url: "https://thuvienphapluat.vn/van-ban/Bat-dong-san/Nghi-dinh-103-2024-ND-CP-tien-su-dung-dat-tien-thue-dat-550020.aspx",
+    title: "Nghị định 103/2024/NĐ-CP — miễn, giảm tiền thuê đất, tiền sử dụng đất",
+    date: "30/07/2024 (sửa đổi, bổ sung bởi Nghị định 291/2025/NĐ-CP)",
+    summary: "Căn cứ trực tiếp xác định số năm miễn tiền thuê đất theo địa bàn và lĩnh vực ưu đãi đầu tư của dự án.",
+    body: `
+      <ul>
+        <li>Khung miễn tiền thuê đất phổ biến: miễn toàn bộ thời gian thuê (dự án thuộc lĩnh vực đặc biệt ưu đãi đầu tư tại địa bàn đặc biệt khó khăn); miễn 15 năm (lĩnh vực ưu đãi đầu tư thông thường); miễn tối thiểu 11 năm hoặc 7 năm tuỳ địa bàn cho các dự án còn lại.</li>
+        <li>Số năm cụ thể phụ thuộc đồng thời vào <b>địa bàn</b> và <b>lĩnh vực</b> của dự án — cần đối chiếu văn bản gốc, không suy diễn từ một tiêu chí duy nhất.</li>
+      </ul>
+      <div class="note"><b>Lưu ý dễ nhầm:</b> đây mới là căn cứ đúng cho việc miễn tiền thuê đất/tiền sử dụng đất theo địa bàn — <b>không phải</b> Nghị định 50/2026/NĐ-CP (văn bản đó hướng dẫn Nghị quyết 254/2025/QH15 về xử lý vướng mắc tính tiền sử dụng đất/tiền thuê đất khi chuyển mục đích sử dụng đất, một vấn đề khác).</div>
+    `
+  },
+  {
+    id: "uu-dai-thue-nk-khauhao",
+    cat: "nd",
+    code: "Khoản 11 Điều 16, Luật 107/2016/QH13",
+    url: "https://thuvienphapluat.vn/van-ban/Xuat-nhap-khau/Luat-thue-xuat-khau-thue-nhap-khau-2016-280693.aspx",
+    title: "Miễn thuế nhập khẩu hàng hóa tạo tài sản cố định cho dự án ưu đãi đầu tư",
+    date: "Luật 107/2016/QH13, sửa đổi bởi Luật 90/2025/QH15 (hiệu lực 01/7/2025)",
+    summary: "Miễn thuế nhập khẩu máy móc, thiết bị, phương tiện vận tải chuyên dùng, vật tư xây dựng trong nước chưa sản xuất được, dùng để tạo tài sản cố định của dự án thuộc diện ưu đãi đầu tư.",
+    body: `
+      <ul>
+        <li>Áp dụng cho cả dự án đầu tư mới và dự án mở rộng.</li>
+        <li>Văn bản hướng dẫn thi hành: <a href="https://thuvienphapluat.vn/van-ban/Xuat-nhap-khau/Nghi-dinh-134-2016-ND-CP-huong-dan-Luat-thue-xuat-khau-thue-nhap-khau-323602.aspx" target="_blank" rel="noopener noreferrer">Điều 14, Nghị định 134/2016/NĐ-CP</a> (sửa đổi, bổ sung bởi Nghị định 18/2021/NĐ-CP).</li>
+      </ul>
+    `
+  },
+  {
+    id: "khau-hao-nhanh",
+    cat: "nd",
+    code: "Điều 13, Thông tư 45/2013/TT-BTC",
+    url: "https://thuvienphapluat.vn/van-ban/Doanh-nghiep/Thong-tu-45-2013-TT-BTC-Che-do-quan-ly-su-dung-va-trich-khau-hao-tai-san-co-dinh-183508.aspx",
+    title: "Khấu hao nhanh tài sản cố định cho doanh nghiệp thuộc diện ưu đãi đầu tư",
+    date: "Sửa đổi, bổ sung bởi Thông tư 147/2016/TT-BTC, 28/2017/TT-BTC, 30/2025/TT-BTC",
+    summary: "Doanh nghiệp hoạt động hiệu quả kinh tế cao thuộc lĩnh vực khuyến khích đầu tư được trích khấu hao nhanh, tối đa gấp 2 lần mức khấu hao theo phương pháp đường thẳng.",
+    body: `
+      <p>Cần đối chiếu điều kiện áp dụng cụ thể tại Thông tư gốc và các thông tư sửa đổi trước khi tư vấn cho doanh nghiệp — không mặc định áp dụng cho mọi dự án ưu đãi đầu tư.</p>
+    `
+  },
+  {
+    id: "quy-ho-tro-dau-tu",
+    cat: "nd",
+    parentLaw: "luat-2025",
+    code: "Nghị định 182/2024/NĐ-CP",
+    url: "https://thuvienphapluat.vn/van-ban/Doanh-nghiep/Nghi-dinh-182-2024-ND-CP-quan-ly-su-dung-Quy-Ho-tro-dau-tu-638056.aspx",
+    title: "Quỹ Hỗ trợ đầu tư — thành lập, quản lý, sử dụng",
+    date: "Ban hành 2024",
+    summary: "Quỹ do Thủ tướng Chính phủ quyết định thành lập, hỗ trợ chi phí đào tạo nhân lực, nghiên cứu phát triển, đầu tư hệ thống công trình hạ tầng xã hội… cho dự án lớn/công nghệ cao đủ điều kiện.",
+    body: `
+      <ul>
+        <li>Đối tượng thường là dự án quy mô vốn lớn, công nghệ cao (bán dẫn, AI…) — không áp dụng đại trà cho mọi dự án ưu đãi đầu tư.</li>
+        <li>Cần kiểm tra điều kiện tiếp cận Quỹ trước khi tư vấn nhà đầu tư, tránh cam kết vượt thẩm quyền địa phương.</li>
+      </ul>
+    `
+  },
+  {
     id: "luat-thue-tndn",
     cat: "lienquan",
     code: "Luật số 67/2025/QH15",
@@ -776,6 +1117,118 @@ const DATA = [
     summary: "Mức thuế suất ưu đãi, thời gian miễn/giảm thuế cho dự án đầu tư (kể cả dự án hưởng ưu đãi đặc biệt) được quy định tại luật chuyên ngành này, không nằm trong Luật Đầu tư hay Nghị định 96/2026/NĐ-CP.",
     body: `
       <p>Khi trao đổi với nhà đầu tư về lợi ích thuế cụ thể, cần dẫn chiếu đúng điều khoản của Luật Thuế TNDN 2025 thay vì suy diễn từ Luật Đầu tư — tránh cam kết sai mức ưu đãi.</p>
+    `
+  },
+  {
+    id: "luat-dau-thau",
+    cat: "luat",
+    code: "Luật số 22/2023/QH15",
+    url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-thau-2023-22-2023-QH15-518805.aspx",
+    title: "Luật Đấu thầu 2023",
+    date: "Hiệu lực từ 01/01/2024 — sửa đổi bởi Luật 57/2024/QH15 (15/01/2025) và Luật 90/2025/QH15 (01/7/2025)",
+    summary: "Áp dụng khi dự án cần lựa chọn nhà thầu (mua sắm công) hoặc lựa chọn nhà đầu tư thực hiện dự án đầu tư kinh doanh có sử dụng đất (đấu thầu dự án, không phải đấu giá quyền sử dụng đất).",
+    body: `
+      <ul>
+        <li>Quy định quản lý nhà nước về đấu thầu; lựa chọn nhà thầu thực hiện gói thầu; <b>lựa chọn nhà đầu tư thực hiện dự án đầu tư kinh doanh</b> — liên quan trực tiếp đến dự án đầu tư có sử dụng đất do Nhà nước tổ chức đấu thầu chọn nhà đầu tư (Điều 24 khoản 8 Luật Đầu tư 2025).</li>
+        <li>Sửa đổi 2 lần trong vòng 18 tháng: Luật 57/2024/QH15 (đồng bộ với Luật Quy hoạch, Luật Đầu tư, Luật PPP) và Luật 90/2025/QH15 (đồng bộ với Luật Đầu tư 2025, Luật Đầu tư công…).</li>
+      </ul>
+      <div class="note">Văn bản hợp nhất 3 lần sửa đổi: tra cứu "Hợp nhất Luật Đấu thầu 22/2023 + 57/2024 + 90/2025" trên các cổng pháp luật để có bản đầy đủ nhất, thay vì chỉ đọc luật gốc 2023.</div>
+    `
+  },
+  {
+    id: "nd-214-2025",
+    cat: "nd",
+    parentLaw: "luat-dau-thau",
+    code: "Nghị định 214/2025/NĐ-CP",
+    url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Nghi-dinh-214-2025-ND-CP-huong-dan-Luat-Dau-thau-ve-lua-chon-nha-thau-668157.aspx",
+    title: "Hướng dẫn Luật Đấu thầu về lựa chọn nhà thầu",
+    date: "Ban hành và hiệu lực từ 04/08/2025 — thay thế Nghị định 24/2024/NĐ-CP",
+    summary: "14 chương, 146 điều — quy trình, hồ sơ, tiêu chí lựa chọn nhà thầu cho gói thầu sử dụng vốn nhà nước và các nguồn vốn khác theo quy định phải đấu thầu.",
+    body: `
+      <ul>
+        <li>Thay thế Nghị định 24/2024/NĐ-CP: bỏ yêu cầu thẩm định kế hoạch tổng thể lựa chọn nhà thầu và kế hoạch lựa chọn nhà thầu ở một số trường hợp.</li>
+        <li>Bổ sung quy định về minh bạch, trách nhiệm giải trình, thúc đẩy chuyển đổi số trong đấu thầu và tiêu chí xanh, phát triển bền vững khi đánh giá năng lực nhà thầu.</li>
+        <li>Mở rộng ưu đãi: nhà thầu thuộc nhóm ưu tiên được miễn bảo đảm cạnh tranh, một số yêu cầu năng lực/kinh nghiệm.</li>
+      </ul>
+      <div class="note">Chỉ áp dụng cho gói thầu lựa chọn <b>nhà thầu</b> (mua sắm hàng hóa/dịch vụ/xây lắp) — khác với lựa chọn <b>nhà đầu tư</b> thực hiện dự án đầu tư kinh doanh (xem Nghị định 274/2026/NĐ-CP bên dưới).</div>
+    `
+  },
+  {
+    id: "nd-274-2026",
+    cat: "nd",
+    parentLaw: "luat-dau-thau",
+    code: "Nghị định 274/2026/NĐ-CP",
+    url: "https://vanban.chinhphu.vn/?docid=218807&pageid=27160",
+    title: "Hướng dẫn Luật Đấu thầu về lựa chọn nhà đầu tư",
+    date: "Ban hành 07/07/2026, hiệu lực từ 21/08/2026 — thay thế Nghị định 23/2024/NĐ-CP và Nghị định 115/2024/NĐ-CP",
+    summary: "Trực tiếp liên quan công tác xúc tiến đầu tư: quy định lựa chọn nhà đầu tư cho dự án đầu tư kinh doanh có sử dụng đất phải đấu thầu (khoản 8 Điều 24 Luật Đầu tư 2025).",
+    body: `
+      <ul>
+        <li>Quy định chi tiết: bảo đảm cạnh tranh, ưu đãi nhà đầu tư, chi phí lựa chọn nhà đầu tư, chỉ định nhà đầu tư, lựa chọn nhà đầu tư trong trường hợp đặc biệt.</li>
+        <li>Phương thức, tiêu chí, quy trình lựa chọn nhà đầu tư; đấu thầu qua mạng; nội dung hợp đồng dự án có sử dụng đất.</li>
+        <li>Xác định rõ trường hợp phải đấu thầu: dự án Nhà nước thu hồi đất theo Luật Đất đai/Nghị quyết 254/2025/QH15, hoặc thuộc danh mục khu đất đấu thầu do HĐND cấp tỉnh quyết định.</li>
+        <li>Được đánh giá là bước gỡ vướng giữa Luật Đấu thầu 2023 và Luật Đất đai 2024 cho các dự án đầu tư kinh doanh có sử dụng đất.</li>
+      </ul>
+    `
+  },
+  {
+    id: "luat-kd-bds",
+    cat: "luat",
+    code: "Luật số 29/2023/QH15",
+    url: "https://thuvienphapluat.vn/van-ban/Bat-dong-san/Luat-Kinh-doanh-bat-dong-san-29-2023-QH15-530116.aspx",
+    title: "Luật Kinh doanh bất động sản 2023",
+    date: "Thông qua 28/11/2023",
+    summary: "Áp dụng cho dự án nhà ở, khu đô thị, bất động sản du lịch — quy định điều kiện kinh doanh, đặt cọc mua bán, chuyển nhượng dự án bất động sản.",
+    body: `
+      <ul>
+        <li>Chủ đầu tư dự án chỉ được thu tiền đặt cọc <b>tối đa 5%</b> giá bán/thuê mua khi nhà, công trình đã đủ điều kiện kinh doanh.</li>
+        <li>Liên quan trực tiếp Điều 24 khoản 11 Luật Đầu tư 2025 (dự án nhà ở, khu đô thị) và điều kiện chuyển nhượng dự án đầu tư (điểm c Điều 34 Luật Đầu tư 2025).</li>
+      </ul>
+    `
+  },
+  {
+    id: "nd-96-2024-bds",
+    cat: "nd",
+    parentLaw: "luat-kd-bds",
+    code: "Nghị định 96/2024/NĐ-CP",
+    url: "https://thuvienphapluat.vn/van-ban/Thuong-mai/Nghi-dinh-96-2024-ND-CP-huong-dan-Luat-Kinh-doanh-bat-dong-san-600395.aspx",
+    title: "Hướng dẫn Luật Kinh doanh bất động sản 2023",
+    date: "Ban hành 24/07/2024",
+    summary: "Quy định chi tiết công trình xây dựng đưa vào kinh doanh, công khai thông tin dự án, tỷ lệ dư nợ tín dụng/trái phiếu trên vốn chủ sở hữu của doanh nghiệp kinh doanh bất động sản.",
+    body: `
+      <ul>
+        <li>Công trình có công năng giáo dục, y tế, thể thao, văn phòng, thương mại dịch vụ, du lịch lưu trú, công nghiệp và công trình hỗn hợp.</li>
+        <li>Yêu cầu công khai thông tin bất động sản, dự án trước khi đưa vào kinh doanh.</li>
+      </ul>
+      <div class="note">Có đề xuất sửa đổi Nghị định 96/2024/NĐ-CP đang được lấy ý kiến — cần kiểm tra bản mới nhất trước khi tư vấn nhà đầu tư về điều kiện kinh doanh bất động sản.</div>
+    `
+  },
+  {
+    id: "luat-dau-gia",
+    cat: "luat",
+    code: "Luật số 01/2016/QH14 (sửa đổi bởi Luật 37/2024/QH15)",
+    url: "https://thuvienphapluat.vn/van-ban/Thuong-mai/Luat-Dau-gia-tai-san-sua-doi-2024-588810.aspx",
+    title: "Luật Đấu giá tài sản",
+    date: "Luật sửa đổi 2024 hiệu lực từ 01/01/2025",
+    summary: "Áp dụng khi dự án tiếp cận đất đai qua đấu giá quyền sử dụng đất, hoặc đấu giá quyền khai thác khoáng sản — khác với đấu thầu chọn nhà đầu tư (Luật Đấu thầu).",
+    body: `
+      <ul>
+        <li>Trình tự, thủ tục đấu giá tài sản nói chung, trong đó có đấu giá quyền sử dụng đất khi Nhà nước giao đất/cho thuê đất có thu tiền (khác trường hợp giao đất/cho thuê đất không qua đấu giá tại khoản 8 Điều 24 Luật Đầu tư 2025).</li>
+        <li>Luật sửa đổi 2024 (số 37/2024/QH15) siết chặt điều kiện tổ chức đấu giá, đấu giá viên, xử lý vi phạm.</li>
+      </ul>
+    `
+  },
+  {
+    id: "nd-172-2024",
+    cat: "nd",
+    parentLaw: "luat-dau-gia",
+    code: "Nghị định 172/2024/NĐ-CP",
+    url: "https://thuvienphapluat.vn/van-ban/Thuong-mai/Nghi-dinh-172-2024-ND-CP-huong-dan-Luat-Dau-gia-tai-san-2016-sua-doi-boi-Luat-Dau-gia-tai-san-2024-638044.aspx",
+    title: "Hướng dẫn Luật Đấu giá tài sản (bản 2016, sửa đổi 2024)",
+    date: "Ban hành 2024",
+    summary: "Quy định chi tiết thi hành Luật Đấu giá tài sản sau khi được sửa đổi bởi Luật 37/2024/QH15 — thay thế các nghị định hướng dẫn trước đó (Nghị định 62/2017/NĐ-CP, sửa đổi bởi Nghị định 47/2023/NĐ-CP).",
+    body: `
+      <p>Áp dụng khi tỉnh tổ chức đấu giá quyền sử dụng đất để lựa chọn nhà đầu tư (khác với đấu thầu chọn nhà đầu tư theo Luật Đấu thầu, và khác với giao đất/cho thuê đất không qua đấu giá theo khoản 8 Điều 24 Luật Đầu tư 2025).</p>
     `
   },
   {
@@ -798,8 +1251,10 @@ const DATA = [
 ];
 
 const CAT_LABEL = { luat: "Luật gốc", nd: "Nghị định/Thủ tục", uudai: "Ưu đãi đầu tư", diaban: "Địa bàn", lienquan: "Luật liên quan" };
+const MAIN_TAB_CATS = ["luat", "nd", "lienquan"];
 
 const LINK_ICON = `<svg viewBox="0 0 24 24" fill="none"><path d="M14 5h5v5M19 5l-8 8M9 5H6a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+const QUOTE_CHEVRON = `<svg class="quote-chevron" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 
 function refBadge(l) {
   if (l.url) {
@@ -807,6 +1262,31 @@ function refBadge(l) {
   }
   return `<span class="ref-badge">${l.ref}</span>`;
 }
+
+let legalItemSeq = 0;
+function renderLegalList(arr) {
+  if (!arr || !arr.length) return '';
+  return `<div class="legal-list">${arr.map(l => {
+    const uid = 'lq' + (legalItemSeq++);
+    const badgeInner = `${l.ref}${l.quote ? QUOTE_CHEVRON : ''}`;
+    const badge = l.quote
+      ? `<button class="ref-badge" type="button" data-quote-toggle="${uid}" aria-expanded="false">${badgeInner}</button>`
+      : (l.url ? `<a class="ref-badge" href="${l.url}" target="_blank" rel="noopener noreferrer" title="Mở văn bản gốc">${badgeInner}${LINK_ICON}</a>` : `<span class="ref-badge">${badgeInner}</span>`);
+    const quoteBlock = l.quote
+      ? `<div class="ref-quote" id="${uid}"><p>“${l.quote}”</p>${l.url ? `<a href="${l.url}" target="_blank" rel="noopener noreferrer">Xem toàn văn văn bản gốc ${LINK_ICON}</a>` : ''}</div>`
+      : '';
+    return `<div class="legal-item">${badge}<span class="ref-detail">${l.detail}</span>${quoteBlock}</div>`;
+  }).join('')}</div>`;
+}
+
+document.addEventListener('click', e => {
+  const btn = e.target.closest('[data-quote-toggle]');
+  if (!btn) return;
+  const panel = document.getElementById(btn.dataset.quoteToggle);
+  if (!panel) return;
+  const isOpen = panel.classList.toggle('open');
+  btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+});
 
 function codeBadge(item, q) {
   const label = highlight(item.code, q);
@@ -826,7 +1306,7 @@ let activeCats = new Set();
 let openIds = new Set();
 
 function buildChips() {
-  Object.keys(CAT_LABEL).forEach(cat => {
+  MAIN_TAB_CATS.forEach(cat => {
     const btn = document.createElement('button');
     btn.className = 'chip';
     btn.dataset.cat = cat;
@@ -849,8 +1329,18 @@ function highlight(text, q) {
 
 function matches(item, q) {
   if (!q) return true;
-  const hay = (item.title + ' ' + item.summary + ' ' + item.code + ' ' + item.body).toLowerCase();
-  return hay.includes(q.toLowerCase());
+  const hay = normalizeVN(item.title + ' ' + item.summary + ' ' + item.code + ' ' + item.body);
+  return hay.includes(normalizeVN(q));
+}
+
+const DATA_INDEX = new Map(DATA.map((d, i) => [d.id, i]));
+const DATA_BY_ID = new Map(DATA.map(d => [d.id, d]));
+
+function groupSortKey(item) {
+  const anchorId = item.parentLaw || item.id;
+  const anchorIdx = DATA_INDEX.has(anchorId) ? DATA_INDEX.get(anchorId) : 9999;
+  const childRank = item.parentLaw ? 1 : 0;
+  return [anchorIdx, childRank, DATA_INDEX.get(item.id)];
 }
 
 function render() {
@@ -858,6 +1348,11 @@ function render() {
   const filtered = DATA.filter(item => {
     const catOk = activeCats.size === 0 || activeCats.has(item.cat);
     return catOk && matches(item, q);
+  });
+  filtered.sort((a, b) => {
+    const ka = groupSortKey(a), kb = groupSortKey(b);
+    for (let i = 0; i < ka.length; i++) { if (ka[i] !== kb[i]) return ka[i] - kb[i]; }
+    return 0;
   });
 
   listEl.innerHTML = '';
@@ -868,6 +1363,9 @@ function render() {
     const card = document.createElement('div');
     card.className = 'card';
     card.dataset.open = openIds.has(item.id) ? 'true' : 'false';
+    if (item.parentLaw) card.dataset.child = 'true';
+
+    const parentItem = item.parentLaw ? DATA_BY_ID.get(item.parentLaw) : null;
 
     const head = document.createElement('div');
     head.className = 'card-head';
@@ -877,6 +1375,7 @@ function render() {
     head.innerHTML = `
       <span class="badge ${item.cat}">${CAT_LABEL[item.cat]}</span>
       <div class="card-main">
+        ${parentItem ? `<div class="parent-breadcrumb">↳ Hướng dẫn thi hành: ${parentItem.title}</div>` : ''}
         <div class="card-title-row">
           <span class="card-title">${highlight(item.title, q)}</span>
           ${codeBadge(item, q)}
@@ -897,7 +1396,7 @@ function render() {
 
     const body = document.createElement('div');
     body.className = 'card-body';
-    body.innerHTML = `<div class="card-body-inner">${item.body}</div>`;
+    body.innerHTML = `<div class="card-body-inner">${item.body}${item.legal ? `<h4>Căn cứ pháp lý cụ thể</h4>${renderLegalList(item.legal)}` : ''}</div>`;
 
     card.appendChild(head);
     card.appendChild(body);
@@ -1001,7 +1500,9 @@ const PROCESS_DATA = [
       "Cơ quan đăng ký đầu tư đánh giá hồ sơ và cấp Giấy chứng nhận đăng ký đầu tư."
     ],
     legal: [
-      { ref: "Điều 20, Luật Đầu tư 2025", url: "https://hethongphapluat.com/van-ban-hop-nhat-09-vbhn-vpqh-nam-2025-hop-nhat-luat-dau-tu-do-van-phong-quoc-hoi-ban-hanh/dieu-20", detail: "Xác định đối tượng phải cấp IRC: dự án của nhà đầu tư nước ngoài; dự án của tổ chức kinh tế theo khoản 1 Điều 20." }
+      { ref: "Điều 26, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Dự án thuộc diện phải cấp IRC: dự án của nhà đầu tư nước ngoài; dự án của tổ chức kinh tế bị nước ngoài chi phối theo khoản 1 Điều 20.", quote: "1. Các dự án phải thực hiện thủ tục cấp Giấy chứng nhận đăng ký đầu tư bao gồm: a) Dự án đầu tư của nhà đầu tư nước ngoài; b) Dự án đầu tư của tổ chức kinh tế quy định tại khoản 1 Điều 20 của Luật này. 2. Các dự án không phải thực hiện thủ tục cấp Giấy chứng nhận đăng ký đầu tư bao gồm: a) Dự án đầu tư của nhà đầu tư trong nước; b) Dự án đầu tư của tổ chức kinh tế quy định tại khoản 2 Điều 20 của Luật này; c) Đầu tư theo hình thức góp vốn, mua cổ phần, mua phần vốn góp của tổ chức kinh tế." },
+      { ref: "Điều 27, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Thẩm quyền cấp IRC: Ban quản lý KCN/KCX/KCNC/KKT (dự án trong khu); Sở Tài chính (dự án ngoài khu); cơ quan nơi đặt văn phòng điều hành (dự án liên tỉnh hoặc vừa trong vừa ngoài khu).", quote: "1. Ban quản lý khu công nghiệp, khu chế xuất, khu công nghệ cao, khu kinh tế cấp, điều chỉnh, thu hồi Giấy chứng nhận đăng ký đầu tư đối với dự án đầu tư trong khu công nghiệp... 2. Sở Tài chính cấp, điều chỉnh, thu hồi Giấy chứng nhận đăng ký đầu tư đối với dự án đầu tư ngoài khu công nghiệp, khu chế xuất, khu công nghệ cao, khu kinh tế... 3. Cơ quan đăng ký đầu tư nơi nhà đầu tư thực hiện dự án đầu tư đặt hoặc dự kiến đặt văn phòng điều hành... cấp, điều chỉnh, thu hồi Giấy chứng nhận đăng ký đầu tư đối với: a) Dự án đầu tư thực hiện tại 02 đơn vị hành chính cấp tỉnh trở lên; b) Dự án đầu tư thực hiện ở trong và ngoài khu công nghiệp..." },
+      { ref: "Điều 19, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Nhà đầu tư nước ngoài được thành lập tổ chức kinh tế (ERC) trước khi làm thủ tục cấp IRC.", quote: "2. Nhà đầu tư nước ngoài được thành lập tổ chức kinh tế thực hiện dự án đầu tư trước khi thực hiện thủ tục cấp, điều chỉnh Giấy chứng nhận đăng ký đầu tư và phải đáp ứng điều kiện tiếp cận thị trường đối với nhà đầu tư nước ngoài quy định tại Điều 8 của Luật này khi thực hiện thủ tục thành lập tổ chức kinh tế." }
     ]
   },
   {
@@ -1079,9 +1580,10 @@ const PROCESS_DATA = [
       "Báo cáo giám sát, đánh giá đầu tư định kỳ theo quy định."
     ],
     legal: [
-      { ref: "Điều 33, Luật Đầu tư 2025", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Quy định 5 trường hợp phải điều chỉnh chủ trương đầu tư — đã bỏ 2 trường hợp so với Luật 2020 (tăng vốn ≥20%; thay đổi công nghệ đã thẩm định)." },
-      { ref: "Điều 34, Luật Đầu tư 2025", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Chuyển nhượng dự án đầu tư." },
-      { ref: "Điều 35, Luật Đầu tư 2025", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Chấm dứt hoạt động dự án đầu tư — nhà đầu tư thông báo bằng văn bản cho cơ quan đăng ký đầu tư." }
+      { ref: "Điều 33, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "5 trường hợp phải làm thủ tục chấp thuận điều chỉnh chủ trương đầu tư (khoản 3) — đã bỏ 2 trường hợp so với Luật 2020 (tăng vốn ≥20%; thay đổi công nghệ đã thẩm định).", quote: "3. Nhà đầu tư có dự án đầu tư đã được chấp thuận chủ trương đầu tư phải thực hiện thủ tục chấp thuận điều chỉnh chủ trương đầu tư nếu thuộc một trong các trường hợp sau đây: a) Thay đổi, bổ sung nội dung, mục tiêu thuộc diện chấp thuận chủ trương đầu tư đã được quy định tại văn bản chấp thuận chủ trương đầu tư; b) Thay đổi quy mô diện tích đất sử dụng theo quy định của Chính phủ, thay đổi địa điểm đầu tư; c) Kéo dài tiến độ thực hiện dự án đầu tư trong trường hợp điều chỉnh tiến độ quá 24 tháng; d) Điều chỉnh thời hạn hoạt động của dự án đầu tư; đ) Thay đổi nhà đầu tư của dự án đầu tư được chấp thuận chủ trương đầu tư đồng thời với chấp thuận nhà đầu tư trước khi dự án khai thác, vận hành hoặc thay đổi điều kiện đối với nhà đầu tư (nếu có)." },
+      { ref: "Điều 34, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Chuyển nhượng toàn bộ hoặc một phần dự án đầu tư — kèm điều kiện về đất đai, nhà ở, kinh doanh bất động sản.", quote: "1. Nhà đầu tư có quyền chuyển nhượng toàn bộ hoặc một phần dự án đầu tư cho nhà đầu tư khác khi đáp ứng các điều kiện sau đây: a) Dự án đầu tư hoặc phần dự án đầu tư chuyển nhượng không bị chấm dứt hoạt động theo quy định tại khoản 1 và khoản 2 Điều 36 của Luật này; b) Nhà đầu tư nước ngoài nhận chuyển nhượng dự án đầu tư phải đáp ứng điều kiện quy định tại khoản 2 Điều 21 của Luật này; c) Điều kiện theo quy định của pháp luật về đất đai, nhà ở, kinh doanh bất động sản..." },
+      { ref: "Điều 35, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Ngừng hoạt động của dự án đầu tư (tạm thời) — khác với chấm dứt hoạt động ở Điều 36.", quote: "1. Nhà đầu tư ngừng hoạt động của dự án đầu tư phải thông báo bằng văn bản cho cơ quan đăng ký đầu tư. Trường hợp ngừng hoạt động của dự án đầu tư vì lý do bất khả kháng thì nhà đầu tư được Nhà nước miễn tiền thuê đất, giảm tiền sử dụng đất trong thời gian ngừng hoạt động để khắc phục hậu quả do bất khả kháng gây ra. 2. Cơ quan quản lý nhà nước về đầu tư quyết định ngừng hoặc ngừng một phần hoạt động của dự án đầu tư trong các trường hợp: bảo vệ di tích; khắc phục vi phạm về môi trường; bảo đảm an toàn lao động; theo bản án, quyết định của Tòa án, phán quyết trọng tài..." },
+      { ref: "Điều 36, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Chấm dứt hoạt động của dự án đầu tư (vĩnh viễn) — nhà đầu tư tự quyết định, hết hạn hoạt động, hoặc do cơ quan đăng ký đầu tư quyết định.", quote: "1. Nhà đầu tư chấm dứt hoạt động đầu tư, dự án đầu tư trong các trường hợp sau đây: a) Nhà đầu tư quyết định chấm dứt hoạt động của dự án đầu tư; b) Theo các điều kiện chấm dứt hoạt động được quy định trong hợp đồng, điều lệ doanh nghiệp; c) Hết thời hạn hoạt động của dự án đầu tư. 2. Cơ quan đăng ký đầu tư chấm dứt hoặc chấm dứt một phần hoạt động của dự án đầu tư trong các trường hợp: a) Dự án thuộc trường hợp ngừng hoạt động (khoản 2, 3 Điều 35) mà nhà đầu tư không có khả năng khắc phục; b) Sau 24 tháng kể từ thời điểm kết thúc tiến độ thực hiện các mục tiêu hoạt động của dự án mà không triển khai theo cam kết..." }
     ]
   }
 ];
@@ -1142,9 +1644,7 @@ function renderSteps() {
         <h4>Công việc chính</h4>
         <ul>${step.tasks.map(t => `<li>${t}</li>`).join('')}</ul>
         <h4>Căn cứ pháp lý cụ thể</h4>
-        <div class="legal-list">
-          ${step.legal.map(l => `<div class="legal-item">${refBadge(l)}<span class="ref-detail">${l.detail}</span></div>`).join('')}
-        </div>
+        ${renderLegalList(step.legal)}
         ${step.note ? `<div class="note">${step.note}</div>` : ''}
       </div>
     `;
@@ -1159,10 +1659,541 @@ function renderSteps() {
 }
 renderSteps();
 
+/* ---------------- Ưu đãi theo địa bàn (Đồng Tháp) ---------------- */
+
+const INCENTIVE_LEGAL = [
+  { ref: "Điều 15, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Khung ưu đãi chung: khoản 2 xác định địa bàn ưu đãi gồm địa bàn khó khăn/đặc biệt khó khăn và KCN, CCN, KCX, KCNC, khu kinh tế…", quote: "2. Địa bàn ưu đãi đầu tư bao gồm: a) Địa bàn có điều kiện kinh tế - xã hội khó khăn, địa bàn có điều kiện kinh tế - xã hội đặc biệt khó khăn; b) Khu công nghiệp, cụm công nghiệp, khu chế xuất, khu công nghệ cao, khu nông nghiệp ứng dụng công nghệ cao, khu công nghệ số tập trung, khu thương mại tự do, trung tâm tài chính quốc tế, khu kinh tế. 3. Căn cứ ngành, nghề, địa bàn ưu đãi đầu tư quy định tại khoản 1 và khoản 2 Điều này, Chính phủ ban hành, sửa đổi, bổ sung Danh mục ngành, nghề ưu đãi đầu tư và Danh mục địa bàn ưu đãi đầu tư." },
+  { ref: "Nghị định 96/2026/NĐ-CP", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Nghi-dinh-96-2026-ND-CP-huong-dan-Luat-Dau-tu-690303.aspx", detail: "Hướng dẫn thi hành Luật Đầu tư — nguyên tắc xác định địa bàn ưu đãi." },
+  { ref: "Quyết định 1717/QĐ-UBND (12/6/2026)", detail: "UBND tỉnh Đồng Tháp — xác định và công bố địa bàn ưu đãi đầu tư cấp xã trên địa bàn tỉnh. Văn bản nội bộ, cần đối chiếu bản đã ký chính thức." },
+  { ref: "Nghị quyết 1663/NQ-UBTVQH15 (16/6/2025)", detail: "Cùng với Luật Tổ chức chính quyền địa phương (16/6/2025) — là cơ sở của việc sắp xếp đơn vị hành chính 2 cấp (tỉnh, xã), làm căn cứ xác định lại địa bàn ưu đãi thay cho đơn vị cấp huyện trước đây." },
+  { ref: "Điều 19–20, Nghị định 320/2025/NĐ-CP", url: "https://thuvienphapluat.vn/van-ban/Doanh-nghiep/Nghi-dinh-320-2025-ND-CP-huong-dan-Luat-Thue-thu-nhap-doanh-nghiep-665051.aspx", detail: "Mức thuế suất ưu đãi và thời gian miễn/giảm thuế TNDN cụ thể (hiệu lực 15/12/2025)." },
+  { ref: "Điều 39, Nghị định 103/2024/NĐ-CP", url: "https://thuvienphapluat.vn/van-ban/Bat-dong-san/Nghi-dinh-103-2024-ND-CP-tien-su-dung-dat-tien-thue-dat-550020.aspx", detail: "Miễn, giảm tiền thuê đất, tiền sử dụng đất theo địa bàn/ngành nghề (sửa đổi bởi Nghị định 291/2025/NĐ-CP) — không phải Nghị định 50/2026/NĐ-CP." },
+  { ref: "Khoản 11 Điều 16, Luật 107/2016/QH13", url: "https://thuvienphapluat.vn/van-ban/Xuat-nhap-khau/Luat-thue-xuat-khau-thue-nhap-khau-2016-280693.aspx", detail: "Miễn thuế nhập khẩu hàng hóa tạo tài sản cố định (sửa đổi bởi Luật 90/2025/QH15); chi tiết tại Điều 14 Nghị định 134/2016/NĐ-CP (sửa đổi bởi Nghị định 18/2021/NĐ-CP)." },
+  { ref: "Điều 13, Thông tư 45/2013/TT-BTC", url: "https://thuvienphapluat.vn/van-ban/Doanh-nghiep/Thong-tu-45-2013-TT-BTC-Che-do-quan-ly-su-dung-va-trich-khau-hao-tai-san-co-dinh-183508.aspx", detail: "Khấu hao nhanh TSCĐ, tối đa gấp 2 lần mức khấu hao đường thẳng (sửa đổi bởi TT 147/2016, TT 28/2017, TT 30/2025/TT-BTC)." },
+  { ref: "Nghị định 182/2024/NĐ-CP", url: "https://thuvienphapluat.vn/van-ban/Doanh-nghiep/Nghi-dinh-182-2024-ND-CP-quan-ly-su-dung-Quy-Ho-tro-dau-tu-638056.aspx", detail: "Đào tạo nhân lực, chuyển giao công nghệ, tín dụng đầu tư Nhà nước, Quỹ Hỗ trợ đầu tư." }
+];
+
+const INCENTIVE_DATA = [
+  {
+    id: "dbkk",
+    level: "Địa bàn đặc biệt khó khăn",
+    cat: "diaban",
+    communes: ["Tân Thới","Tân Phú Đông","Tân Phước 1","Tân Phước 2","Tân Phước 3","Hưng Thạnh","Thường Phước","Long Khánh","Long Phú Thuận","Thường Lạc","An Bình","Hồng Ngự","Tân Hồng","Tân Thành","Tân Hộ Cơ","An Phước","An Hòa","Tam Nông","Phú Thọ","Tràm Chim","Phú Cường","An Long","Tháp Mười","Thanh Mỹ","Mỹ Quí","Đốc Binh Kiều","Trường Xuân","Phương Thịnh"],
+    incentives: [
+      { label: "Thuế suất TNDN", detail: "10% trong 15 năm (mức phổ thông 20%).", ref: "Điểm c khoản 1, Điều 19 NĐ 320/2025/NĐ-CP" },
+      { label: "Miễn/giảm thuế TNDN", detail: "Miễn 4 năm, giảm 50% số thuế phải nộp trong 9 năm tiếp theo.", ref: "Khoản 1, Điều 20 NĐ 320/2025/NĐ-CP" },
+      { label: "Miễn tiền thuê đất (thuê trực tiếp từ Nhà nước)", detail: "11 năm (mức thường) — 15 năm (kèm ngành ưu đãi đầu tư) — toàn bộ thời gian thuê (kèm ngành đặc biệt ưu đãi đầu tư).", ref: "Khoản 2; điểm b/c/d/đ khoản 3, Điều 39 NĐ 103/2024/NĐ-CP (sđ NĐ 291/2025/NĐ-CP)" },
+      { label: "Miễn thuế NK hàng hóa tạo TSCĐ", detail: "Miễn 100% (máy móc, thiết bị, phương tiện vận tải chuyên dùng, vật tư xây dựng trong nước chưa sản xuất được).", ref: "Khoản 11 Điều 16 Luật 107/2016/QH13; Điều 14 NĐ 134/2016/NĐ-CP" },
+      { label: "Miễn thuế NK nguyên liệu, vật tư, linh kiện (5 năm kể từ khi sản xuất)", detail: "Có được miễn.", ref: "Khoản 13 Điều 16 Luật 107/2016/QH13; Điều 15 NĐ 134/2016/NĐ-CP" },
+      { label: "Khấu hao nhanh TSCĐ", detail: "Tối đa gấp 2 lần mức khấu hao theo phương pháp đường thẳng.", ref: "Điểm a khoản 2, Điều 13 TT 45/2013/TT-BTC (sđ TT 147/2016, 28/2017, 30/2025/TT-BTC)" },
+      { label: "Hỗ trợ khác", detail: "Đào tạo nguồn nhân lực, chuyển giao công nghệ, tín dụng đầu tư Nhà nước; có thể tiếp cận Quỹ Hỗ trợ đầu tư nếu đủ điều kiện (dự án lớn/công nghệ cao).", ref: "Luật 143/2025/QH15; NĐ 96/2026/NĐ-CP; NĐ 182/2024/NĐ-CP" }
+    ]
+  },
+  {
+    id: "kk",
+    level: "Địa bàn khó khăn",
+    cat: "diaban",
+    communes: ["Gò Công Đông","Tân Điền","Tân Hòa","Tân Đông","Gia Thuận","Vĩnh Bình","Đồng Sơn","Phú Thành","Long Bình","Vĩnh Hựu","Phong Mỹ","Ba Sao","Mỹ Thọ","Bình Hàng Trung","Mỹ Hiệp","Phú Hựu","Tân Nhuận Đông","Tân Phú Trung","Lai Vung","Hòa Long","Phong Hòa","Tân Dương","Mỹ An Hưng","Tân Khánh Trung","Lấp Vò","Thanh Bình","Tân Thạnh","Bình Thành","Tân Long","Mỹ Trà"],
+    incentives: [
+      { label: "Thuế suất TNDN", detail: "17% trong 10 năm; nếu dự án thuộc ngành nghề ưu đãi nhóm cao thì hưởng mức 10%/15 năm như địa bàn đặc biệt khó khăn.", ref: "Điểm b khoản 4, Điều 19 NĐ 320/2025/NĐ-CP" },
+      { label: "Miễn/giảm thuế TNDN", detail: "Miễn 2 năm, giảm 50% số thuế phải nộp trong 4 năm tiếp theo (hoặc hưởng như địa bàn đặc biệt khó khăn nếu thuộc ngành ưu đãi nhóm cao).", ref: "Khoản 2, Điều 20 NĐ 320/2025/NĐ-CP" },
+      { label: "Miễn tiền thuê đất (thuê trực tiếp từ Nhà nước)", detail: "7 năm (mức thường) — 11 năm (kèm ngành ưu đãi đầu tư) — 15 năm (kèm ngành đặc biệt ưu đãi đầu tư).", ref: "Khoản 2; điểm b/c/d/đ khoản 3, Điều 39 NĐ 103/2024/NĐ-CP (sđ NĐ 291/2025/NĐ-CP)" },
+      { label: "Miễn thuế NK hàng hóa tạo TSCĐ", detail: "Miễn 100%, áp dụng như địa bàn đặc biệt khó khăn.", ref: "Khoản 11 Điều 16 Luật 107/2016/QH13; Điều 14 NĐ 134/2016/NĐ-CP" },
+      { label: "Miễn thuế NK nguyên liệu, vật tư, linh kiện (5 năm)", detail: "Không được miễn, trừ khi dự án thuộc ngành nghề đặc biệt ưu đãi đầu tư.", ref: "Khoản 13 Điều 16 Luật 107/2016/QH13; Điều 15 NĐ 134/2016/NĐ-CP" },
+      { label: "Khấu hao nhanh TSCĐ", detail: "Tối đa gấp 2 lần mức khấu hao theo phương pháp đường thẳng, áp dụng như địa bàn đặc biệt khó khăn.", ref: "Điểm a khoản 2, Điều 13 TT 45/2013/TT-BTC (sđ TT 147/2016, 28/2017, 30/2025/TT-BTC)" },
+      { label: "Hỗ trợ khác", detail: "Áp dụng tương tự địa bàn đặc biệt khó khăn; mức hỗ trợ cụ thể tùy chính sách của địa phương.", ref: "Luật 143/2025/QH15; NĐ 96/2026/NĐ-CP; NĐ 182/2024/NĐ-CP" }
+    ]
+  }
+];
+
+function normalizeVN(s) {
+  return s.normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/g, 'd').replace(/Đ/g, 'D').toLowerCase();
+}
+
+const incentiveListEl = document.getElementById('incentiveList');
+const communeSearchInput = document.getElementById('communeSearch');
+const communeResultCount = document.getElementById('communeResultCount');
+let openIncentiveIds = new Set();
+
+function renderIncentives() {
+  const q = communeSearchInput.value.trim();
+  const nq = normalizeVN(q);
+  incentiveListEl.innerHTML = '';
+
+  let totalMatches = 0;
+
+  INCENTIVE_DATA.forEach(group => {
+    const matchedCommunes = nq ? group.communes.filter(c => normalizeVN(c).includes(nq)) : [];
+    totalMatches += matchedCommunes.length;
+    const forceOpen = nq && matchedCommunes.length > 0;
+    const isOpen = openIncentiveIds.has(group.id) || forceOpen;
+
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.dataset.open = isOpen ? 'true' : 'false';
+
+    const head = document.createElement('div');
+    head.className = 'card-head';
+    head.tabIndex = 0;
+    head.setAttribute('role', 'button');
+    head.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    head.innerHTML = `
+      <span class="badge ${group.cat}">${CAT_LABEL[group.cat]}</span>
+      <div class="card-main">
+        <div class="card-title-row">
+          <span class="card-title">${group.level}</span>
+        </div>
+        <div class="card-summary">${group.communes.length} xã/phường${nq ? ` — ${matchedCommunes.length} khớp với "${q}"` : ''}</div>
+      </div>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    `;
+    const toggle = () => {
+      const nowOpen = card.dataset.open === 'true';
+      card.dataset.open = nowOpen ? 'false' : 'true';
+      head.setAttribute('aria-expanded', nowOpen ? 'false' : 'true');
+      if (nowOpen) openIncentiveIds.delete(group.id); else openIncentiveIds.add(group.id);
+    };
+    head.addEventListener('click', toggle);
+    head.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); } });
+
+    const body = document.createElement('div');
+    body.className = 'card-body';
+    body.innerHTML = `
+      <div class="card-body-inner">
+        <h4>Xã/phường thuộc diện này</h4>
+        <div class="commune-chips">
+          ${group.communes.map(c => {
+            const isMatch = nq && normalizeVN(c).includes(nq);
+            const isDim = nq && !isMatch;
+            return `<span class="commune-chip" data-match="${isMatch}" data-dim="${isDim}">${c}</span>`;
+          }).join('')}
+        </div>
+        <h4>Mức ưu đãi áp dụng</h4>
+        <ul>${group.incentives.map(inc => `<li><b>${inc.label}:</b> ${inc.detail} <span class="card-code">(${inc.ref})</span></li>`).join('')}</ul>
+        <h4>Căn cứ pháp lý cụ thể</h4>
+        ${renderLegalList(INCENTIVE_LEGAL)}
+      </div>
+    `;
+
+    card.appendChild(head);
+    card.appendChild(body);
+    incentiveListEl.appendChild(card);
+  });
+
+  const totalCommunes = INCENTIVE_DATA.reduce((n, g) => n + g.communes.length, 0);
+  communeResultCount.textContent = nq ? `${totalMatches} xã/phường khớp` : `${totalCommunes} xã/phường · 2 địa bàn`;
+}
+
+communeSearchInput.addEventListener('input', renderIncentives);
+renderIncentives();
+
+/* ---------------- Sơ đồ tra cứu nhanh dự án (wizard) ---------------- */
+
+const DIEU24_LIST = [
+  { k: 1, tier: "ttg", label: "Chuyển mục đích sử dụng rừng đặc dụng/phòng hộ/sản xuất quy mô lớn" },
+  { k: 2, tier: "ttg", label: "Chuyển mục đích đất trồng lúa 2 vụ trở lên, quy mô ≥ 500 ha" },
+  { k: 4, tier: "ttg", label: "Kinh doanh đặt cược, casino" },
+  { k: 6, tier: "ttg", label: "Nhà máy điện hạt nhân" },
+  { k: 7, tier: "ttg", label: "NĐT nước ngoài: viễn thông có hạ tầng mạng / trồng rừng / xuất bản / báo chí" },
+  { k: 19, tier: "ttg", label: "Dự án khác thuộc diện Thủ tướng chấp thuận theo quy định pháp luật" },
+  { k: 8, tier: "tinh", label: "Nhà nước giao đất/cho thuê đất không đấu giá, đấu thầu chọn NĐT có sử dụng đất, hoặc chuyển mục đích sử dụng đất" },
+  { k: 9, tier: "tinh", label: "Khu vực ảnh hưởng quốc phòng, an ninh" },
+  { k: 10, tier: "tinh", label: "Đề nghị Nhà nước giao khu vực biển" },
+  { k: 11, tier: "tinh", label: "Xây nhà ở/khu đô thị (qua nhận quyền sử dụng đất hoặc đang có quyền sử dụng đất)" },
+  { k: 12, tier: "tinh", label: "Khu vực hạn chế phát triển/nội đô lịch sử của đô thị loại đặc biệt" },
+  { k: 13, tier: "tinh", label: "Sân golf" },
+  { k: 14, tier: "tinh", label: "Hạ tầng KCN, KCX, khu công nghệ số tập trung" },
+  { k: 15, tier: "tinh", label: "Cảng biển đặc biệt/loại I (xây mới)" },
+  { k: 16, tier: "tinh", label: "Cảng hàng không, sân bay (xây mới)" },
+  { k: 17, tier: "tinh", label: "Vận chuyển hành khách hàng không (dự án mới)" },
+  { k: 18, tier: "tinh", label: "Chế biến dầu khí" },
+  { k: 20, tier: "qh", label: "Yêu cầu cơ chế, chính sách đặc biệt khác luật/nghị quyết Quốc hội" }
+];
+
+const NGANH_UUDAI_LIST = [
+  { k: "a", label: "Khoa học, công nghệ, đổi mới sáng tạo, chuyển đổi số, công nghiệp công nghệ số, công nghiệp bán dẫn (VD: phần mềm, AI, chip, trung tâm dữ liệu)" },
+  { k: "b", label: "Kinh tế xanh, kinh tế tuần hoàn, kinh tế chia sẻ, kinh tế số, mô hình kinh tế mới (VD: tái chế, xử lý chất thải thành nguyên liệu)" },
+  { k: "c", label: "Cụm liên kết ngành, chuỗi giá trị, quản trị hiện đại, giá trị gia tăng cao, kết nối chuỗi cung ứng toàn cầu (VD: logistics, trung tâm logistics)" },
+  { k: "d", label: "Năng lượng tái tạo, năng lượng mới, năng lượng sạch (VD: điện gió, điện mặt trời, điện sinh khối, hydrogen)" },
+  { k: "đ", label: "Nông nghiệp, lâm nghiệp; bảo vệ môi trường, kinh tế biển (VD: chế biến nông sản, thủy sản, nuôi trồng thủy sản, trồng trọt, chăn nuôi, lâm sản)" },
+  { k: "e", label: "Xây dựng và phát triển kết cấu hạ tầng (VD: cấp thoát nước, xử lý nước thải, hạ tầng giao thông, cảng)" },
+  { k: "g", label: "Giáo dục, đào tạo, y tế, thể dục thể thao thành tích cao, văn hóa dân tộc (VD: trường học, bệnh viện)" },
+  { k: "h", label: "Hóa chất trọng điểm, cơ khí trọng điểm, công nghiệp hỗ trợ, công nghiệp dược (VD: linh kiện/phụ liệu cho dệt may, da giày, ô tô — không phải hàng may mặc/giày dép thành phẩm thông thường)" }
+];
+
+const wizardState = {
+  khoan: new Set(),
+  khoanSearch: '',
+  resettleCount: '',
+  resettleRegion: 'khac',
+  inKCN: false,
+  nganh: new Set(),
+  nganhSearch: '',
+  communeQuery: '',
+  landMethod: '',
+  vonDauTu: '',
+  soLaoDong: '',
+  moiTruong: ''
+};
+
+const LAND_METHODS = [
+  { v: "giao_thue_khong_dg", label: "Đất công — Nhà nước giao đất/cho thuê đất KHÔNG qua đấu giá, đấu thầu" },
+  { v: "dau_gia", label: "Đất công — đấu giá quyền sử dụng đất" },
+  { v: "dau_thau_ndt", label: "Đất công — đấu thầu lựa chọn nhà đầu tư (dự án có sử dụng đất)" },
+  { v: "chuyen_muc_dich", label: "Đất dân — nhà đầu tư tự gom/nhận chuyển nhượng, cần chuyển mục đích sử dụng đất" },
+  { v: "khong_ap_dung", label: "Không thuộc trường hợp nào ở trên / chưa xác định" }
+];
+
+const LAND_METHOD_LEGAL = {
+  giao_thue_khong_dg: [
+    { ref: "Khoản 8, Điều 24, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Giao đất/cho thuê đất không qua đấu giá, đấu thầu — thuộc diện phải chấp thuận chủ trương đầu tư (đã tính vào Bước 1)." }
+  ],
+  dau_gia: [
+    { ref: "Luật Đấu giá tài sản (01/2016/QH14, sđ 37/2024/QH15)", url: "https://thuvienphapluat.vn/van-ban/Thuong-mai/Luat-Dau-gia-tai-san-sua-doi-2024-588810.aspx", detail: "Trình tự, thủ tục đấu giá quyền sử dụng đất." },
+    { ref: "Nghị định 172/2024/NĐ-CP", url: "https://thuvienphapluat.vn/van-ban/Thuong-mai/Nghi-dinh-172-2024-ND-CP-huong-dan-Luat-Dau-gia-tai-san-2016-sua-doi-boi-Luat-Dau-gia-tai-san-2024-638044.aspx", detail: "Hướng dẫn thi hành Luật Đấu giá tài sản." }
+  ],
+  dau_thau_ndt: [
+    { ref: "Luật Đấu thầu 2023 (22/2023/QH15)", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-thau-2023-22-2023-QH15-518805.aspx", detail: "Lựa chọn nhà đầu tư thực hiện dự án đầu tư kinh doanh có sử dụng đất." },
+    { ref: "Nghị định 274/2026/NĐ-CP", url: "https://vanban.chinhphu.vn/?docid=218807&pageid=27160", detail: "Hướng dẫn chi tiết lựa chọn nhà đầu tư — thay thế Nghị định 23/2024/NĐ-CP và 115/2024/NĐ-CP." }
+  ],
+  chuyen_muc_dich: [
+    { ref: "Khoản 8, Điều 24, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Dự án có đề nghị chuyển mục đích sử dụng đất — thuộc diện phải chấp thuận chủ trương đầu tư (đã tính vào Bước 1)." },
+    { ref: "Luật Đất đai 2024 (31/2024/QH15)", url: "https://thuvienphapluat.vn/van-ban/Bat-dong-san/Luat-Dat-dai-2024-31-2024-QH15-523642.aspx", detail: "Điều kiện, thẩm quyền cho phép chuyển mục đích sử dụng đất." }
+  ]
+};
+
+const VON_LAODONG_LEGAL = [
+  { ref: "Điểm c khoản 1, Điều 14, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Dự án quy mô vốn lớn, sử dụng nhiều lao động, hoặc dự án trọng điểm/quan trọng quốc gia cũng thuộc đối tượng được hưởng ưu đãi đầu tư — không cần thuộc ngành nghề hay địa bàn ưu đãi.", quote: "c) Dự án đầu tư có quy mô vốn lớn, dự án đầu tư sử dụng nhiều lao động hoặc dự án đầu tư trọng điểm, quan trọng quốc gia phù hợp với định hướng phát triển kinh tế - xã hội trong từng thời kỳ theo quy định của Chính phủ." },
+  { ref: "Điều 17, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Nếu vốn đầu tư rất lớn và thuộc lĩnh vực công nghệ chiến lược/chip bán dẫn/AI, có thể được xét ưu đãi đầu tư đặc biệt — ví dụ dự án R&D chip bán dẫn/trung tâm dữ liệu AI cần vốn từ 6.000 tỷ đồng trở lên. Ngưỡng cụ thể theo từng loại dự án do Chính phủ quy định tại Nghị định 96/2026/NĐ-CP, không áp dụng chung một mức cho mọi ngành." }
+];
+
+const MOITRUONG_LEGAL = [
+  { ref: "Điều 30, Luật Bảo vệ môi trường 2020 (số 72/2020/QH14)", url: "https://hethongphapluat.com/luat-bao-ve-moi-truong-2020/dieu-30", detail: "Dự án đầu tư nhóm I (theo tiêu chí về môi trường) phải thực hiện đánh giá tác động môi trường (ĐTM) trước khi triển khai." },
+  { ref: "Điều 32, Luật Bảo vệ môi trường 2020", url: "https://www.luatmoitruong.vn/luat-bao-ve-moi-truong/chuong-iv.-danh-gia-moi-truong-chien-luoc-danh-gia-tac-dong-moi-truong-giay-phep-moi-truong/muc-3.-danh-gia-tac-dong-moi-truong/dieu-32.-noi-dung-cua-bao-cao-danh-gia-tac-dong-moi-truong", detail: "Nội dung báo cáo ĐTM cần lập nếu thuộc diện bắt buộc." }
+];
+
+const DIEU_24_25_LEGAL = [
+  { ref: "Điều 24, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Liệt kê 20 khoản dự án thuộc diện phải chấp thuận chủ trương đầu tư.", quote: "1. Dự án đầu tư có yêu cầu chuyển mục đích sử dụng đất rừng đặc dụng... 3. Dự án đầu tư có yêu cầu di dân tái định cư từ 10.000 người trở lên ở miền núi, từ 20.000 người trở lên ở vùng khác... 8. Dự án đầu tư mà nhà đầu tư có đề nghị Nhà nước giao đất, cho thuê đất không đấu giá quyền sử dụng đất... 19. Dự án đầu tư khác thuộc diện chấp thuận chủ trương đầu tư của Thủ tướng Chính phủ theo quy định của pháp luật. 20. Dự án đầu tư có yêu cầu áp dụng cơ chế, chính sách đặc biệt, khác với quy định của luật, nghị quyết của Quốc hội." },
+  { ref: "Điều 25, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Phân định thẩm quyền theo từng khoản của Điều 24.", quote: "1. Quốc hội chấp thuận chủ trương đầu tư đối với dự án đầu tư quy định tại khoản 20 Điều 24... 2. Thủ tướng Chính phủ chấp thuận chủ trương đầu tư đối với: a) Dự án đầu tư quy định tại các khoản 1, 2, 4, 6, 7 và 19 Điều 24; b) Dự án tái định cư từ 20.000 người trở lên ở miền núi, từ 50.000 người trở lên ở vùng khác... 3. Chủ tịch Ủy ban nhân dân cấp tỉnh chấp thuận chủ trương đầu tư đối với: a) Dự án đầu tư quy định tại các khoản 8-18 Điều 24... 4. Đối với dự án đầu tư quy định tại khoản 3 Điều này thực hiện tại khu công nghiệp, khu chế xuất, khu công nghệ cao, khu công nghệ số tập trung, khu kinh tế phù hợp với quy hoạch đã được cấp có thẩm quyền phê duyệt thì Ban quản lý khu công nghiệp, khu chế xuất, khu công nghệ cao, khu kinh tế chấp thuận chủ trương đầu tư." },
+  { ref: "Điều 26, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Nếu không thuộc diện chấp thuận chủ trương ở trên: xác định có phải cấp Giấy chứng nhận đăng ký đầu tư (IRC) hay không.", quote: "1. Các dự án phải thực hiện thủ tục cấp Giấy chứng nhận đăng ký đầu tư bao gồm: a) Dự án đầu tư của nhà đầu tư nước ngoài; b) Dự án đầu tư của tổ chức kinh tế quy định tại khoản 1 Điều 20 của Luật này." }
+];
+
+const DIABAN_15_LEGAL = [
+  { ref: "Khoản 2, Điều 15, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "2 nhóm địa bàn ưu đãi: (a) khó khăn/đặc biệt khó khăn; (b) KCN, CCN, KCX, KCNC, khu công nghệ số tập trung, khu kinh tế…", quote: "2. Địa bàn ưu đãi đầu tư bao gồm: a) Địa bàn có điều kiện kinh tế - xã hội khó khăn, địa bàn có điều kiện kinh tế - xã hội đặc biệt khó khăn; b) Khu công nghiệp, cụm công nghiệp, khu chế xuất, khu công nghệ cao, khu nông nghiệp ứng dụng công nghệ cao, khu công nghệ số tập trung, khu thương mại tự do, trung tâm tài chính quốc tế, khu kinh tế." },
+  { ref: "Điều 19–20, Nghị định 320/2025/NĐ-CP", url: "https://thuvienphapluat.vn/van-ban/Doanh-nghiep/Nghi-dinh-320-2025-ND-CP-huong-dan-Luat-Thue-thu-nhap-doanh-nghiep-665051.aspx", detail: "Mức thuế suất ưu đãi, thời gian miễn/giảm thuế TNDN cụ thể theo địa bàn." },
+  { ref: "Điều 39, Nghị định 103/2024/NĐ-CP", url: "https://thuvienphapluat.vn/van-ban/Bat-dong-san/Nghi-dinh-103-2024-ND-CP-tien-su-dung-dat-tien-thue-dat-550020.aspx", detail: "Miễn, giảm tiền thuê đất/tiền sử dụng đất theo địa bàn — chỉ áp dụng khi thuê đất trực tiếp từ Nhà nước." }
+];
+
+const NGANH_15_17_LEGAL = [
+  { ref: "Khoản 1, Điều 15, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "9 nhóm ngành, nghề ưu đãi đầu tư (a–i).", quote: "1. Ngành, nghề ưu đãi đầu tư là các ngành, nghề được ưu tiên thu hút đầu tư để thực hiện các mục tiêu sau đây: a) Phát triển khoa học, công nghệ, đổi mới sáng tạo, chuyển đổi số, công nghiệp công nghệ số và công nghiệp bán dẫn; b) Phát triển kinh tế xanh, kinh tế tuần hoàn, kinh tế chia sẻ, kinh tế số...; c) Phát triển cụm liên kết ngành, chuỗi giá trị...; d) Phát triển năng lượng tái tạo, năng lượng mới, năng lượng sạch...; đ) Phát triển nông nghiệp, lâm nghiệp; bảo vệ môi trường...; e) Xây dựng và phát triển kết cấu hạ tầng; g) Phát triển giáo dục, đào tạo, y tế...; h) Phát triển công nghiệp hóa chất trọng điểm, cơ khí trọng điểm...; i) Thực hiện các mục tiêu khác theo quy định của Chính phủ." },
+  { ref: "Điều 7, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Nếu ngành nghề dự án nằm trong Phụ lục IV (198 ngành có điều kiện) — cần thêm điều kiện tiếp cận thị trường, xem mục tra cứu văn bản." },
+  { ref: "Điều 17, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Nếu dự án thuộc công nghệ chiến lược/chip bán dẫn/AI/hạ tầng số quy mô lớn — có thể được xét ưu đãi đầu tư đặc biệt (cao hơn mức ưu đãi thường)." }
+];
+
+function computeAuthority() {
+  if (wizardState.khoan.has(20)) {
+    return { tier: "qh", khoanHit: [20] };
+  }
+  const ttgKhoan = DIEU24_LIST.filter(x => x.tier === "ttg" && wizardState.khoan.has(x.k)).map(x => x.k);
+  const count = Number(wizardState.resettleCount) || 0;
+  let ttgResettle = false, tinhResettle = false;
+  if (count > 0) {
+    const ttgThreshold = wizardState.resettleRegion === "nui" ? 20000 : 50000;
+    const tinhThreshold = wizardState.resettleRegion === "nui" ? 10000 : 20000;
+    if (count >= ttgThreshold) ttgResettle = true;
+    else if (count >= tinhThreshold) tinhResettle = true;
+  }
+  if (ttgKhoan.length || ttgResettle) {
+    return { tier: "ttg", khoanHit: ttgResettle ? [...ttgKhoan, 3] : ttgKhoan };
+  }
+  const tinhKhoan = DIEU24_LIST.filter(x => x.tier === "tinh" && wizardState.khoan.has(x.k)).map(x => x.k);
+  const landImpliesKhoan8 = ["giao_thue_khong_dg", "dau_gia", "dau_thau_ndt", "chuyen_muc_dich"].includes(wizardState.landMethod) && !tinhKhoan.includes(8);
+  if (landImpliesKhoan8) tinhKhoan.push(8);
+  if (tinhKhoan.length || tinhResettle) {
+    const khoanHit = tinhResettle ? [...tinhKhoan, 3] : tinhKhoan;
+    return { tier: wizardState.inKCN ? "banql" : "tinh", khoanHit };
+  }
+  return { tier: "none", khoanHit: [] };
+}
+
+const AUTHORITY_LABEL = {
+  qh: "Quốc hội",
+  ttg: "Thủ tướng Chính phủ",
+  tinh: "Chủ tịch UBND cấp tỉnh",
+  banql: "Ban quản lý KCN/KCX/KCNC/KKT",
+  none: "Không thuộc diện chấp thuận chủ trương đầu tư"
+};
+
+function computeDiaBan() {
+  const q = wizardState.communeQuery.trim();
+  const nq = normalizeVN(q);
+  if (!q && !wizardState.inKCN) return { status: "empty" };
+  if (nq) {
+    for (const group of INCENTIVE_DATA) {
+      const hit = group.communes.find(c => normalizeVN(c) === nq || normalizeVN(c).includes(nq));
+      if (hit) return { status: "found", level: group.level, commune: hit };
+    }
+  }
+  if (wizardState.inKCN) return { status: "kcn" };
+  if (q) return { status: "notfound" };
+  return { status: "empty" };
+}
+
+function computeNganh() {
+  const hits = NGANH_UUDAI_LIST.filter(n => wizardState.nganh.has(n.k));
+  return hits;
+}
+
+function renderResultPanel(html, empty) {
+  return `<div class="result-panel${empty ? ' empty' : ''}">${html}</div>`;
+}
+
+function renderTagSearch({ inputId, placeholder, searchValue, items, selectedSet, addAttr, removeAttr, keyProp, labelFn, emptyNote }) {
+  const nq = normalizeVN(searchValue);
+  const selected = items.filter(x => selectedSet.has(x[keyProp]));
+  const suggestions = searchValue ? items.filter(x => !selectedSet.has(x[keyProp]) && normalizeVN(labelFn(x)).includes(nq)) : [];
+  return `
+    <div class="search-box tag-search-box">
+      <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke-width="2"/><path d="M21 21l-4.3-4.3" stroke-width="2" stroke-linecap="round"/></svg>
+      <input id="${inputId}" type="text" placeholder="${placeholder}" autocomplete="off" value="${searchValue}" />
+    </div>
+    ${selected.length ? `<div class="selected-chips">${selected.map(x => `<span class="sel-chip">${labelFn(x)}<button type="button" data-${removeAttr}="${x[keyProp]}">×</button></span>`).join('')}</div>` : ''}
+    ${searchValue ? `<div class="tag-suggestions">${suggestions.length ? suggestions.map(x => `<button type="button" class="suggestion-btn" data-${addAttr}="${x[keyProp]}">${labelFn(x)}</button>`).join('') : `<div class="note">${emptyNote}</div>`}</div>` : ''}
+  `;
+}
+
+function renderWizard() {
+  const stepsEl = document.getElementById('wizardSteps');
+  const auth = computeAuthority();
+  const diaban = computeDiaBan();
+  const nganhHits = computeNganh();
+
+  const step1Body = `
+    ${renderTagSearch({
+      inputId: 'wizKhoanSearch',
+      placeholder: 'Tìm đặc điểm dự án: casino, sân golf, đất lúa, cảng biển, giao đất…',
+      searchValue: wizardState.khoanSearch,
+      items: DIEU24_LIST,
+      selectedSet: wizardState.khoan,
+      addAttr: 'add-khoan',
+      removeAttr: 'remove-khoan',
+      keyProp: 'k',
+      labelFn: x => `${x.label} (khoản ${x.k})`,
+      emptyNote: 'Không khớp trường hợp nào trong 18 khoản của Điều 24 — có thể dự án của bạn không thuộc diện đặc biệt.'
+    })}
+    <h4 style="margin-top:14px;">Đất công hay đất dân? Có phải đấu giá/đấu thầu/chuyển mục đích không?</h4>
+    <div class="wizard-fields">
+      ${LAND_METHODS.map(m => `
+        <label class="wizard-check">
+          <input type="radio" name="wizLandMethod" data-land="${m.v}" ${wizardState.landMethod === m.v ? 'checked' : ''} />
+          <span>${m.label}</span>
+        </label>
+      `).join('')}
+    </div>
+    ${wizardState.landMethod && LAND_METHOD_LEGAL[wizardState.landMethod] ? renderLegalList(LAND_METHOD_LEGAL[wizardState.landMethod]) : ''}
+    <div class="wizard-inline-row">
+      <span>Di dân tái định cư:</span>
+      <input type="number" id="wizResettle" min="0" placeholder="Số người" value="${wizardState.resettleCount}" />
+      <select id="wizRegion">
+        <option value="khac" ${wizardState.resettleRegion === 'khac' ? 'selected' : ''}>Vùng khác</option>
+        <option value="nui" ${wizardState.resettleRegion === 'nui' ? 'selected' : ''}>Miền núi</option>
+      </select>
+    </div>
+    <label class="wizard-check">
+      <input type="checkbox" id="wizInKCN" ${wizardState.inKCN ? 'checked' : ''} />
+      <span>Dự án đặt trong khu công nghiệp / khu chế xuất / khu công nghệ cao / khu kinh tế</span>
+    </label>
+    <h4 style="margin-top:14px;">Quy mô vốn & lao động (để xét thêm ưu đãi ngoài ngành/địa bàn)</h4>
+    <div class="wizard-inline-row">
+      <span>Vốn đầu tư dự kiến:</span>
+      <input type="number" id="wizVon" min="0" placeholder="Tỷ đồng" value="${wizardState.vonDauTu}" />
+      <span>Số lao động dự kiến:</span>
+      <input type="number" id="wizLaoDong" min="0" placeholder="Người" value="${wizardState.soLaoDong}" />
+    </div>
+    ${(Number(wizardState.vonDauTu) > 0 || Number(wizardState.soLaoDong) > 0) ? renderResultPanel(
+      `<span class="result-line">→ Vốn/lao động lớn cũng là căn cứ hưởng ưu đãi đầu tư (điểm c khoản 1 Điều 14), không chỉ riêng ngành nghề/địa bàn — xem chi tiết ngưỡng áp dụng bên dưới.</span>`,
+      false
+    ) + renderLegalList(VON_LAODONG_LEGAL) : ''}
+    <h4 style="margin-top:14px;">Dự án có phát sinh nước thải, khí thải, chất thải nguy hại không?</h4>
+    <div class="wizard-fields">
+      <label class="wizard-check"><input type="radio" name="wizMoiTruong" data-moitruong="co" ${wizardState.moiTruong === 'co' ? 'checked' : ''} /><span>Có</span></label>
+      <label class="wizard-check"><input type="radio" name="wizMoiTruong" data-moitruong="khong" ${wizardState.moiTruong === 'khong' ? 'checked' : ''} /><span>Không</span></label>
+    </div>
+    ${wizardState.moiTruong === 'co' ? renderResultPanel(
+      `<span class="result-line">→ Có thể thuộc diện phải lập báo cáo đánh giá tác động môi trường (ĐTM) hoặc xin giấy phép môi trường trước khi vận hành — cần xác định dự án nhóm I/II/III để biết chính xác mức độ.</span>`,
+      false
+    ) + renderLegalList(MOITRUONG_LEGAL) : ''}
+    ${renderResultPanel(
+      auth.tier === 'none'
+        ? `<span class="result-line">→ <b>${AUTHORITY_LABEL.none}</b> — chuyển thẳng sang xác định Giấy chứng nhận đăng ký đầu tư (Điều 26).</span>`
+        : `<span class="result-line">→ Thẩm quyền chấp thuận chủ trương đầu tư: <b>${AUTHORITY_LABEL[auth.tier]}</b>${auth.khoanHit.length ? ` (khoản ${auth.khoanHit.join(', ')} Điều 24)` : ''}</span>`,
+      false
+    )}
+    <div class="note">Trường hợp dự án liên quan khu vực bảo vệ di tích quốc gia đặc biệt/di sản thế giới (khoản 5 Điều 24) có quy tắc riêng theo phạm vi bảo vệ I/II — không tính tự động ở đây, cần đọc trực tiếp Điều 25 khoản 2c/3c.</div>
+    <h4>Căn cứ pháp lý</h4>
+    ${renderLegalList(DIEU_24_25_LEGAL)}
+  `;
+
+  const step2Body = `
+    <div class="search-box" style="margin-bottom:10px;">
+      <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke-width="2"/><path d="M21 21l-4.3-4.3" stroke-width="2" stroke-linecap="round"/></svg>
+      <input id="wizCommune" type="text" placeholder="Gõ tên xã/phường (VD: Tháp Mười, Lai Vung…)" autocomplete="off" value="${wizardState.communeQuery}" />
+    </div>
+    ${wizardState.inKCN ? '<div class="note">Đã đánh dấu ở Bước 1: dự án đặt trong KCN/KCX/KCNC/KKT.</div>' : ''}
+    ${renderResultPanel(
+      diaban.status === 'found'
+        ? `<span class="result-line">→ Xã/phường <b>${diaban.commune}</b> thuộc <b>${diaban.level}</b> — được hưởng ưu đãi theo địa bàn.</span>`
+        : diaban.status === 'kcn'
+          ? `<span class="result-line">→ Dự án trong KCN/KCX/KCNC/KKT — <b>thuộc địa bàn ưu đãi</b> theo điểm b khoản 2 Điều 15, dù không nằm trong danh sách xã/phường khó khăn.</span>`
+          : diaban.status === 'notfound'
+            ? `<span class="result-line">→ Không khớp danh mục xã/phường khó khăn/đặc biệt khó khăn hiện có — kiểm tra lại chính tả hoặc xác nhận dự án không thuộc địa bàn ưu đãi.</span>`
+            : `<span class="result-line">Gõ tên xã/phường ở trên để kiểm tra.</span>`,
+      diaban.status === 'empty'
+    )}
+    <h4>Căn cứ pháp lý</h4>
+    ${renderLegalList(DIABAN_15_LEGAL)}
+  `;
+
+  const step3Body = `
+    ${renderTagSearch({
+      inputId: 'wizNganhSearch',
+      placeholder: 'Tìm ngành nghề: công nghệ số, năng lượng tái tạo, nông nghiệp, giáo dục…',
+      searchValue: wizardState.nganhSearch,
+      items: NGANH_UUDAI_LIST,
+      selectedSet: wizardState.nganh,
+      addAttr: 'add-nganh',
+      removeAttr: 'remove-nganh',
+      keyProp: 'k',
+      labelFn: x => x.label,
+      emptyNote: 'Không khớp nhóm ngành ưu đãi nào trong 8 nhóm của khoản 1 Điều 15 — đây là điều bình thường với nhiều dự án phổ biến (VD: khu đô thị, trung tâm thương mại, cửa hàng xăng dầu, may mặc/giày dép thành phẩm thông thường). Không thuộc ngành ưu đãi không có nghĩa là không đầu tư được — vẫn có thể xin ưu đãi theo địa bàn (Bước 2) hoặc theo quy mô vốn/lao động lớn (Bước 1).'
+    })}
+    ${renderResultPanel(
+      nganhHits.length
+        ? `<span class="result-line">→ Thuộc nhóm ngành ưu đãi đầu tư: <b>${nganhHits.map(n => 'điểm ' + n.k).join(', ')}</b> khoản 1 Điều 15.</span>`
+        : `<span class="result-line">Chưa chọn nhóm nào ở trên — nếu không thuộc nhóm nào, dự án vẫn có thể xin ưu đãi theo địa bàn (Bước 2) mà không cần thuộc ngành ưu đãi.</span>`,
+      !nganhHits.length
+    )}
+    <div class="note">Riêng biệt: kiểm tra thêm ngành nghề <b>có điều kiện</b> (Phụ lục IV, Điều 7) và ngành nghề <b>cấm</b> (Phụ lục I–III, Điều 6) tại tab "Tra cứu văn bản".</div>
+    <h4>Căn cứ pháp lý</h4>
+    ${renderLegalList(NGANH_15_17_LEGAL)}
+  `;
+
+  const steps = [
+    { title: "Quy mô, đặc điểm dự án → Thẩm quyền chấp thuận chủ trương", body: step1Body },
+    { title: "Địa bàn thực hiện dự án → Có được ưu đãi địa bàn không?", body: step2Body },
+    { title: "Ngành, nghề dự án → Có thuộc ngành ưu đãi không?", body: step3Body }
+  ];
+
+  stepsEl.innerHTML = steps.map((s, i) => `
+    <div class="step" data-open="true">
+      <div class="step-rail"><div class="step-num">${i + 1}</div><div class="step-line"></div></div>
+      <div style="flex:1; min-width:0;">
+        <div class="step-card">
+          <div class="step-head" style="cursor:default;">
+            <div class="step-main">
+              <div class="step-title-row"><span class="step-title">${s.title}</span></div>
+            </div>
+          </div>
+          <div class="step-body" style="display:block; border-top:1px solid var(--border);">
+            <div class="step-body-inner">${s.body}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `).join('') + `
+    <div class="wizard-summary">
+      <h4>Tổng hợp nhanh</h4>
+      <div class="summary-row"><span class="label">Thẩm quyền</span><span>${AUTHORITY_LABEL[auth.tier]}</span></div>
+      <div class="summary-row"><span class="label">Địa bàn</span><span>${
+        diaban.status === 'found' ? diaban.level + ' (' + diaban.commune + ')' :
+        diaban.status === 'kcn' ? 'Trong KCN/KCX/KCNC/KKT' :
+        diaban.status === 'notfound' ? 'Không thuộc địa bàn ưu đãi (theo dữ liệu hiện có)' : 'Chưa xác định'
+      }</span></div>
+      <div class="summary-row"><span class="label">Ngành nghề ưu đãi</span><span>${nganhHits.length ? nganhHits.map(n => n.label).join('; ') : 'Chưa xác định thuộc nhóm nào'}</span></div>
+      ${(Number(wizardState.vonDauTu) > 0 || Number(wizardState.soLaoDong) > 0) ? `<div class="summary-row"><span class="label">Vốn / lao động</span><span>${wizardState.vonDauTu ? wizardState.vonDauTu + ' tỷ đồng' : '—'}${wizardState.soLaoDong ? ' · ' + wizardState.soLaoDong + ' lao động' : ''} (điểm c khoản 1 Điều 14)</span></div>` : ''}
+      ${wizardState.moiTruong === 'co' ? `<div class="summary-row"><span class="label">Môi trường</span><span>Có phát sinh chất thải — cần kiểm tra ĐTM/giấy phép môi trường (Điều 30 Luật BVMT 2020)</span></div>` : ''}
+    </div>
+  `;
+
+  // wire up listeners after DOM is built
+  stepsEl.querySelectorAll('[data-land]').forEach(el => {
+    el.addEventListener('change', () => {
+      wizardState.landMethod = el.dataset.land;
+      renderWizard();
+    });
+  });
+  stepsEl.querySelectorAll('[data-moitruong]').forEach(el => {
+    el.addEventListener('change', () => {
+      wizardState.moiTruong = el.dataset.moitruong;
+      renderWizard();
+    });
+  });
+  const vonEl = document.getElementById('wizVon');
+  if (vonEl) vonEl.addEventListener('input', () => { wizardState.vonDauTu = vonEl.value; renderWizard(); });
+  const laoDongEl = document.getElementById('wizLaoDong');
+  if (laoDongEl) laoDongEl.addEventListener('input', () => { wizardState.soLaoDong = laoDongEl.value; renderWizard(); });
+  stepsEl.querySelectorAll('[data-add-khoan]').forEach(el => {
+    el.addEventListener('click', () => {
+      wizardState.khoan.add(Number(el.dataset.addKhoan));
+      wizardState.khoanSearch = '';
+      renderWizard();
+    });
+  });
+  stepsEl.querySelectorAll('[data-remove-khoan]').forEach(el => {
+    el.addEventListener('click', () => {
+      wizardState.khoan.delete(Number(el.dataset.removeKhoan));
+      renderWizard();
+    });
+  });
+  stepsEl.querySelectorAll('[data-add-nganh]').forEach(el => {
+    el.addEventListener('click', () => {
+      wizardState.nganh.add(el.dataset.addNganh);
+      wizardState.nganhSearch = '';
+      renderWizard();
+    });
+  });
+  stepsEl.querySelectorAll('[data-remove-nganh]').forEach(el => {
+    el.addEventListener('click', () => {
+      wizardState.nganh.delete(el.dataset.removeNganh);
+      renderWizard();
+    });
+  });
+  const khoanSearchEl = document.getElementById('wizKhoanSearch');
+  if (khoanSearchEl) khoanSearchEl.addEventListener('input', () => { wizardState.khoanSearch = khoanSearchEl.value; renderWizard(); });
+  const nganhSearchEl = document.getElementById('wizNganhSearch');
+  if (nganhSearchEl) nganhSearchEl.addEventListener('input', () => { wizardState.nganhSearch = nganhSearchEl.value; renderWizard(); });
+  const resettleEl = document.getElementById('wizResettle');
+  if (resettleEl) resettleEl.addEventListener('input', () => { wizardState.resettleCount = resettleEl.value; renderWizard(); });
+  const regionEl = document.getElementById('wizRegion');
+  if (regionEl) regionEl.addEventListener('change', () => { wizardState.resettleRegion = regionEl.value; renderWizard(); });
+  const inKCNEl = document.getElementById('wizInKCN');
+  if (inKCNEl) inKCNEl.addEventListener('change', () => { wizardState.inKCN = inKCNEl.checked; renderWizard(); });
+  const communeEl = document.getElementById('wizCommune');
+  if (communeEl) communeEl.addEventListener('input', () => { wizardState.communeQuery = communeEl.value; renderWizard(); });
+
+  restoreWizardFocus();
+}
+
+let wizardFocusId = null;
+document.addEventListener('focusin', e => {
+  if (['wizResettle', 'wizCommune', 'wizKhoanSearch', 'wizNganhSearch', 'wizVon', 'wizLaoDong'].includes(e.target.id)) wizardFocusId = e.target.id;
+});
+function restoreWizardFocus() {
+  if (!wizardFocusId) return;
+  const el = document.getElementById(wizardFocusId);
+  if (el) {
+    el.focus();
+    if (typeof el.setSelectionRange === 'function') el.setSelectionRange(el.value.length, el.value.length);
+  }
+}
+renderWizard();
+
 /* ---------------- Tab switching ---------------- */
 const tabs = document.querySelectorAll('.tab');
 const lookupView = document.getElementById('lookupView');
 const processView = document.getElementById('processView');
+const incentiveView = document.getElementById('incentiveView');
+const wizardView = document.getElementById('wizardView');
 tabs.forEach(btn => {
   btn.addEventListener('click', () => {
     tabs.forEach(b => b.dataset.active = 'false');
@@ -1170,6 +2201,8 @@ tabs.forEach(btn => {
     const view = btn.dataset.view;
     lookupView.style.display = view === 'lookup' ? 'block' : 'none';
     processView.style.display = view === 'process' ? 'block' : 'none';
+    incentiveView.style.display = view === 'incentive' ? 'block' : 'none';
+    wizardView.style.display = view === 'wizard' ? 'block' : 'none';
   });
 });
 </script>
