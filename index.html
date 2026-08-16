@@ -579,6 +579,11 @@
     color: var(--text);
     margin: 0 0 8px;
   }
+  .ref-quote p.no-quote {
+    font-family: inherit;
+    font-style: normal;
+    color: var(--text-muted);
+  }
   .ref-quote a {
     font-size: 12px;
     color: var(--accent);
@@ -1353,25 +1358,18 @@ const MAIN_TAB_CATS = ["luat", "nd", "lienquan"];
 const LINK_ICON = `<svg viewBox="0 0 24 24" fill="none"><path d="M14 5h5v5M19 5l-8 8M9 5H6a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 const QUOTE_CHEVRON = `<svg class="quote-chevron" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 
-function refBadge(l) {
-  if (l.url) {
-    return `<a class="ref-badge" href="${l.url}" target="_blank" rel="noopener noreferrer" title="Mở văn bản gốc">${l.ref}${LINK_ICON}</a>`;
-  }
-  return `<span class="ref-badge">${l.ref}</span>`;
-}
-
 let legalItemSeq = 0;
 function renderLegalList(arr) {
   if (!arr || !arr.length) return '';
   return `<div class="legal-list">${arr.map(l => {
     const uid = 'lq' + (legalItemSeq++);
-    const badgeInner = `${l.ref}${l.quote ? QUOTE_CHEVRON : ''}`;
-    const badge = l.quote
-      ? `<button class="ref-badge" type="button" data-quote-toggle="${uid}" aria-expanded="false">${badgeInner}</button>`
-      : (l.url ? `<a class="ref-badge" href="${l.url}" target="_blank" rel="noopener noreferrer" title="Mở văn bản gốc">${badgeInner}${LINK_ICON}</a>` : `<span class="ref-badge">${badgeInner}</span>`);
+    const badgeInner = `${l.ref}${QUOTE_CHEVRON}`;
+    // Every badge is a toggle button — never navigates on its own. External link (if any)
+    // only fires from an explicit click inside the expanded panel.
+    const badge = `<button class="ref-badge" type="button" data-quote-toggle="${uid}" aria-expanded="false">${badgeInner}</button>`;
     const quoteBlock = l.quote
       ? `<div class="ref-quote" id="${uid}"><p>“${l.quote}”</p>${l.url ? `<a href="${l.url}" target="_blank" rel="noopener noreferrer">Xem toàn văn văn bản gốc ${LINK_ICON}</a>` : ''}</div>`
-      : '';
+      : `<div class="ref-quote" id="${uid}"><p class="no-quote">Chưa có bản trích dẫn nguyên văn được xác minh cho mục này trong hệ thống.</p>${l.url ? `<a href="${l.url}" target="_blank" rel="noopener noreferrer">Xem toàn văn văn bản gốc ${LINK_ICON}</a>` : ''}</div>`;
     return `<div class="legal-item">${badge}<span class="ref-detail">${l.detail}</span>${quoteBlock}</div>`;
   }).join('')}</div>`;
 }
@@ -1520,7 +1518,7 @@ const PROCESS_DATA = [
       "Nếu là nhà đầu tư nước ngoài: kiểm tra thêm điều kiện tiếp cận thị trường riêng."
     ],
     legal: [
-      { ref: "Phụ lục IV, Luật Đầu tư 2025 (số 143/2025/QH15)", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Danh mục 198 ngành, nghề đầu tư kinh doanh có điều kiện — rút gọn so với Luật 2020." },
+      { ref: "Điều 7, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Danh mục 198 ngành, nghề đầu tư kinh doanh có điều kiện tại Phụ lục IV — rút gọn so với Luật 2020.", quote: "1. Ngành, nghề đầu tư kinh doanh có điều kiện là ngành, nghề kinh doanh trên lãnh thổ Việt Nam mà việc thực hiện hoạt động đầu tư kinh doanh trong ngành, nghề đó phải đáp ứng điều kiện cần thiết vì lý do quốc phòng, an ninh quốc gia, trật tự, an toàn xã hội, đạo đức xã hội, sức khỏe của cộng đồng. Danh mục ngành, nghề đầu tư kinh doanh có điều kiện được quy định tại Phụ lục IV ban hành kèm theo Luật này." },
       { ref: "Nghị định 96/2026/NĐ-CP", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Nghi-dinh-96-2026-ND-CP-huong-dan-Luat-Dau-tu-690303.aspx", detail: "Quy định chi tiết ngành, nghề và điều kiện tiếp cận thị trường đối với nhà đầu tư nước ngoài." }
     ]
   },
@@ -1551,7 +1549,8 @@ const PROCESS_DATA = [
       "Nếu có, xác định đúng cấp thẩm quyền theo quy mô, tính chất dự án."
     ],
     legal: [
-      { ref: "Điều 24, Luật Đầu tư 2025", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Quốc hội: dự án quan trọng quốc gia, cần cơ chế/chính sách đặc thù. Thủ tướng: khoản 1, 2, 4, 6, 7, 19 — dự án lớn, tái định cư ≥20.000 người (miền núi)/50.000 người (vùng khác). Chủ tịch UBND cấp tỉnh: khoản 8–18, gồm dự án Nhà nước giao/cho thuê đất không qua đấu giá." }
+      { ref: "Điều 24, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Liệt kê 20 khoản dự án thuộc diện phải chấp thuận chủ trương đầu tư — nền tảng để tra Điều 25 xác định đúng cấp thẩm quyền.", quote: "8. Dự án đầu tư mà nhà đầu tư có đề nghị Nhà nước giao đất, cho thuê đất không đấu giá quyền sử dụng đất, đấu thầu lựa chọn nhà đầu tư thực hiện dự án có sử dụng đất; dự án có đề nghị chuyển mục đích sử dụng đất... 19. Dự án đầu tư khác thuộc diện chấp thuận chủ trương đầu tư của Thủ tướng Chính phủ theo quy định của pháp luật. 20. Dự án đầu tư có yêu cầu áp dụng cơ chế, chính sách đặc biệt, khác với quy định của luật, nghị quyết của Quốc hội." },
+      { ref: "Điều 25, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Quốc hội: dự án theo khoản 20 Điều 24. Thủ tướng: khoản 1, 2, 4, 6, 7, 19 — dự án lớn, tái định cư ≥20.000 người (miền núi)/50.000 người (vùng khác). Chủ tịch UBND cấp tỉnh: khoản 8–18, gồm dự án Nhà nước giao/cho thuê đất không qua đấu giá.", quote: "1. Quốc hội chấp thuận chủ trương đầu tư đối với dự án đầu tư quy định tại khoản 20 Điều 24 của Luật này. 2. Thủ tướng Chính phủ chấp thuận chủ trương đầu tư đối với: a) Dự án đầu tư quy định tại các khoản 1, 2, 4, 6, 7 và 19 Điều 24... 3. Chủ tịch Ủy ban nhân dân cấp tỉnh chấp thuận chủ trương đầu tư đối với: a) Dự án đầu tư quy định tại các khoản 8, 9, 10, 11, 12, 13, 14, 15, 16, 17 và 18 Điều 24..." }
     ]
   },
   {
@@ -1583,7 +1582,7 @@ const PROCESS_DATA = [
     ],
     legal: [
       { ref: "Luật Doanh nghiệp 2020 (số 59/2020/QH14)", url: "https://thuvienphapluat.vn/van-ban/Doanh-nghiep/Luat-Doanh-nghiep-so-59-2020-QH14-427301.aspx", detail: "Quy định thành lập, tổ chức quản lý doanh nghiệp — nền tảng của bước ERC." },
-      { ref: "Luật Đầu tư 2025 (điểm mới)", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Nhà đầu tư nước ngoài lập pháp nhân qua ERC trước, sau đó mới xin IRC." }
+      { ref: "Điều 19, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Nhà đầu tư nước ngoài lập pháp nhân qua ERC trước, sau đó mới xin IRC.", quote: "2. Nhà đầu tư nước ngoài được thành lập tổ chức kinh tế thực hiện dự án đầu tư trước khi thực hiện thủ tục cấp, điều chỉnh Giấy chứng nhận đăng ký đầu tư và phải đáp ứng điều kiện tiếp cận thị trường đối với nhà đầu tư nước ngoài quy định tại Điều 8 của Luật này khi thực hiện thủ tục thành lập tổ chức kinh tế." }
     ]
   },
   {
@@ -1963,7 +1962,7 @@ const LAND_METHODS = [
 
 const LAND_METHOD_LEGAL = {
   giao_thue_khong_dg: [
-    { ref: "Khoản 8, Điều 24, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Giao đất/cho thuê đất không qua đấu giá, đấu thầu — thuộc diện phải chấp thuận chủ trương đầu tư (đã tính vào Bước 1)." }
+    { ref: "Khoản 8, Điều 24, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Giao đất/cho thuê đất không qua đấu giá, đấu thầu — thuộc diện phải chấp thuận chủ trương đầu tư (đã tính vào Bước 1).", quote: "8. Dự án đầu tư mà nhà đầu tư có đề nghị Nhà nước giao đất, cho thuê đất không đấu giá quyền sử dụng đất, đấu thầu lựa chọn nhà đầu tư thực hiện dự án có sử dụng đất; dự án có đề nghị chuyển mục đích sử dụng đất theo quy định của pháp luật về đất đai. Việc chấp thuận chủ trương đầu tư quy định tại khoản này không áp dụng đối với: a) Dự án đầu tư của cá nhân không thuộc diện phải có văn bản chấp thuận của UBND cấp tỉnh trước khi được quyết định cho thuê đất, cho phép chuyển mục đích sử dụng đất; b) Dự án đầu tư xây dựng hạ tầng kỹ thuật cụm công nghiệp; c) Dự án khai thác khoáng sản thuộc diện đấu giá quyền khai thác khoáng sản...; d) Dự án đầu tư khác theo quy định của Chính phủ." }
   ],
   dau_gia: [
     { ref: "Luật Đấu giá tài sản (01/2016/QH14, sđ 37/2024/QH15)", url: "https://thuvienphapluat.vn/van-ban/Thuong-mai/Luat-Dau-gia-tai-san-sua-doi-2024-588810.aspx", detail: "Trình tự, thủ tục đấu giá quyền sử dụng đất." },
@@ -1974,14 +1973,14 @@ const LAND_METHOD_LEGAL = {
     { ref: "Nghị định 274/2026/NĐ-CP", url: "https://vanban.chinhphu.vn/?docid=218807&pageid=27160", detail: "Hướng dẫn chi tiết lựa chọn nhà đầu tư — thay thế Nghị định 23/2024/NĐ-CP và 115/2024/NĐ-CP." }
   ],
   chuyen_muc_dich: [
-    { ref: "Khoản 8, Điều 24, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Dự án có đề nghị chuyển mục đích sử dụng đất — thuộc diện phải chấp thuận chủ trương đầu tư (đã tính vào Bước 1)." },
+    { ref: "Khoản 8, Điều 24, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Dự án có đề nghị chuyển mục đích sử dụng đất — thuộc diện phải chấp thuận chủ trương đầu tư (đã tính vào Bước 1).", quote: "8. Dự án đầu tư mà nhà đầu tư có đề nghị Nhà nước giao đất, cho thuê đất không đấu giá quyền sử dụng đất, đấu thầu lựa chọn nhà đầu tư thực hiện dự án có sử dụng đất; dự án có đề nghị chuyển mục đích sử dụng đất theo quy định của pháp luật về đất đai..." },
     { ref: "Luật Đất đai 2024 (31/2024/QH15)", url: "https://thuvienphapluat.vn/van-ban/Bat-dong-san/Luat-Dat-dai-2024-31-2024-QH15-523642.aspx", detail: "Điều kiện, thẩm quyền cho phép chuyển mục đích sử dụng đất." }
   ]
 };
 
 const VON_LAODONG_LEGAL = [
   { ref: "Điểm c khoản 1, Điều 14, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Dự án quy mô vốn lớn, sử dụng nhiều lao động, hoặc dự án trọng điểm/quan trọng quốc gia cũng thuộc đối tượng được hưởng ưu đãi đầu tư — không cần thuộc ngành nghề hay địa bàn ưu đãi.", quote: "c) Dự án đầu tư có quy mô vốn lớn, dự án đầu tư sử dụng nhiều lao động hoặc dự án đầu tư trọng điểm, quan trọng quốc gia phù hợp với định hướng phát triển kinh tế - xã hội trong từng thời kỳ theo quy định của Chính phủ." },
-  { ref: "Điều 17, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Nếu vốn đầu tư rất lớn và thuộc lĩnh vực công nghệ chiến lược/chip bán dẫn/AI, có thể được xét ưu đãi đầu tư đặc biệt — ví dụ dự án R&D chip bán dẫn/trung tâm dữ liệu AI cần vốn từ 6.000 tỷ đồng trở lên. Ngưỡng cụ thể theo từng loại dự án do Chính phủ quy định tại Nghị định 96/2026/NĐ-CP, không áp dụng chung một mức cho mọi ngành." }
+  { ref: "Điều 17, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Nếu vốn đầu tư rất lớn và thuộc lĩnh vực công nghệ chiến lược/chip bán dẫn/AI, có thể được xét ưu đãi đầu tư đặc biệt — ví dụ dự án R&D chip bán dẫn/trung tâm dữ liệu AI cần vốn từ 6.000 tỷ đồng trở lên. Ngưỡng cụ thể theo từng loại dự án do Chính phủ quy định tại Nghị định 96/2026/NĐ-CP, không áp dụng chung một mức cho mọi ngành.", quote: "2. Đối tượng áp dụng ưu đãi, hỗ trợ đầu tư đặc biệt bao gồm: a) Dự án đầu tư thành lập mới trung tâm đổi mới sáng tạo, trung tâm nghiên cứu và phát triển, dự án đầu tư xây dựng hạ tầng trung tâm dữ liệu lớn, hạ tầng điện toán đám mây, hạ tầng di động từ 5G trở lên...; b) Dự án đầu tư sản xuất sản phẩm công nghệ số trọng điểm, dự án nghiên cứu và phát triển, thiết kế, sản xuất, đóng gói, kiểm thử chip bán dẫn, dự án xây dựng trung tâm dữ liệu trí tuệ nhân tạo... có quy mô vốn đầu tư và thời hạn giải ngân vốn đầu tư theo quy định của Chính phủ; c) Dự án đầu tư khác thuộc ngành, nghề đặc biệt ưu đãi đầu tư có quy mô vốn đầu tư và thời hạn giải ngân vốn đầu tư theo quy định của Chính phủ." }
 ];
 
 const PROJECT_GROUP_LEGAL = [
@@ -2009,8 +2008,8 @@ const DIABAN_15_LEGAL = [
 
 const NGANH_15_17_LEGAL = [
   { ref: "Khoản 1, Điều 15, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "9 nhóm ngành, nghề ưu đãi đầu tư (a–i).", quote: "1. Ngành, nghề ưu đãi đầu tư là các ngành, nghề được ưu tiên thu hút đầu tư để thực hiện các mục tiêu sau đây: a) Phát triển khoa học, công nghệ, đổi mới sáng tạo, chuyển đổi số, công nghiệp công nghệ số và công nghiệp bán dẫn; b) Phát triển kinh tế xanh, kinh tế tuần hoàn, kinh tế chia sẻ, kinh tế số...; c) Phát triển cụm liên kết ngành, chuỗi giá trị...; d) Phát triển năng lượng tái tạo, năng lượng mới, năng lượng sạch...; đ) Phát triển nông nghiệp, lâm nghiệp; bảo vệ môi trường...; e) Xây dựng và phát triển kết cấu hạ tầng; g) Phát triển giáo dục, đào tạo, y tế...; h) Phát triển công nghiệp hóa chất trọng điểm, cơ khí trọng điểm...; i) Thực hiện các mục tiêu khác theo quy định của Chính phủ." },
-  { ref: "Điều 7, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Nếu ngành nghề dự án nằm trong Phụ lục IV (198 ngành có điều kiện) — cần thêm điều kiện tiếp cận thị trường, xem mục tra cứu văn bản." },
-  { ref: "Điều 17, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Nếu dự án thuộc công nghệ chiến lược/chip bán dẫn/AI/hạ tầng số quy mô lớn — có thể được xét ưu đãi đầu tư đặc biệt (cao hơn mức ưu đãi thường)." }
+  { ref: "Điều 7, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Nếu ngành nghề dự án nằm trong Phụ lục IV (198 ngành có điều kiện) — cần thêm điều kiện tiếp cận thị trường, xem mục tra cứu văn bản.", quote: "1. Ngành, nghề đầu tư kinh doanh có điều kiện là ngành, nghề kinh doanh trên lãnh thổ Việt Nam mà việc thực hiện hoạt động đầu tư kinh doanh trong ngành, nghề đó phải đáp ứng điều kiện cần thiết vì lý do quốc phòng, an ninh quốc gia, trật tự, an toàn xã hội, đạo đức xã hội, sức khỏe của cộng đồng. Danh mục ngành, nghề đầu tư kinh doanh có điều kiện được quy định tại Phụ lục IV ban hành kèm theo Luật này." },
+  { ref: "Điều 17, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Nếu dự án thuộc công nghệ chiến lược/chip bán dẫn/AI/hạ tầng số quy mô lớn — có thể được xét ưu đãi đầu tư đặc biệt (cao hơn mức ưu đãi thường).", quote: "1. Chính phủ quy định việc áp dụng ưu đãi, hỗ trợ đầu tư đặc biệt nhằm khuyến khích phát triển một số dự án đầu tư có tác động lớn đến phát triển kinh tế - xã hội. 2. Đối tượng áp dụng bao gồm: a) Trung tâm đổi mới sáng tạo, trung tâm R&D, hạ tầng trung tâm dữ liệu lớn, điện toán đám mây, hạ tầng di động 5G trở lên trong lĩnh vực công nghệ chiến lược; b) Sản xuất sản phẩm công nghệ số trọng điểm, chip bán dẫn, trung tâm dữ liệu AI; c) Dự án khác thuộc ngành, nghề đặc biệt ưu đãi đầu tư — quy mô vốn và thời hạn giải ngân theo quy định của Chính phủ." }
 ];
 
 function computeAuthority() {
