@@ -1177,9 +1177,13 @@ const DATA = [
     body: `
       <ul>
         <li>Áp dụng cho cả dự án đầu tư mới và dự án mở rộng.</li>
-        <li>Văn bản hướng dẫn thi hành: <a href="https://thuvienphapluat.vn/van-ban/Xuat-nhap-khau/Nghi-dinh-134-2016-ND-CP-huong-dan-Luat-thue-xuat-khau-thue-nhap-khau-323602.aspx" target="_blank" rel="noopener noreferrer">Điều 14, Nghị định 134/2016/NĐ-CP</a> (sửa đổi, bổ sung bởi Nghị định 18/2021/NĐ-CP và Nghị định 182/2025/NĐ-CP, hiệu lực 01/7/2025 — cần dùng bản hợp nhất mới nhất).</li>
+        <li>Văn bản hướng dẫn thi hành: Điều 14, Nghị định 134/2016/NĐ-CP (sửa đổi, bổ sung bởi Nghị định 18/2021/NĐ-CP và Nghị định 182/2025/NĐ-CP, hiệu lực 01/7/2025 — cần dùng bản hợp nhất mới nhất).</li>
       </ul>
-    `
+    `,
+    legal: [
+      { ref: "Khoản 11 Điều 16, Luật 107/2016/QH13", url: "https://thuvienphapluat.vn/van-ban/Xuat-nhap-khau/Luat-thue-xuat-khau-thue-nhap-khau-2016-280693.aspx", detail: "Miễn thuế nhập khẩu hàng hóa tạo tài sản cố định (sửa đổi bởi Luật 90/2025/QH15)." },
+      { ref: "Điều 14, Nghị định 134/2016/NĐ-CP", url: "https://thuvienphapluat.vn/van-ban/Xuat-nhap-khau/Nghi-dinh-134-2016-ND-CP-huong-dan-Luat-thue-xuat-khau-thue-nhap-khau-323602.aspx", detail: "Hướng dẫn chi tiết miễn thuế nhập khẩu hàng hóa tạo tài sản cố định (sửa đổi bởi Nghị định 18/2021/NĐ-CP và Nghị định 182/2025/NĐ-CP)." }
+    ]
   },
   {
     id: "khau-hao-nhanh",
@@ -1384,11 +1388,9 @@ document.addEventListener('click', e => {
 });
 
 function codeBadge(item, q) {
-  const label = highlight(item.code, q);
-  if (item.url) {
-    return `<a class="card-code" href="${item.url}" target="_blank" rel="noopener noreferrer" title="Mở văn bản gốc">${label}${LINK_ICON}</a>`;
-  }
-  return `<span class="card-code">${label}</span>`;
+  // Plain text — bấm vào đây chỉ mở/đóng thẻ (giống bấm vào tiêu đề), không nhảy sang trang khác.
+  // Muốn xem văn bản gốc: mở thẻ ra rồi bấm nút "Xem toàn văn văn bản gốc" bên trong từng điều luật cụ thể.
+  return `<span class="card-code">${highlight(item.code, q)}</span>`;
 }
 
 const listEl = document.getElementById('list');
@@ -1491,7 +1493,8 @@ function render() {
 
     const body = document.createElement('div');
     body.className = 'card-body';
-    body.innerHTML = `<div class="card-body-inner">${item.body}${item.legal ? `<h4>Căn cứ pháp lý cụ thể</h4>${renderLegalList(item.legal)}` : ''}</div>`;
+    const legalArr = item.legal || (item.url ? [{ ref: item.code, url: item.url, detail: "Toàn văn văn bản." }] : null);
+    body.innerHTML = `<div class="card-body-inner">${item.body}${legalArr ? `<h4>Căn cứ pháp lý cụ thể</h4>${renderLegalList(legalArr)}` : ''}</div>`;
 
     card.appendChild(head);
     card.appendChild(body);
