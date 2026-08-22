@@ -1339,6 +1339,39 @@ const DATA = [
     `
   },
   {
+    id: "nd-206-2026",
+    cat: "nd",
+    parentLaw: "luat-xay-dung-2025",
+    code: "Nghị định 206/2026/NĐ-CP",
+    url: "https://thuvienphapluat.vn/van-ban/Xay-dung-Do-thi/Nghi-dinh-206-2026-ND-CP-huong-dan-quan-ly-chi-phi-dau-tu-xay-dung-457659.aspx",
+    title: "Quản lý chi phí đầu tư xây dựng",
+    date: "Ban hành 15/06/2026, hiệu lực 01/07/2026 — thay thế Nghị định 10/2021/NĐ-CP",
+    summary: "Khung pháp lý để lập, thẩm định tổng mức đầu tư sơ bộ, tổng mức đầu tư, dự toán xây dựng — căn cứ để đánh giá vốn đầu tư nhà đầu tư đề xuất có hợp lý so với quy mô hay không.",
+    body: `
+      <ul>
+        <li>Quy định: sơ bộ tổng mức đầu tư, tổng mức đầu tư, dự toán xây dựng, giá gói thầu xây dựng, chi phí quản lý dự án, chi phí tư vấn, hệ thống công cụ định mức, giá và chỉ số giá xây dựng.</li>
+        <li>Áp dụng trực tiếp cho dự án đầu tư công/PPP/vốn ngân sách thường xuyên — với dự án tư nhân, hệ thống suất vốn đầu tư và định mức tại đây vẫn là căn cứ tham khảo phổ biến để kiểm tra tính hợp lý của tổng mức đầu tư nhà đầu tư đề xuất.</li>
+      </ul>
+    `
+  },
+  {
+    id: "qd-425-bxd",
+    cat: "nd",
+    parentLaw: "luat-xay-dung-2025",
+    code: "Quyết định 425/QĐ-BXD",
+    url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Quyet-dinh-425-QD-BXD-2026-cong-bo-suat-von-dau-tu-xay-dung-cong-trinh-2025-699543.aspx",
+    title: "Công bố suất vốn đầu tư xây dựng và giá xây dựng tổng hợp năm 2025",
+    date: "Ban hành 30/03/2026",
+    summary: "Bảng suất vốn đầu tư (triệu đồng/m²) theo từng loại công trình — dùng để ước tính hoặc kiểm tra nhanh tổng mức đầu tư nhà đầu tư đề xuất có phù hợp với quy mô xây dựng hay không.",
+    body: `
+      <ul>
+        <li>Kết cấu 3 phần, mã hóa chỉ tiêu theo số hiệu thống nhất — bao phủ 5 nhóm công trình chuyên ngành (dân dụng, công nghiệp, hạ tầng kỹ thuật…).</li>
+        <li>Một số mức tham khảo (qua nguồn thứ cấp, năm 2025): nhà xưởng sản xuất 1 tầng kết cấu thép ~6,7 triệu đồng/m²; văn phòng/trụ sở hạng B (10–20 tầng) ~15,9 triệu đồng/m²; nhà chung cư 9–20 tầng ~12,8 triệu đồng/m².</li>
+      </ul>
+      <div class="note"><b>Lưu ý:</b> các mức trên trích qua nguồn tổng hợp thứ cấp, không phải chụp trực tiếp từ Phụ lục chính thức — trước khi dùng để thẩm định/cam kết với nhà đầu tư, cần đối chiếu bản Phụ lục gốc kèm theo Quyết định 425/QĐ-BXD.</div>
+    `
+  },
+  {
     id: "quy-trinh-xuc-tien",
     cat: "nd",
     code: "Quy trình tham khảo",
@@ -1938,7 +1971,14 @@ const wizardState = {
   vonDauTu: '',
   soLaoDong: '',
   moiTruong: '',
-  isGiaoThong: false
+  isGiaoThong: false,
+  dienTichXayDung: '',
+  loaiCongTrinh: '',
+  doanhThuNam: '',
+  chiPhiNam: '',
+  soNamDuAn: '',
+  tyLeChietKhau: '10',
+  thueSuatTNDN: ''
 };
 
 function computeProjectGroup() {
@@ -1955,6 +1995,68 @@ function computeProjectGroup() {
   return { group: "C" };
 }
 const PROJECT_GROUP_LABEL = { qtqg: "Dự án quan trọng quốc gia", A: "Nhóm A", B: "Nhóm B", C: "Nhóm C" };
+
+const SUAT_DAU_TU_BENCHMARK = [
+  { key: "nha_xuong", label: "Nhà xưởng sản xuất 1 tầng, kết cấu thép", rate: 6.7 },
+  { key: "van_phong", label: "Văn phòng / trụ sở làm việc hạng B (10–20 tầng)", rate: 15.9 },
+  { key: "chung_cu", label: "Nhà chung cư 9–20 tầng (tiêu chuẩn)", rate: 12.8 },
+  { key: "khac", label: "Loại khác / không so sánh", rate: null }
+];
+
+const SUAT_DAU_TU_LEGAL = [
+  { ref: "Nghị định 206/2026/NĐ-CP", url: "https://thuvienphapluat.vn/van-ban/Xay-dung-Do-thi/Nghi-dinh-206-2026-ND-CP-huong-dan-quan-ly-chi-phi-dau-tu-xay-dung-457659.aspx", detail: "Khung quản lý chi phí đầu tư xây dựng — cơ sở lập/thẩm định tổng mức đầu tư." },
+  { ref: "Quyết định 425/QĐ-BXD (30/3/2026)", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Quyet-dinh-425-QD-BXD-2026-cong-bo-suat-von-dau-tu-xay-dung-cong-trinh-2025-699543.aspx", detail: "Bảng suất vốn đầu tư năm 2025 — mức tham khảo dùng ở trên trích qua nguồn thứ cấp, cần đối chiếu Phụ lục chính thức trước khi thẩm định/cam kết." }
+];
+
+function computeSuatDauTu() {
+  const von = Number(wizardState.vonDauTu) || 0;
+  const dienTich = Number(wizardState.dienTichXayDung) || 0;
+  if (von <= 0 || dienTich <= 0) return { rate: null };
+  const rateThucTe = (von * 1000) / dienTich; // tỷ đồng -> triệu đồng, chia m2
+  const benchmark = SUAT_DAU_TU_BENCHMARK.find(b => b.key === wizardState.loaiCongTrinh);
+  let compareText = null;
+  if (benchmark && benchmark.rate) {
+    const diffPct = ((rateThucTe - benchmark.rate) / benchmark.rate) * 100;
+    compareText = `${diffPct >= 0 ? 'cao hơn' : 'thấp hơn'} ${Math.abs(diffPct).toFixed(0)}% so với mức tham khảo năm 2025 (${benchmark.rate} triệu đồng/m²)`;
+  }
+  return { rate: rateThucTe, compareText };
+}
+
+function calcNPV(rate, initialInvestment, annualCashFlow, years) {
+  let npv = -initialInvestment;
+  for (let t = 1; t <= years; t++) npv += annualCashFlow / Math.pow(1 + rate, t);
+  return npv;
+}
+
+function calcIRR(initialInvestment, annualCashFlow, years) {
+  if (annualCashFlow <= 0) return null;
+  let low = -0.99, high = 10;
+  for (let i = 0; i < 100; i++) {
+    const mid = (low + high) / 2;
+    const npvMid = calcNPV(mid, initialInvestment, annualCashFlow, years);
+    if (Math.abs(npvMid) < 0.0001) return mid;
+    if (npvMid > 0) low = mid; else high = mid;
+  }
+  return (low + high) / 2;
+}
+
+function computeFinancials() {
+  const von = Number(wizardState.vonDauTu) || 0;
+  const doanhThu = Number(wizardState.doanhThuNam) || 0;
+  const chiPhi = Number(wizardState.chiPhiNam) || 0;
+  const soNam = Number(wizardState.soNamDuAn) || 0;
+  const chietKhau = Number(wizardState.tyLeChietKhau);
+  const thueSuat = Number(wizardState.thueSuatTNDN) || 0;
+  if (von <= 0 || soNam <= 0) return { valid: false };
+  const loiNhuanTruocThue = doanhThu - chiPhi;
+  const thueTNDN = Math.max(0, loiNhuanTruocThue) * (thueSuat / 100);
+  const dongTienRong = loiNhuanTruocThue - thueTNDN;
+  const rate = (isNaN(chietKhau) ? 10 : chietKhau) / 100;
+  const npv = calcNPV(rate, von, dongTienRong, soNam);
+  const irr = calcIRR(von, dongTienRong, soNam);
+  const paybackYears = dongTienRong > 0 ? von / dongTienRong : null;
+  return { valid: true, dongTienRong, npv, irr, paybackYears, rate, khaThi: npv > 0 };
+}
 
 const LAND_METHODS = [
   { v: "giao_thue_khong_dg", label: "Đất công — Nhà nước giao đất/cho thuê đất KHÔNG qua đấu giá, đấu thầu" },
@@ -2216,10 +2318,55 @@ function renderWizard() {
     ${renderLegalList(NGANH_15_17_LEGAL)}
   `;
 
+  const suatDauTu = computeSuatDauTu();
+  const fin = computeFinancials();
+  const step4Body = `
+    <h4 style="margin-top:0;">Suất đầu tư (kiểm tra vốn đầu tư có hợp lý với quy mô xây dựng không)</h4>
+    <div class="wizard-inline-row">
+      <span>Diện tích sàn xây dựng:</span>
+      <input type="number" id="wizDienTich" min="0" placeholder="m²" value="${wizardState.dienTichXayDung}" />
+      <select id="wizLoaiCongTrinh">
+        <option value="">— Chọn loại công trình —</option>
+        ${SUAT_DAU_TU_BENCHMARK.map(b => `<option value="${b.key}" ${wizardState.loaiCongTrinh === b.key ? 'selected' : ''}>${b.label}</option>`).join('')}
+      </select>
+    </div>
+    ${suatDauTu.rate !== null ? renderResultPanel(
+      `<span class="result-line">→ Suất đầu tư thực tế: <b>${suatDauTu.rate.toFixed(1)} triệu đồng/m²</b>${suatDauTu.compareText ? ` — ${suatDauTu.compareText}` : ''}</span>`,
+      false
+    ) : renderResultPanel('Nhập vốn đầu tư (Bước 1) và diện tích sàn xây dựng để tính suất đầu tư.', true)}
+    ${renderLegalList(SUAT_DAU_TU_LEGAL)}
+
+    <h4 style="margin-top:22px;">Hiệu quả tài chính sơ bộ (NPV, IRR, thời gian hoàn vốn)</h4>
+    <p class="process-intro" style="margin:0 0 10px;">Dùng vốn đầu tư đã nhập ở Bước 1. Nhập doanh thu/chi phí bình quân mỗi năm (giả định đều đặn) để ước tính nhanh — không thay thế phương án tài chính chi tiết trong hồ sơ dự án.</p>
+    <div class="wizard-inline-row">
+      <span>Doanh thu bình quân/năm:</span>
+      <input type="number" id="wizDoanhThu" min="0" placeholder="Tỷ đồng" value="${wizardState.doanhThuNam}" />
+      <span>Chi phí hoạt động bình quân/năm:</span>
+      <input type="number" id="wizChiPhi" min="0" placeholder="Tỷ đồng" value="${wizardState.chiPhiNam}" />
+    </div>
+    <div class="wizard-inline-row">
+      <span>Thời gian dự án:</span>
+      <input type="number" id="wizSoNam" min="1" placeholder="Số năm" value="${wizardState.soNamDuAn}" />
+      <span>Tỷ lệ chiết khấu:</span>
+      <input type="number" id="wizChietKhau" min="0" placeholder="%/năm" value="${wizardState.tyLeChietKhau}" />
+      <span>Thuế suất TNDN áp dụng:</span>
+      <input type="number" id="wizThueSuat" min="0" max="20" placeholder="VD: 10, 17, 20" value="${wizardState.thueSuatTNDN}" />
+    </div>
+    ${fin.valid ? `
+      ${renderResultPanel(
+        `<span class="result-line">→ Dòng tiền ròng/năm: <b>${fin.dongTienRong.toFixed(1)} tỷ đồng</b> · NPV (chiết khấu ${(fin.rate*100).toFixed(0)}%/năm): <b>${fin.npv.toFixed(1)} tỷ đồng</b> · IRR: <b>${fin.irr !== null ? (fin.irr*100).toFixed(1) + '%' : 'không xác định (dòng tiền không dương)'}</b> · Thời gian hoàn vốn: <b>${fin.paybackYears !== null ? fin.paybackYears.toFixed(1) + ' năm' : '—'}</b></span><br/>
+         <span class="result-line" style="margin-top:6px; display:inline-block;">${fin.khaThi ? '✓ NPV > 0 — dự án <b>khả thi về mặt tài chính</b> ở mức giả định này.' : '⚠ NPV ≤ 0 ở mức giả định này — cần xem lại doanh thu/chi phí/tỷ lệ chiết khấu, hoặc dự án chưa hiệu quả với các thông số đã nhập.'}</span>`,
+        false
+      )}
+      <div class="note">Đây là ước tính <b>sơ bộ, dòng tiền đều mỗi năm</b> — hồ sơ chính thức cần phương án tài chính chi tiết theo từng năm (đặc biệt 1-2 năm đầu thường thấp hơn), có thể khác kết quả ở đây.</div>
+    ` : renderResultPanel('Nhập đủ vốn đầu tư (Bước 1), doanh thu/chi phí và số năm dự án để tính NPV/IRR.', true)}
+  `;
+
   const steps = [
     { title: "Quy mô, đặc điểm dự án → Thẩm quyền chấp thuận chủ trương", body: step1Body },
     { title: "Địa bàn thực hiện dự án → Có được ưu đãi địa bàn không?", body: step2Body },
-    { title: "Ngành, nghề dự án → Có thuộc ngành ưu đãi không?", body: step3Body }
+    { title: "Ngành, nghề dự án → Có thuộc ngành ưu đãi không?", body: step3Body },
+    { title: "Suất đầu tư & hiệu quả tài chính sơ bộ", body: step4Body }
   ];
 
   stepsEl.innerHTML = steps.map((s, i) => `
@@ -2309,6 +2456,20 @@ function renderWizard() {
   if (inKCNEl) inKCNEl.addEventListener('change', () => { wizardState.inKCN = inKCNEl.checked; renderWizard(); });
   const giaoThongEl = document.getElementById('wizGiaoThong');
   if (giaoThongEl) giaoThongEl.addEventListener('change', () => { wizardState.isGiaoThong = giaoThongEl.checked; renderWizard(); });
+  const dienTichEl = document.getElementById('wizDienTich');
+  if (dienTichEl) dienTichEl.addEventListener('input', () => { wizardState.dienTichXayDung = dienTichEl.value; renderWizard(); });
+  const loaiCongTrinhEl = document.getElementById('wizLoaiCongTrinh');
+  if (loaiCongTrinhEl) loaiCongTrinhEl.addEventListener('change', () => { wizardState.loaiCongTrinh = loaiCongTrinhEl.value; renderWizard(); });
+  const doanhThuEl = document.getElementById('wizDoanhThu');
+  if (doanhThuEl) doanhThuEl.addEventListener('input', () => { wizardState.doanhThuNam = doanhThuEl.value; renderWizard(); });
+  const chiPhiEl = document.getElementById('wizChiPhi');
+  if (chiPhiEl) chiPhiEl.addEventListener('input', () => { wizardState.chiPhiNam = chiPhiEl.value; renderWizard(); });
+  const soNamEl = document.getElementById('wizSoNam');
+  if (soNamEl) soNamEl.addEventListener('input', () => { wizardState.soNamDuAn = soNamEl.value; renderWizard(); });
+  const chietKhauEl = document.getElementById('wizChietKhau');
+  if (chietKhauEl) chietKhauEl.addEventListener('input', () => { wizardState.tyLeChietKhau = chietKhauEl.value; renderWizard(); });
+  const thueSuatEl = document.getElementById('wizThueSuat');
+  if (thueSuatEl) thueSuatEl.addEventListener('input', () => { wizardState.thueSuatTNDN = thueSuatEl.value; renderWizard(); });
   const communeEl = document.getElementById('wizCommune');
   if (communeEl) communeEl.addEventListener('input', () => { wizardState.communeQuery = communeEl.value; renderWizard(); });
 
@@ -2317,7 +2478,7 @@ function renderWizard() {
 
 let wizardFocusId = null;
 document.addEventListener('focusin', e => {
-  if (['wizResettle', 'wizCommune', 'wizKhoanSearch', 'wizNganhSearch', 'wizVon', 'wizLaoDong'].includes(e.target.id)) wizardFocusId = e.target.id;
+  if (['wizResettle', 'wizCommune', 'wizKhoanSearch', 'wizNganhSearch', 'wizVon', 'wizLaoDong', 'wizDienTich', 'wizDoanhThu', 'wizChiPhi', 'wizSoNam', 'wizChietKhau', 'wizThueSuat'].includes(e.target.id)) wizardFocusId = e.target.id;
 });
 function restoreWizardFocus() {
   if (!wizardFocusId) return;
