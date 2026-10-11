@@ -363,8 +363,10 @@
     align-items: center;
     gap: 4px;
   }
+  .card[data-depth="2"] { margin-left: 56px; }
   @media (max-width: 560px) {
     .card[data-child="true"] { margin-left: 12px; }
+    .card[data-depth="2"] { margin-left: 24px; }
   }
   .chevron {
     flex-shrink: 0;
@@ -525,6 +527,110 @@
   .step-body h4:first-child { margin-top: 0; }
   .step-body ul { margin: 0; padding-left: 20px; }
   .step-body li { font-size: 14px; margin-bottom: 5px; }
+
+  /* Sơ đồ số hoá quy trình (flowchart) */
+  .flowchart {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    gap: 0;
+    margin-bottom: 18px;
+  }
+  .flow-pair { display: flex; align-items: stretch; }
+  .flow-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    flex-shrink: 0;
+    color: var(--text-muted);
+  }
+  .flow-arrow svg { width: 18px; height: 18px; }
+  .flow-node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 7px;
+    width: 138px;
+    padding: 12px 8px;
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    cursor: pointer;
+    text-align: center;
+    transition: border-color .15s, box-shadow .15s;
+  }
+  .flow-node:hover { border-color: var(--accent); }
+  .flow-node:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .flow-node[data-active="true"] {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+  }
+  .flow-node-num {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: 12px;
+    font-weight: 700;
+    background: var(--accent-soft);
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+  .flow-node[data-active="true"] .flow-node-num { background: var(--accent); color: #fff; }
+  .flow-node-title {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+  @media (max-width: 720px) {
+    .flow-node { width: 104px; padding: 9px 6px; }
+    .flow-node-title { font-size: 11.5px; }
+  }
+  .flow-detail {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    padding: 18px;
+    scroll-margin-top: 90px;
+  }
+  .flow-detail-empty { color: var(--text-muted); font-size: 14px; text-align: center; padding: 16px 0; }
+  .flow-detail-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 14px;
+  }
+  .flow-detail-title-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .flow-detail-title {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .flow-detail-summary { color: var(--text-muted); font-size: 13.5px; margin-top: 6px; }
+  .flow-detail-close {
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--surface-alt);
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1;
+  }
+  .flow-detail-close:hover { color: var(--text); border-color: var(--accent); }
   .legal-list { display: flex; flex-direction: column; gap: 8px; }
   .legal-item {
     display: flex;
@@ -809,8 +915,9 @@
   </div>
 
   <div id="processView" style="display:none">
-    <p class="process-intro">Quy trình chung tham khảo khi hướng dẫn nhà đầu tư triển khai một dự án cụ thể, từ tiếp cận đến vận hành. Bấm vào từng bước để xem điều luật cụ thể áp dụng. Trình tự có thể thay đổi tuỳ loại dự án (ví dụ dự án không thuộc diện chấp thuận chủ trương thì bỏ qua bước 4). <b>Cần trả lời nhanh cho dự án cụ thể (thẩm quyền/địa bàn/ngành nghề)?</b> Dùng tab "Sơ đồ tra cứu nhanh dự án".</p>
-    <div id="steps"></div>
+    <p class="process-intro">Sơ đồ quy trình chung tham khảo khi hướng dẫn nhà đầu tư triển khai một dự án cụ thể, từ tiếp cận đến vận hành. <b>Bấm vào từng ô trong sơ đồ</b> để xem công việc chính và điều luật cụ thể áp dụng. Trình tự có thể thay đổi tuỳ loại dự án (ví dụ dự án không thuộc diện chấp thuận chủ trương thì bỏ qua bước 4). <b>Cần trả lời nhanh cho dự án cụ thể (thẩm quyền/địa bàn/ngành nghề)?</b> Dùng tab "Sơ đồ tra cứu nhanh dự án".</p>
+    <div class="flowchart" id="flowchart"></div>
+    <div class="flow-detail" id="flowDetail"></div>
   </div>
 
   <div id="incentiveView" style="display:none">
@@ -824,7 +931,7 @@
     </div>
     <div id="incentiveList" style="margin-top:14px"></div>
     <div class="note">
-      <b>Về nguồn dữ liệu địa bàn:</b> danh sách xã/phường tổng hợp từ tài liệu nội bộ; bản thân tài liệu ghi cả hai trạng thái (đã ký ban hành / trích từ dự thảo) nên <b>cần đối chiếu Quyết định 1717/QĐ-UBND bản chính thức</b> trước khi cam kết với nhà đầu tư. Riêng căn cứ miễn tiền thuê đất/tiền sử dụng đất là <b>Điều 39 Nghị định 103/2024/NĐ-CP</b> (sửa đổi bởi Nghị định 291/2025/NĐ-CP) — <b>không phải</b> Nghị định 50/2026/NĐ-CP (văn bản này chỉ hướng dẫn Nghị quyết 254/2025/QH15 về xử lý vướng mắc tính tiền sử dụng đất/tiền thuê đất khi chuyển mục đích sử dụng đất, không phải căn cứ miễn giảm theo địa bàn).
+      <b>Về nguồn dữ liệu địa bàn:</b> danh sách xã/phường đã được <b>đối chiếu với bản sao y Quyết định 1717/QĐ-UBND ngày 12/6/2026</b> (UBND tỉnh ký số, hiệu lực từ ngày ký): khớp số lượng 28 xã/phường đặc biệt khó khăn và 30 xã/phường khó khăn; một vài dòng trong bản scan mờ, không đọc được tự động — nên mở file PDF lưu kèm để kiểm tra khi cần cam kết với nhà đầu tư. <b>Miễn tiền thuê đất cho dự án xã hội hóa/phi lợi nhuận:</b> áp dụng Nghị quyết 56/2026/NQ-HĐND (hiệu lực 05/10/2026). Riêng căn cứ miễn tiền thuê đất/tiền sử dụng đất là <b>Điều 39 Nghị định 103/2024/NĐ-CP</b> (sửa đổi bởi Nghị định 291/2025/NĐ-CP) — <b>không phải</b> Nghị định 50/2026/NĐ-CP (văn bản này chỉ hướng dẫn Nghị quyết 254/2025/QH15 về xử lý vướng mắc tính tiền sử dụng đất/tiền thuê đất khi chuyển mục đích sử dụng đất, không phải căn cứ miễn giảm theo địa bàn).
     </div>
   </div>
 
@@ -835,7 +942,7 @@
 
   <footer>
     <div><b style="color:var(--text)">Lưu ý:</b> Nội dung tóm tắt phục vụ tra cứu nhanh nội bộ, biên soạn tháng 7/2026 dựa trên Luật Đầu tư số 143/2025/QH15 (hiệu lực 01/3/2026) và Nghị định 96/2026/NĐ-CP. Các mã văn bản/điều luật có biểu tượng liên kết dẫn thẳng đến trang văn bản gốc (thuvienphapluat.vn, hethongphapluat.com, vanban.chinhphu.vn…) — một số dẫn đúng tới điều cụ thể, số khác dẫn tới toàn văn của luật/nghị định do chưa có bản deep-link theo điều. Trước khi áp dụng vào hồ sơ, quyết định hoặc tư vấn nhà đầu tư, vẫn cần đối chiếu văn bản gốc vì các nghị định, thông tư hướng dẫn chi tiết có thể tiếp tục được sửa đổi.</div>
-    <div>Cập nhật lần cuối: 23/07/2026</div>
+    <div>Cập nhật lần cuối: 11/10/2026</div>
   </footer>
 </div>
 
@@ -860,6 +967,27 @@ const DATA = [
       <h4>Chuyển tiếp</h4>
       <p>Giấy chứng nhận đăng ký đầu tư, quyết định chấp thuận chủ trương đầu tư và các giấy phép cấp theo Luật Đầu tư 2020 vẫn tiếp tục có hiệu lực, không phải làm lại thủ tục.</p>
       <div class="note">Nghị định hướng dẫn thi hành: <b>Nghị định 96/2026/NĐ-CP</b> (ban hành 31/3/2026). File PDF toàn văn đã lưu kèm trang web (không phụ thuộc website bên ngoài) — có thể đối chiếu thêm tại thuvienphapluat.vn.</div>
+      <div class="note"><b>⚠️ Đã có luật sửa đổi:</b> <b>Luật số 24/2026/QH16</b> sửa đổi, bổ sung một số điều của Luật Đầu tư — <b>hiệu lực từ 01/3/2027</b> (riêng quy định cấm kinh doanh khí N2O hiệu lực từ 01/01/2027). Thay toàn bộ Phụ lục IV (cắt giảm 62, sửa đổi 14 ngành, nghề có điều kiện). Đến trước 01/3/2027 vẫn áp dụng Phụ lục IV của Luật 143/2025/QH15. Xem mục riêng bên dưới.</div>
+    `
+  },
+  {
+    id: "luat-24-2026",
+    cat: "luat",
+    parentLaw: "luat-2025",
+    parentLabel: "Luật sửa đổi, bổ sung",
+    code: "Luật số 24/2026/QH16",
+    url: "https://xaydungchinhsach.chinhphu.vn/noi-dung-co-ban-cua-luat-so-24-2026-qh16-sua-doi-bo-sung-mot-so-dieu-cua-luat-dau-tu-119260928153454059.htm",
+    title: "Luật sửa đổi, bổ sung một số điều của Luật Đầu tư (2026)",
+    date: "Hiệu lực từ 01/3/2027 — riêng quy định cấm kinh doanh khí N2O hiệu lực từ 01/01/2027",
+    summary: "Thay thế toàn bộ Phụ lục IV (Danh mục ngành, nghề đầu tư kinh doanh có điều kiện) của Luật Đầu tư 2025: cắt giảm 62 ngành, nghề, sửa đổi 14 ngành, nghề; bổ sung cấm kinh doanh khí N2O dùng cho con người qua đường hô hấp.",
+    body: `
+      <ul>
+        <li><b>Phụ lục IV mới</b> thay thế Phụ lục IV của Luật 143/2025/QH15 — cắt giảm 62 ngành, nghề và sửa đổi 14 ngành, nghề (theo Cổng thông tin Chính phủ). Báo chí pháp lý nêu ví dụ: kinh doanh rượu, kinh doanh trò chơi điện tử thông thường không còn là ngành nghề có điều kiện từ 01/3/2027.</li>
+        <li>Bổ sung ngành nghề có điều kiện: <b>hoạt động dịch vụ hỗ trợ cấp thị thực</b> của cơ sở kinh doanh được ủy quyền.</li>
+        <li>Bổ sung vào Điều 6 (ngành nghề <b>cấm</b>): kinh doanh khí N2O để sử dụng cho con người qua đường hô hấp — trừ mục đích y tế, công nghệ thực phẩm, kiểm nghiệm, nghiên cứu khoa học và mục đích khác do Chính phủ quy định.</li>
+        <li>Sửa đổi kèm theo: khoản 1, 2 Điều 88 Luật Xây dựng 135/2025/QH15 (chứng chỉ hành nghề); bãi bỏ khoản 6 Điều 29 Luật Đường bộ 35/2024/QH15.</li>
+      </ul>
+      <div class="note"><b>Khi tư vấn nhà đầu tư lúc này (trước 01/3/2027):</b> vẫn tra Phụ lục IV của Luật 143/2025/QH15; nếu dự án dự kiến triển khai sau 01/3/2027 thì đối chiếu thêm Phụ lục mới để báo trước ngành nghề có còn phải đáp ứng điều kiện hay không. Chưa có bản toàn văn lưu kèm trang — nguồn: Cổng thông tin điện tử Chính phủ (xaydungchinhsach.chinhphu.vn).</div>
     `
   },
   {
@@ -998,6 +1126,7 @@ const DATA = [
         <li>Điều 6 quy định riêng Danh mục ngành, nghề <b>cấm</b> đầu tư kinh doanh (Phụ lục I – ma túy, Phụ lục II – hóa chất/khoáng vật, Phụ lục III – mẫu vật động thực vật hoang dã…) — khác với danh mục có điều kiện tại Điều 7.</li>
       </ul>
       <div class="note">Khi xúc tiến một dự án cụ thể, luôn kiểm tra ngành nghề mục tiêu có nằm trong Phụ lục IV hay không trước khi tư vấn về điều kiện, thời gian cấp phép.</div>
+      <div class="note"><b>⚠️ Sắp thay đổi:</b> Luật 24/2026/QH16 thay toàn bộ Phụ lục IV từ <b>01/3/2027</b> (cắt giảm 62, sửa đổi 14 ngành nghề) và bổ sung cấm kinh doanh khí N2O từ 01/01/2027.</div>
     `,
     legal: [
       { ref: "Điều 7, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Ngành, nghề đầu tư kinh doanh có điều kiện — danh mục tại Phụ lục IV.", quote: "1. Ngành, nghề đầu tư kinh doanh có điều kiện là ngành, nghề kinh doanh trên lãnh thổ Việt Nam mà việc thực hiện hoạt động đầu tư kinh doanh trong ngành, nghề đó phải đáp ứng điều kiện cần thiết vì lý do quốc phòng, an ninh quốc gia, trật tự, an toàn xã hội, đạo đức xã hội, sức khỏe của cộng đồng. Danh mục ngành, nghề đầu tư kinh doanh có điều kiện được quy định tại Phụ lục IV ban hành kèm theo Luật này." },
@@ -1007,33 +1136,35 @@ const DATA = [
   {
     id: "luat-doanh-nghiep",
     cat: "lienquan",
-    code: "Luật số 59/2020/QH14 (sửa đổi bởi Luật 76/2025/QH15)",
+    code: "Luật số 59/2020/QH14 (sđ Luật 03/2022/QH15, Luật 76/2025/QH15)",
     url: "https://thuvienphapluat.vn/van-ban/Doanh-nghiep/Luat-Doanh-nghiep-so-59-2020-QH14-427301.aspx",
     title: "Luật Doanh nghiệp 2020",
-    date: "Liên quan trực tiếp bước thành lập pháp nhân (ERC) — sửa đổi gần nhất bởi Luật 76/2025/QH15, hiệu lực từ 01/7/2025",
+    date: "Hiệu lực 01/01/2021 — sửa đổi bởi Luật 03/2022/QH15 (hiệu lực 01/3/2022) và Luật 76/2025/QH15 (hiệu lực 01/7/2025); văn bản hợp nhất đăng Công báo số 1105–1108 ngày 31/8/2025",
     summary: "Quy định thành lập, tổ chức quản lý, tổ chức lại, giải thể doanh nghiệp — nền tảng cho bước xin Giấy chứng nhận đăng ký doanh nghiệp trước khi xin IRC theo Luật Đầu tư 2025. Luật gốc 2020 vẫn còn hiệu lực (chưa có luật thay thế hoàn toàn), chỉ được sửa đổi bổ sung.",
     body: `
       <ul>
         <li>Áp dụng cho bước ERC — nay được thực hiện trước bước IRC đối với nhà đầu tư nước ngoài theo Luật Đầu tư 2025.</li>
         <li>Quy định về loại hình doanh nghiệp, người đại diện theo pháp luật, vốn điều lệ, ngành nghề đăng ký kinh doanh.</li>
       </ul>
-      <div class="note">Luật số 76/2025/QH15 (hiệu lực 01/7/2025) sửa đổi, bổ sung một số điều — cần dùng bản hợp nhất Luật Doanh nghiệp 2020 + Luật sửa đổi 2025 khi tra cứu chi tiết, không dùng bản gốc 2020 riêng lẻ.</div>
+      <div class="note">Khi tra cứu chi tiết, dùng <b>văn bản hợp nhất của Văn phòng Quốc hội</b> (đăng Công báo ngày 31/8/2025, đã gộp Luật 03/2022/QH15 và Luật 76/2025/QH15) — không dùng bản gốc 2020 riêng lẻ.</div>
     `
   },
   {
     id: "luat-dat-dai",
     cat: "lienquan",
-    code: "Luật Đất đai 2024",
+    code: "Luật Đất đai 2024 (số 31/2024/QH15)",
     url: "docs/luat-dat-dai-2024-so-31-2024-qh15.pdf",
     title: "Luật Đất đai — giao đất, cho thuê đất, chuyển mục đích sử dụng đất",
-    date: "Liên quan trực tiếp triển khai dự án sau cấp phép",
+    date: "Hiệu lực từ 01/8/2024 — đã được sửa đổi, bổ sung bởi 12 luật (gần nhất: Luật 146/2025/QH15, 147/2025/QH15); kèm Nghị quyết 254/2025/QH15 tháo gỡ vướng mắc",
     summary: "Chi phối thẩm quyền chấp thuận chủ trương đầu tư (khi dự án gắn với giao đất/cho thuê đất không qua đấu giá) và mức ưu đãi tiền thuê đất, thuê mặt nước cho dự án đầu tư.",
     body: `
       <ul>
         <li>Dự án thuộc diện Nhà nước giao đất, cho thuê đất không qua đấu giá, đấu thầu, hoặc chuyển mục đích sử dụng đất thuộc thẩm quyền chấp thuận chủ trương của UBND cấp tỉnh (Điều 24 Luật Đầu tư 2025).</li>
         <li>Mức ưu đãi tiền thuê đất/thuê mặt nước cho dự án ưu đãi đặc biệt áp dụng theo pháp luật đất đai hiện hành.</li>
       </ul>
-      <div class="note">File PDF toàn văn (bản đăng Công báo Chính phủ số 363+364+365+366, 01/3/2024) đã lưu kèm trang web.</div>
+      <h4>Các luật sửa đổi, bổ sung (theo căn cứ ban hành của Nghị quyết 40/2026/NQ-HĐND tỉnh Đồng Tháp, 09/7/2026)</h4>
+      <p>Luật số 43/2024/QH15, 47/2024/QH15, 58/2024/QH15, 71/2025/QH15, 84/2025/QH15, 93/2025/QH15, 95/2025/QH15, 116/2025/QH15, 130/2025/QH15, 142/2025/QH15, 146/2025/QH15, 147/2025/QH15.</p>
+      <div class="note">File PDF đã lưu kèm trang là <b>bản gốc 2024</b> (Công báo số 363+364+365+366, 01/3/2024) — chưa gộp 12 lần sửa đổi ở trên. Khi trích dẫn điều khoản cụ thể cho hồ sơ, cần đối chiếu bản hợp nhất mới nhất.</div>
     `
   },
   {
@@ -1058,22 +1189,25 @@ const DATA = [
   {
     id: "luat-bvmt",
     cat: "lienquan",
-    code: "Luật số 72/2020/QH14",
-    url: "https://thuvienphapluat.vn/van-ban/Tai-nguyen-Moi-truong/Luat-so-72-2020-QH14-Bao-ve-moi-truong-2020-431147.aspx",
+    code: "Luật số 72/2020/QH14 (VBHN 98/VBHN-VPQH, 10/4/2026)",
+    url: "docs/luat-bvmt-vbhn-98-2026.pdf",
     title: "Luật Bảo vệ môi trường 2020",
-    date: "Hiệu lực từ 01/01/2022",
-    summary: "Điều 28 quy định tiêu chí phân loại dự án theo mức độ tác động môi trường thành nhóm I, II, III, IV — nhóm I phải lập báo cáo đánh giá tác động môi trường (ĐTM) trước khi triển khai.",
+    date: "Hiệu lực từ 01/01/2022 — sửa đổi 6 lần, gần nhất bởi Luật 146/2025/QH15 (hiệu lực 01/01/2026); bản hợp nhất số 98/VBHN-VPQH ngày 10/4/2026",
+    summary: "Điều 28 phân loại dự án theo mức độ tác động môi trường thành nhóm I, II, III, IV. Điều 30: dự án nhóm I và một phần nhóm II (điểm c, d, đ, e khoản 4 Điều 28) phải lập báo cáo đánh giá tác động môi trường (ĐTM).",
     body: `
       <ul>
         <li>Tiêu chí phân loại (Điều 28): kết hợp quy mô (nhóm A/B/C theo Luật Đầu tư công), loại hình sản xuất/kinh doanh có nguy cơ gây ô nhiễm, và yếu tố nhạy cảm về môi trường (rừng, khu bảo tồn, di sản, nguồn nước…).</li>
-        <li><b>Nhóm I:</b> nguy cơ tác động xấu đến môi trường mức độ cao — bắt buộc lập ĐTM trước khi triển khai (Điều 30).</li>
-        <li><b>Nhóm II, III:</b> mức tác động thấp hơn — có thể chỉ cần đăng ký môi trường hoặc giấy phép môi trường tuỳ trường hợp.</li>
+        <li><b>Nhóm I:</b> nguy cơ tác động xấu đến môi trường mức độ cao — bắt buộc lập ĐTM (điểm a khoản 1 Điều 30).</li>
+        <li><b>Nhóm II:</b> nếu thuộc điểm c, d, đ hoặc e khoản 4 Điều 28 thì <b>cũng phải lập ĐTM</b> (điểm b khoản 1 Điều 30); các trường hợp nhóm II còn lại và nhóm III thường chỉ cần giấy phép môi trường hoặc đăng ký môi trường tuỳ trường hợp.</li>
+        <li><b>Từ 01/01/2026</b> (Luật 146/2025/QH15 sửa Điều 31): ĐTM do chủ dự án tự tổ chức thực hiện, đồng thời với lập báo cáo nghiên cứu khả thi.</li>
         <li><b>Nhóm IV:</b> không có yếu tố nguy cơ gây ô nhiễm — thủ tục môi trường đơn giản nhất.</li>
       </ul>
-      <div class="note">Danh mục cụ thể dự án thuộc từng nhóm: xem Nghị định 08/2022/NĐ-CP (Phụ lục III/IV/V) bên dưới — bản tóm tắt Điều 28 không thay thế việc tra cứu Phụ lục.</div>
+      <div class="note">Danh mục cụ thể dự án thuộc từng nhóm: xem Nghị định 08/2022/NĐ-CP (Phụ lục III/IV/V) bên dưới — bản tóm tắt Điều 28 không thay thế việc tra cứu Phụ lục. File PDF bản hợp nhất 98/VBHN-VPQH (10/4/2026) đã lưu kèm trang web.</div>
+      <div class="note"><b>Lưu ý:</b> dự án Luật sửa đổi, bổ sung Luật Bảo vệ môi trường đang được trình Quốc hội (kỳ họp tháng 10/2026) — chưa có hiệu lực, cần theo dõi.</div>
     `,
     legal: [
-      { ref: "Điều 30, Luật Bảo vệ môi trường 2020", url: "https://hethongphapluat.com/luat-bao-ve-moi-truong-2020/dieu-30", detail: "Đối tượng phải thực hiện đánh giá tác động môi trường — dự án đầu tư nhóm I." },
+      { ref: "Điều 30, Luật Bảo vệ môi trường (VBHN 98/VBHN-VPQH)", url: "docs/luat-bvmt-vbhn-98-2026.pdf", detail: "Đối tượng phải đánh giá tác động môi trường: dự án nhóm I và dự án nhóm II thuộc điểm c, d, đ, e khoản 4 Điều 28 — không chỉ riêng nhóm I.", quote: "1. Đối tượng phải thực hiện đánh giá tác động môi trường bao gồm: a) Dự án đầu tư nhóm I quy định tại khoản 3 Điều 28 của Luật này; b) Dự án đầu tư nhóm II quy định tại các điểm c, d, đ và e khoản 4 Điều 28 của Luật này. 2. Đối tượng quy định tại khoản 1 Điều này không phải thực hiện đánh giá tác động môi trường khi thuộc một trong các trường hợp sau đây: a) Dự án đầu tư công khẩn cấp theo quy định của pháp luật về đầu tư công; b) Dự án đầu tư không phải thực hiện đánh giá tác động môi trường theo quy định của luật, nghị quyết của Quốc hội." },
+      { ref: "Điều 31, Luật Bảo vệ môi trường (sđ Luật 146/2025/QH15)", url: "docs/luat-bvmt-vbhn-98-2026.pdf", detail: "Từ 01/01/2026: ĐTM do chủ dự án đầu tư tự tổ chức thực hiện, đồng thời với lập báo cáo nghiên cứu khả thi.", quote: "1. Đánh giá tác động môi trường do chủ dự án đầu tư tổ chức thực hiện. Đánh giá tác động môi trường được thực hiện đồng thời với quá trình lập báo cáo nghiên cứu khả thi hoặc tài liệu tương đương với báo cáo nghiên cứu khả thi của dự án đầu tư, dự án thành phần hoặc phân kỳ đầu tư của dự án. Kết quả đánh giá tác động môi trường được thể hiện bằng báo cáo đánh giá tác động môi trường." },
       { ref: "Điều 32, Luật Bảo vệ môi trường 2020", url: "https://www.luatmoitruong.vn/luat-bao-ve-moi-truong/chuong-iv.-danh-gia-moi-truong-chien-luoc-danh-gia-tac-dong-moi-truong-giay-phep-moi-truong/muc-3.-danh-gia-tac-dong-moi-truong/dieu-32.-noi-dung-cua-bao-cao-danh-gia-tac-dong-moi-truong", detail: "Nội dung báo cáo đánh giá tác động môi trường." }
     ]
   },
@@ -1157,15 +1291,93 @@ const DATA = [
     code: "Điều 39, Nghị định 103/2024/NĐ-CP",
     url: "https://thuvienphapluat.vn/van-ban/Bat-dong-san/Nghi-dinh-103-2024-ND-CP-tien-su-dung-dat-tien-thue-dat-550020.aspx",
     title: "Nghị định 103/2024/NĐ-CP — miễn, giảm tiền thuê đất, tiền sử dụng đất",
-    date: "30/07/2024 (sửa đổi, bổ sung bởi Nghị định 291/2025/NĐ-CP)",
+    date: "Ban hành 30/07/2024 — sửa đổi, bổ sung bởi NĐ 261/2025/NĐ-CP, NĐ 291/2025/NĐ-CP, NĐ 50/2026/NĐ-CP",
     summary: "Căn cứ trực tiếp xác định số năm miễn tiền thuê đất theo địa bàn và lĩnh vực ưu đãi đầu tư của dự án.",
     body: `
       <ul>
         <li>Khung miễn tiền thuê đất phổ biến: miễn toàn bộ thời gian thuê (dự án thuộc lĩnh vực đặc biệt ưu đãi đầu tư tại địa bàn đặc biệt khó khăn); miễn 15 năm (lĩnh vực ưu đãi đầu tư thông thường); miễn tối thiểu 11 năm hoặc 7 năm tuỳ địa bàn cho các dự án còn lại.</li>
         <li>Số năm cụ thể phụ thuộc đồng thời vào <b>địa bàn</b> và <b>lĩnh vực</b> của dự án — cần đối chiếu văn bản gốc, không suy diễn từ một tiêu chí duy nhất.</li>
       </ul>
-      <div class="note"><b>Lưu ý dễ nhầm:</b> đây mới là căn cứ đúng cho việc miễn tiền thuê đất/tiền sử dụng đất theo địa bàn — <b>không phải</b> Nghị định 50/2026/NĐ-CP (văn bản đó hướng dẫn Nghị quyết 254/2025/QH15 về xử lý vướng mắc tính tiền sử dụng đất/tiền thuê đất khi chuyển mục đích sử dụng đất, một vấn đề khác).</div>
+      <div class="note"><b>Lưu ý dễ nhầm:</b> căn cứ miễn tiền thuê đất theo địa bàn/ngành nghề là <b>Điều 39 Nghị định 103/2024/NĐ-CP</b> (bản đã sửa đổi). Nghị định 50/2026/NĐ-CP có sửa đổi một số điều của NĐ 103 nhưng nội dung chính là hướng dẫn Nghị quyết 254/2025/QH15 — không trích NĐ 50/2026 làm căn cứ mức miễn theo địa bàn.</div>
+      <div class="note"><b>Đồng Tháp:</b> với dự án xã hội hóa và dự án phi lợi nhuận (khoản 15 Điều 38 NĐ 103), mức miễn cụ thể do HĐND tỉnh quy định tại <b>Nghị quyết 56/2026/NQ-HĐND</b> (hiệu lực 05/10/2026) — xem mục riêng.</div>
     `
+  },
+  {
+    id: "nd-102-2024",
+    cat: "nd",
+    parentLaw: "luat-dat-dai",
+    code: "Nghị định 102/2024/NĐ-CP",
+    title: "Quy định chi tiết thi hành một số điều của Luật Đất đai",
+    date: "Ban hành 30/07/2024, hiệu lực 01/8/2024 — sửa đổi, bổ sung bởi NĐ 175/2024, 151/2025, 226/2025, 49/2026, 70/2026",
+    summary: "Nghị định hướng dẫn chung của Luật Đất đai 2024: giao đất, cho thuê đất, chuyển mục đích sử dụng đất, thu hồi đất, điều kiện đối với người được giao đất/thuê đất để thực hiện dự án.",
+    body: `
+      <ul>
+        <li>Danh sách văn bản sửa đổi theo căn cứ ban hành của Nghị quyết 40/2026/NQ-HĐND tỉnh Đồng Tháp (09/7/2026).</li>
+        <li><b>Nghị định 226/2025/NĐ-CP</b> (15/8/2025) sửa đổi đồng thời nhiều nghị định hướng dẫn Luật Đất đai (NĐ 71, 88, 101, 102, 112/2024…).</li>
+        <li><b>Nghị định 49/2026/NĐ-CP</b> (31/01/2026) hướng dẫn Nghị quyết 254/2025/QH15 về tháo gỡ vướng mắc thi hành Luật Đất đai.</li>
+        <li><b>Nghị định 151/2025/NĐ-CP</b> (12/6/2025) phân định thẩm quyền chính quyền địa phương 2 cấp trong lĩnh vực đất đai.</li>
+      </ul>
+      <div class="note">Dùng bản hợp nhất mới nhất khi trích dẫn điều khoản cụ thể.</div>
+    `
+  },
+  {
+    id: "nq-56-2026-dt",
+    cat: "lienquan",
+    parentLaw: "nd-103-2024",
+    parentLabel: "Văn bản địa phương (Đồng Tháp) áp dụng",
+    code: "Nghị quyết 56/2026/NQ-HĐND tỉnh Đồng Tháp",
+    url: "docs/dong-thap-nq-56-2026-mien-tien-thue-dat.pdf",
+    title: "Đồng Tháp — miễn tiền thuê đất cho dự án xã hội hóa, phi lợi nhuận theo khu vực, lĩnh vực",
+    date: "Thông qua 25/9/2026, hiệu lực từ 05/10/2026 — thay Nghị quyết 05/2025/NQ-HĐND",
+    summary: "Mức miễn tiền thuê đất (tính sau thời gian miễn trong xây dựng cơ bản) cho dự án xã hội hóa đáp ứng danh mục của Thủ tướng (giáo dục, y tế, văn hóa, thể thao, môi trường…) và dự án phi lợi nhuận trên địa bàn tỉnh Đồng Tháp.",
+    body: `
+      <h4>Dự án xã hội hóa thuộc khoản 15 Điều 38 NĐ 103/2024 (Điều 3)</h4>
+      <ul>
+        <li><b>Toàn bộ thời gian thuê:</b> ngành đặc biệt ưu đãi đầu tư + địa bàn đặc biệt khó khăn.</li>
+        <li><b>30 năm:</b> ngành ưu đãi đầu tư + địa bàn đặc biệt khó khăn; ngành đặc biệt ưu đãi đầu tư + địa bàn khó khăn.</li>
+        <li><b>25 năm:</b> địa bàn đặc biệt khó khăn; ngành đặc biệt ưu đãi đầu tư; ngành ưu đãi đầu tư + địa bàn khó khăn.</li>
+        <li><b>20 năm:</b> địa bàn khó khăn.</li>
+        <li><b>15 năm:</b> ngành ưu đãi đầu tư.</li>
+        <li><b>Dự án phi lợi nhuận:</b> miễn toàn bộ thời gian thuê.</li>
+      </ul>
+      <h4>Cơ sở xã hội hóa theo khoản 7 Điều 5 NĐ 230/2025/NĐ-CP (Điều 4)</h4>
+      <p>Miễn 15 năm (tính sau thời gian miễn trong xây dựng cơ bản).</p>
+      <div class="note">Chỉ áp dụng cho dự án <b>xã hội hóa / phi lợi nhuận</b> — dự án sản xuất, kinh doanh thông thường vẫn áp dụng mức miễn tại Điều 39 NĐ 103/2024. Dự án có thời hạn hoạt động ngắn hơn thời gian miễn thì chỉ được miễn bằng thời hạn hoạt động (Điều 5). Chuyển tiếp: đang hưởng mức cao hơn thì giữ, thấp hơn thì được nâng cho thời gian còn lại (Điều 6). File PDF bản sao y đã lưu kèm trang web.</div>
+    `,
+    legal: [
+      { ref: "Điều 3, Nghị quyết 56/2026/NQ-HĐND", url: "docs/dong-thap-nq-56-2026-mien-tien-thue-dat.pdf", detail: "Mức miễn tiền thuê đất theo địa bàn, ngành nghề cho dự án xã hội hóa và dự án phi lợi nhuận.", quote: "Miễn tiền thuê đất sau thời gian được miễn tiền thuê đất trong thời gian xây dựng cơ bản theo quy định tại khoản 2 Điều 39 Nghị định số 103/2024/NĐ-CP đối với các dự án sau: 1. Đối với các dự án thuộc danh mục các loại hình, tiêu chí, quy mô, tiêu chuẩn xã hội hóa do Thủ tướng Chính phủ quyết định a) Miễn toàn bộ thời gian thuê đối với dự án sử dụng đất vào mục đích sản xuất, kinh doanh thực hiện dự án đầu tư thuộc Danh mục ngành, nghề đặc biệt ưu đãi đầu tư được đầu tư tại địa bàn có điều kiện kinh tế - xã hội đặc biệt khó khăn; b) Miễn 30 (ba mươi) năm đối với dự án sản xuất, kinh doanh thuộc Danh mục ngành, nghề ưu đãi đầu tư được đầu tư tại địa bàn có điều kiện kinh tế - xã hội đặc biệt khó khăn; dự án sản xuất, kinh doanh thuộc Danh mục ngành, nghề đặc biệt ưu đãi đầu tư được đầu tư tại địa bàn có điều kiện kinh tế - xã hội khó khăn; đất xây dựng công trình trên mặt đất phục vụ cho việc vận hành, khai thác, sử dụng công trình ngầm; c) Miễn 25 (hai mươi lăm) năm đối với dự án sản xuất, kinh doanh đầu tư tại địa bàn có điều kiện kinh tế - xã hội đặc biệt khó khăn; dự án sản xuất, kinh doanh thuộc Danh mục ngành, nghề đặc biệt ưu đãi đầu tư; dự án sản xuất, kinh doanh thuộc Danh mục ngành, nghề ưu đãi đầu tư được đầu tư tại địa bàn có điều kiện kinh tế - xã hội khó khăn; d) Miễn 20 (hai mươi) năm đối với dự án sản xuất, kinh doanh đầu tư tại địa bàn có điều kiện kinh tế - xã hội khó khăn; đ) Miễn 15 (mười lăm) năm đối với dự án sản xuất, kinh doanh thuộc Danh mục ngành, nghề ưu đãi đầu tư. 2. Miễn toàn bộ thời gian thuê đất đối với dự án phi lợi nhuận." },
+      { ref: "Điều 4, Nghị quyết 56/2026/NQ-HĐND", url: "docs/dong-thap-nq-56-2026-mien-tien-thue-dat.pdf", detail: "Cơ sở thực hiện xã hội hóa (khoản 7 Điều 5 NĐ 230/2025/NĐ-CP): miễn 15 năm.", quote: "1. Cơ sở thực hiện xã hội hóa không thuộc trường hợp được miễn, giảm tiền thuê đất theo quy định tại điểm a khoản 1 Điều 157 Luật Đất đai số 31/2024/QH15 và khoản 15 Điều 38 Nghị định số 103/2024/NĐ-CP, được Nhà nước cho thuê đất để thực hiện dự án xã hội hóa mà nội dung dự án đã được phê duyệt đáp ứng danh mục các loại hình, tiêu chí, quy mô, tiêu chuẩn về xã hội hóa theo quy định của Thủ tướng Chính phủ thì được miễn tiền thuê đất 15 (mười lăm) năm." }
+    ]
+  },
+  {
+    id: "nq-40-46-2026-dt",
+    cat: "lienquan",
+    parentLaw: "nd-274-2026",
+    parentLabel: "Văn bản địa phương (Đồng Tháp) áp dụng",
+    code: "Nghị quyết 40/2026/NQ-HĐND; Nghị quyết 46/NQ-HĐND (Đồng Tháp)",
+    url: "docs/dong-thap-nq-40-2026-tieu-chi-dau-thau.pdf",
+    title: "Đồng Tháp — tiêu chí đấu thầu chọn nhà đầu tư khu đô thị, khu dân cư nông thôn; danh mục khu đất đấu thầu",
+    date: "Cùng thông qua 09/7/2026 — NQ 40/2026 hiệu lực 20/7/2026 (thay NQ 21/2024/NQ-HĐND)",
+    summary: "Tiêu chí để quyết định tổ chức đấu thầu lựa chọn nhà đầu tư dự án có sử dụng đất (điểm a khoản 1 Điều 126 Luật Đất đai) và điều chỉnh Danh mục khu đất thực hiện đấu thầu trên địa bàn tỉnh.",
+    body: `
+      <h4>Nghị quyết 40/2026/NQ-HĐND — tiêu chí đấu thầu (Điều 2)</h4>
+      <ul>
+        <li><b>Phù hợp quy hoạch:</b> Quy hoạch tỉnh Đồng Tháp 2021–2030, tầm nhìn 2050; quy hoạch đô thị và nông thôn; chương trình, kế hoạch phát triển nhà ở.</li>
+        <li><b>Quy mô khu đô thị:</b> từ một đơn vị ở trở lên (Mục 2.2 Phần 2 QCVN 01:2021/BXD), hoặc từ <b>20 ha</b> trở lên nếu quy hoạch không xác định rõ đơn vị ở.</li>
+        <li><b>Quy mô khu dân cư nông thôn:</b> từ <b>03 ha</b> trở lên.</li>
+      </ul>
+      <h4>Nghị quyết 46/NQ-HĐND — sửa đổi Danh mục khu đất đấu thầu (ban hành kèm NQ 24/NQ-HĐND ngày 29/7/2025)</h4>
+      <ul>
+        <li>Bổ sung khu đất dự án <b>Khu đô thị Trần Công Tường</b> (phường Gò Công và phường Bình Xuân), 30,92 ha.</li>
+        <li>Đưa ra khỏi danh mục 13 khu đất (3 khu đô thị/dân cư nông thôn; 10 dự án theo pháp luật quản lý ngành, lĩnh vực).</li>
+        <li>Điều chỉnh thông tin khu đất <b>Nhà máy xử lý rác Tân Lập 1</b> (xã Tân Phước 3), 13,66 ha.</li>
+      </ul>
+      <div class="note">Trước khi giới thiệu khu đất cho nhà đầu tư, kiểm tra khu đất có nằm trong Danh mục đấu thầu hiện hành (NQ 24/NQ-HĐND đã sửa đổi bởi NQ 46/NQ-HĐND) hay không. File PDF NQ 40/2026 và NQ 46 đã lưu kèm trang web.</div>
+    `,
+    legal: [
+      { ref: "Khoản 2 Điều 2, Nghị quyết 40/2026/NQ-HĐND", url: "docs/dong-thap-nq-40-2026-tieu-chi-dau-thau.pdf", detail: "Tiêu chí quy mô khu đô thị (≥ 1 đơn vị ở hoặc ≥ 20 ha) và khu dân cư nông thôn (≥ 3 ha).", quote: "2. Tiêu chí về quy mô dự án a) Đối với dự án đầu tư xây dựng khu đô thị ...: Dự án đầu tư xây dựng khu đô thị được đầu tư xây dựng đồng bộ hệ thống hạ tầng kỹ thuật, hạ tầng xã hội, hình thành từ một đơn vị ở trở lên quy định tại Mục 2.2. Phần 2 QCVN 01:2021/BXD ... hoặc dự án có quy mô sử dụng đất từ 20 ha trở lên đối với trường hợp quy hoạch xây dựng không xác định rõ các đơn vị ở. b) Đối với dự án khu dân cư nông thôn: Dự án khu dân cư nông thôn theo quy định của pháp luật về quy hoạch đô thị và nông thôn có quy mô diện tích sử dụng đất từ 03 ha trở lên." },
+      { ref: "Nghị quyết 46/NQ-HĐND (09/7/2026)", url: "docs/dong-thap-nq-46-2026-danh-muc-khu-dat.pdf", detail: "Sửa đổi, bổ sung Danh mục các khu đất thực hiện đấu thầu dự án đầu tư có sử dụng đất (bổ sung KĐT Trần Công Tường 30,92 ha; đưa ra 13 khu đất; điều chỉnh Nhà máy xử lý rác Tân Lập 1)." }
+    ]
   },
   {
     id: "uu-dai-thue-nk-khauhao",
@@ -1205,7 +1417,7 @@ const DATA = [
     code: "Nghị định 182/2024/NĐ-CP",
     url: "https://thuvienphapluat.vn/van-ban/Doanh-nghiep/Nghi-dinh-182-2024-ND-CP-quan-ly-su-dung-Quy-Ho-tro-dau-tu-638056.aspx",
     title: "Quỹ Hỗ trợ đầu tư — thành lập, quản lý, sử dụng",
-    date: "Ban hành 2024",
+    date: "Ban hành 31/12/2024",
     summary: "Quỹ do Thủ tướng Chính phủ quyết định thành lập, hỗ trợ chi phí đào tạo nhân lực, nghiên cứu phát triển, đầu tư hệ thống công trình hạ tầng xã hội… cho dự án lớn/công nghệ cao đủ điều kiện.",
     body: `
       <ul>
@@ -1232,24 +1444,25 @@ const DATA = [
     code: "Luật số 22/2023/QH15",
     url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-thau-2023-22-2023-QH15-518805.aspx",
     title: "Luật Đấu thầu 2023",
-    date: "Hiệu lực từ 01/01/2024 — sửa đổi bởi Luật 57/2024/QH15 (15/01/2025) và Luật 90/2025/QH15 (01/7/2025)",
+    date: "Hiệu lực từ 01/01/2024 — sửa đổi, bổ sung bởi Luật 57/2024/QH15, 90/2025/QH15, 116/2025/QH15, 133/2025/QH15, 142/2025/QH15",
     summary: "Áp dụng khi dự án cần lựa chọn nhà thầu (mua sắm công) hoặc lựa chọn nhà đầu tư thực hiện dự án đầu tư kinh doanh có sử dụng đất (đấu thầu dự án, không phải đấu giá quyền sử dụng đất).",
     body: `
       <ul>
         <li>Quy định quản lý nhà nước về đấu thầu; lựa chọn nhà thầu thực hiện gói thầu; <b>lựa chọn nhà đầu tư thực hiện dự án đầu tư kinh doanh</b> — liên quan trực tiếp đến dự án đầu tư có sử dụng đất do Nhà nước tổ chức đấu thầu chọn nhà đầu tư (Điều 24 khoản 8 Luật Đầu tư 2025).</li>
-        <li>Sửa đổi 2 lần trong vòng 18 tháng: Luật 57/2024/QH15 (đồng bộ với Luật Quy hoạch, Luật Đầu tư, Luật PPP) và Luật 90/2025/QH15 (đồng bộ với Luật Đầu tư 2025, Luật Đầu tư công…).</li>
+        <li>Đã được sửa đổi, bổ sung 5 lần: Luật 57/2024/QH15 (đồng bộ Luật Quy hoạch, Luật Đầu tư, Luật PPP), Luật 90/2025/QH15, Luật 116/2025/QH15, Luật 133/2025/QH15 và Luật 142/2025/QH15 — danh sách theo căn cứ ban hành của Thông tư 134/2026/TT-BTC (09/9/2026).</li>
+        <li>Văn bản hướng dẫn hiện hành: <b>lựa chọn nhà thầu</b> — Nghị định 214/2025/NĐ-CP (sđ NĐ 165/2026, 170/2026, <b>349/2026</b>); <b>lựa chọn nhà đầu tư</b> — Nghị định 274/2026/NĐ-CP.</li>
       </ul>
-      <div class="note">Văn bản hợp nhất 3 lần sửa đổi: tra cứu "Hợp nhất Luật Đấu thầu 22/2023 + 57/2024 + 90/2025" trên các cổng pháp luật để có bản đầy đủ nhất, thay vì chỉ đọc luật gốc 2023.</div>
+      <div class="note">Khi tra cứu điều khoản cụ thể, dùng bản hợp nhất mới nhất (đã gộp 5 luật sửa đổi), không đọc riêng luật gốc 2023.</div>
     `
   },
   {
     id: "nd-214-2025",
     cat: "nd",
     parentLaw: "luat-dau-thau",
-    code: "Nghị định 214/2025/NĐ-CP",
+    code: "Nghị định 214/2025/NĐ-CP (sđ NĐ 165/2026, 170/2026, 349/2026)",
     url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Nghi-dinh-214-2025-ND-CP-huong-dan-Luat-Dau-thau-ve-lua-chon-nha-thau-668157.aspx",
     title: "Hướng dẫn Luật Đấu thầu về lựa chọn nhà thầu",
-    date: "Ban hành và hiệu lực từ 04/08/2025 — thay thế Nghị định 24/2024/NĐ-CP",
+    date: "Ban hành và hiệu lực từ 04/08/2025 (thay Nghị định 24/2024/NĐ-CP) — VẪN CÒN HIỆU LỰC, đã sửa đổi bởi NĐ 165/2026 và 170/2026 (hiệu lực 01/7/2026), NĐ 349/2026 (hiệu lực 09/9/2026)",
     summary: "14 chương, 146 điều — quy trình, hồ sơ, tiêu chí lựa chọn nhà thầu cho gói thầu sử dụng vốn nhà nước và các nguồn vốn khác theo quy định phải đấu thầu.",
     body: `
       <ul>
@@ -1257,7 +1470,52 @@ const DATA = [
         <li>Bổ sung quy định về minh bạch, trách nhiệm giải trình, thúc đẩy chuyển đổi số trong đấu thầu và tiêu chí xanh, phát triển bền vững khi đánh giá năng lực nhà thầu.</li>
         <li>Mở rộng ưu đãi: nhà thầu thuộc nhóm ưu tiên được miễn bảo đảm cạnh tranh, một số yêu cầu năng lực/kinh nghiệm.</li>
       </ul>
+      <div class="note"><b>Dễ nhầm:</b> Nghị định 349/2026/NĐ-CP chỉ <b>sửa đổi, bổ sung</b> một số điều — <b>không thay thế</b> Nghị định 214/2025/NĐ-CP. Nghị định 214 vẫn là văn bản hướng dẫn chính; dùng bản hợp nhất số 36/2026/VBHN-NĐ-BTC (Bộ Tài chính xác thực 23/9/2026) đã gộp 3 lần sửa đổi.</div>
       <div class="note">Chỉ áp dụng cho gói thầu lựa chọn <b>nhà thầu</b> (mua sắm hàng hóa/dịch vụ/xây lắp) — khác với lựa chọn <b>nhà đầu tư</b> thực hiện dự án đầu tư kinh doanh (xem Nghị định 274/2026/NĐ-CP bên dưới).</div>
+    `
+  },
+  {
+    id: "nd-349-2026",
+    cat: "nd",
+    parentLaw: "nd-214-2025",
+    parentLabel: "Sửa đổi, bổ sung",
+    code: "Nghị định 349/2026/NĐ-CP",
+    url: "docs/nd-349-2026-nd-cp.pdf",
+    title: "Sửa đổi, bổ sung các Nghị định hướng dẫn Luật Đấu thầu về lựa chọn nhà thầu",
+    date: "Ban hành và hiệu lực từ 09/9/2026 — sửa đổi NĐ 214/2025/NĐ-CP (Chương I) và NĐ 32/2019/NĐ-CP (Chương II); không thay thế NĐ 214",
+    summary: "Nâng hạn mức chỉ định thầu (1 tỷ / 3 tỷ / 5 tỷ đồng), nâng ngưỡng mua sắm thủ trưởng đơn vị tự quyết lên 100 triệu đồng, sửa quy định báo giá, bổ sung xử lý tình huống (khoản 33a, 33b Điều 140 NĐ 214).",
+    body: `
+      <ul>
+        <li><b>Hạn mức chỉ định thầu (khoản 4 Điều 78 NĐ 214):</b> mua sắm không hình thành dự án ≤ 01 tỷ đồng; tư vấn thuộc dự án ≤ 03 tỷ đồng; phi tư vấn, hàng hóa, xây lắp, hỗn hợp thuộc dự án ≤ 05 tỷ đồng.</li>
+        <li>Bổ sung trường hợp chỉ định thầu: gói thầu mua sắm từ thanh lý, giải thể, phá sản; hàng hóa mua qua sàn giao dịch hàng hóa; gói thầu tư vấn, rà phá bom mìn chuẩn bị mặt bằng.</li>
+        <li><b>Báo giá (điểm d khoản 2 Điều 18):</b> tối thiểu 01 báo giá, đăng tải yêu cầu báo giá trên Hệ thống mạng đấu thầu quốc gia; có cơ chế loại báo giá chênh lệch bất thường so với giá trung bình.</li>
+        <li><b>Mua sắm giá trị nhỏ (khoản 4 Điều 80):</b> ngưỡng tự quyết định nâng từ 50 triệu lên 100 triệu đồng.</li>
+        <li><b>Xử lý tình huống (Điều 140):</b> khoản 33a — chỉ 1 nhà thầu, sai lệch kỹ thuật ở hàng hóa thông dụng ≤ 1% giá gói thầu được cho bổ sung/thay thế; khoản 33b — được yêu cầu nhà thầu khôi phục hiệu lực hồ sơ dự thầu khi đánh giá kéo dài.</li>
+      </ul>
+      <div class="note">Hệ thống mạng đấu thầu quốc gia áp dụng các chức năng theo Nghị định này từ 10/9/2026. File PDF toàn văn đã lưu kèm trang web.</div>
+    `,
+    legal: [
+      { ref: "Khoản 4 Điều 78 NĐ 214/2025 (sửa bởi Điều 4 NĐ 349/2026)", url: "docs/nd-349-2026-nd-cp.pdf", detail: "Hạn mức áp dụng chỉ định thầu mới.", quote: "4. Gói thầu thuộc dự toán mua sắm không hình thành dự án có giá gói thầu không quá 01 tỷ đồng; gói thầu dịch vụ tư vấn thuộc dự án có giá gói thầu không quá 03 tỷ đồng, gói thầu dịch vụ phi tư vấn, hàng hóa, xây lắp, hỗn hợp thuộc dự án có giá gói thầu không quá 05 tỷ đồng." },
+      { ref: "Khoản 33a Điều 140 NĐ 214/2025 (bổ sung bởi NĐ 349/2026)", url: "docs/nd-349-2026-nd-cp.pdf", detail: "Xử lý tình huống khi chỉ có một nhà thầu và sai lệch kỹ thuật nhỏ.", quote: "33a. Trường hợp gói thầu chỉ có một nhà thầu tham dự thầu và có hồ sơ dự thầu đáp ứng cơ bản yêu cầu của hồ sơ mời thầu nhưng không đáp ứng yêu cầu kỹ thuật theo quy định của hồ sơ mời thầu đối với hạng mục hàng hóa là vật tư, thiết bị thông thường, thông dụng, sẵn có trên thị trường với tổng giá trị các hạng mục hàng hóa này trong giá gói thầu chiếm tỷ trọng không quá 1% giá gói thầu thì chủ đầu tư xem xét, quyết định cho phép nhà thầu bổ sung, thay thế các hàng hóa đó. Việc bổ sung, thay thế không được cao hơn đơn giá của hàng hóa đã chào." },
+      { ref: "Điều 28 NĐ 349/2026/NĐ-CP", url: "docs/nd-349-2026-nd-cp.pdf", detail: "Hiệu lực thi hành.", quote: "1. Nghị định này có hiệu lực thi hành kể từ ngày ký ban hành. 2. Bãi bỏ khoản 2 Điều 3 Nghị định số 111/2025/NĐ-CP ngày 22 tháng 5 năm 2025 của Chính phủ sửa đổi, bổ sung một số điều của Nghị định số 60/2021/NĐ-CP ngày 21 tháng 6 năm 2021 của Chính phủ quy định cơ chế tự chủ tài chính của đơn vị sự nghiệp công lập." }
+    ]
+  },
+  {
+    id: "tt-dau-thau-mau",
+    cat: "nd",
+    parentLaw: "luat-dau-thau",
+    parentLabel: "Thông tư hướng dẫn",
+    code: "Thông tư 79/2025/TT-BTC; Thông tư 134/2026/TT-BTC",
+    url: "docs/tt-134-2026-tt-btc.pdf",
+    title: "Thông tư hướng dẫn mẫu hồ sơ đấu thầu, mẫu chỉ định thầu",
+    date: "TT 79/2025/TT-BTC ban hành 04/8/2025; TT 134/2026/TT-BTC ban hành 09/9/2026",
+    summary: "Mẫu hồ sơ dùng trong đấu thầu lựa chọn nhà thầu và báo cáo hoạt động đấu thầu do Bộ Tài chính ban hành.",
+    body: `
+      <ul>
+        <li><b>Thông tư 79/2025/TT-BTC (04/8/2025):</b> hướng dẫn cung cấp, đăng tải thông tin về đấu thầu và mẫu hồ sơ đấu thầu trên Hệ thống mạng đấu thầu quốc gia.</li>
+        <li><b>Thông tư 134/2026/TT-BTC (09/9/2026):</b> mẫu hồ sơ yêu cầu áp dụng hình thức <b>chỉ định thầu</b>, báo cáo đánh giá, báo cáo thẩm định, kiểm tra, giám sát, báo cáo tình hình thực hiện hoạt động đấu thầu — căn cứ NĐ 214/2025 (sđ 165/2026, 170/2026, 349/2026) và NĐ 274/2026.</li>
+      </ul>
+      <div class="note">File PDF Thông tư 134/2026/TT-BTC đã lưu kèm trang web.</div>
     `
   },
   {
@@ -1267,7 +1525,7 @@ const DATA = [
     code: "Nghị định 274/2026/NĐ-CP",
     url: "https://vanban.chinhphu.vn/?docid=218807&pageid=27160",
     title: "Hướng dẫn Luật Đấu thầu về lựa chọn nhà đầu tư",
-    date: "Ban hành 07/07/2026, hiệu lực từ 21/08/2026 — thay thế Nghị định 23/2024/NĐ-CP và Nghị định 115/2024/NĐ-CP",
+    date: "Ban hành 07/07/2026, hiệu lực từ 21/08/2026 — các NĐ 23/2024, NĐ 115/2024 (trừ Điều 69) và NĐ 225/2025 hết hiệu lực",
     summary: "Trực tiếp liên quan công tác xúc tiến đầu tư: quy định lựa chọn nhà đầu tư cho dự án đầu tư kinh doanh có sử dụng đất phải đấu thầu (khoản 8 Điều 24 Luật Đầu tư 2025).",
     body: `
       <ul>
@@ -1275,8 +1533,13 @@ const DATA = [
         <li>Phương thức, tiêu chí, quy trình lựa chọn nhà đầu tư; đấu thầu qua mạng; nội dung hợp đồng dự án có sử dụng đất.</li>
         <li>Xác định rõ trường hợp phải đấu thầu: dự án Nhà nước thu hồi đất theo Luật Đất đai/Nghị quyết 254/2025/QH15, hoặc thuộc danh mục khu đất đấu thầu do HĐND cấp tỉnh quyết định.</li>
         <li>Được đánh giá là bước gỡ vướng giữa Luật Đấu thầu 2023 và Luật Đất đai 2024 cho các dự án đầu tư kinh doanh có sử dụng đất.</li>
+        <li>Mẫu hồ sơ lựa chọn nhà đầu tư: Thông tư 98/2025/TT-BTC (27/10/2025) — văn bản hợp nhất số 45/2026/VBHN-TT-BTC (29/9/2026).</li>
       </ul>
-    `
+      <div class="note"><b>Văn bản đã hết hiệu lực từ 21/8/2026</b> (theo Điều 75): NĐ 23/2024/NĐ-CP; NĐ 115/2024/NĐ-CP (trừ Điều 69); NĐ 225/2025/NĐ-CP. Dự án đang dở dang áp dụng quy định chuyển tiếp tại Điều 76.</div>
+    `,
+    legal: [
+      { ref: "Điều 75, Nghị định 274/2026/NĐ-CP", url: "https://vanban.chinhphu.vn/?docid=218807&pageid=27160", detail: "Hiệu lực thi hành và các nghị định hết hiệu lực.", quote: "1. Nghị định này có hiệu lực thi hành từ ngày 21 tháng 8 năm 2026, trừ quy định tại khoản 2 Điều này. 2. Quy định tại Điều 74 của Nghị định này có hiệu lực thi hành kể từ ngày ký ban hành. 3. Kể từ ngày Nghị định này có hiệu lực thi hành, các Nghị định sau đây hết hiệu lực thi hành: a) Nghị định số 23/2024/NĐ-CP ngày 27 tháng 02 năm 2024 ...; b) Nghị định số 115/2024/NĐ-CP ngày 16 tháng 9 năm 2024 ..., trừ quy định tại Điều 69 của Nghị định; c) Nghị định số 225/2025/NĐ-CP ngày 15 tháng 8 năm 2025 ..." }
+    ]
   },
   {
     id: "luat-kd-bds",
@@ -1284,7 +1547,7 @@ const DATA = [
     code: "Luật số 29/2023/QH15",
     url: "https://thuvienphapluat.vn/van-ban/Bat-dong-san/Luat-Kinh-doanh-bat-dong-san-29-2023-QH15-530116.aspx",
     title: "Luật Kinh doanh bất động sản 2023",
-    date: "Thông qua 28/11/2023",
+    date: "Thông qua 28/11/2023 — sửa đổi, bổ sung bởi Luật 43/2024/QH15 (hiệu lực sớm từ 01/8/2024)",
     summary: "Áp dụng cho dự án nhà ở, khu đô thị, bất động sản du lịch — quy định điều kiện kinh doanh, đặt cọc mua bán, chuyển nhượng dự án bất động sản.",
     body: `
       <ul>
@@ -1300,15 +1563,87 @@ const DATA = [
     code: "Nghị định 96/2024/NĐ-CP",
     url: "https://thuvienphapluat.vn/van-ban/Thuong-mai/Nghi-dinh-96-2024-ND-CP-huong-dan-Luat-Kinh-doanh-bat-dong-san-600395.aspx",
     title: "Hướng dẫn Luật Kinh doanh bất động sản 2023",
-    date: "Ban hành 24/07/2024",
+    date: "Ban hành 24/07/2024 — sửa đổi, bổ sung bởi Nghị định 54/2026/NĐ-CP (09/02/2026)",
     summary: "Quy định chi tiết công trình xây dựng đưa vào kinh doanh, công khai thông tin dự án, tỷ lệ dư nợ tín dụng/trái phiếu trên vốn chủ sở hữu của doanh nghiệp kinh doanh bất động sản.",
     body: `
       <ul>
         <li>Công trình có công năng giáo dục, y tế, thể thao, văn phòng, thương mại dịch vụ, du lịch lưu trú, công nghiệp và công trình hỗn hợp.</li>
         <li>Yêu cầu công khai thông tin bất động sản, dự án trước khi đưa vào kinh doanh.</li>
       </ul>
-      <div class="note">Có đề xuất sửa đổi Nghị định 96/2024/NĐ-CP đang được lấy ý kiến — cần kiểm tra bản mới nhất trước khi tư vấn nhà đầu tư về điều kiện kinh doanh bất động sản.</div>
+      <div class="note">Đã được sửa đổi, bổ sung bởi <b>Nghị định 54/2026/NĐ-CP</b> (09/02/2026) — nghị định sửa đổi đồng thời nhiều nghị định trong lĩnh vực nhà ở, kinh doanh bất động sản. Dùng bản hợp nhất mới nhất khi tư vấn.</div>
     `
+  },
+  {
+    id: "luat-nha-o",
+    cat: "luat",
+    code: "Luật số 27/2023/QH15 (sđ Luật 43/2024/QH15)",
+    title: "Luật Nhà ở 2023",
+    date: "Ban hành 27/11/2023, hiệu lực từ 01/8/2024 (sớm theo Luật 43/2024/QH15)",
+    summary: "Áp dụng cho dự án nhà ở thương mại, nhà ở xã hội, khu đô thị có nhà ở — quy định chủ đầu tư, điều kiện, ưu đãi phát triển nhà ở xã hội (Điều 85).",
+    body: `
+      <ul>
+        <li>Liên quan trực tiếp dự án khu đô thị, khu dân cư (khoản 11 Điều 24 Luật Đầu tư 2025) và dự án nhà ở xã hội.</li>
+        <li>Điểm g khoản 2 Điều 85: căn cứ để HĐND cấp tỉnh ban hành cơ chế hỗ trợ dự án nhà ở xã hội (Đồng Tháp: Nghị quyết 43/2026/NQ-HĐND).</li>
+      </ul>
+    `
+  },
+  {
+    id: "nd-95-100-2024",
+    cat: "nd",
+    parentLaw: "luat-nha-o",
+    code: "Nghị định 95/2024/NĐ-CP; Nghị định 100/2024/NĐ-CP",
+    title: "Hướng dẫn Luật Nhà ở; phát triển và quản lý nhà ở xã hội",
+    date: "NĐ 95/2024 ban hành 24/7/2024; NĐ 100/2024 ban hành 26/7/2024 — NĐ 100 sửa đổi bởi NĐ 261/2025 và NĐ 54/2026",
+    summary: "NĐ 95/2024 quy định chi tiết Luật Nhà ở; NĐ 100/2024 quy định riêng về phát triển và quản lý nhà ở xã hội (đối tượng, điều kiện, ưu đãi chủ đầu tư).",
+    body: `
+      <ul>
+        <li>Nghị định 54/2026/NĐ-CP (09/02/2026) sửa đổi, bổ sung đồng thời nhiều nghị định trong lĩnh vực nhà ở và kinh doanh bất động sản.</li>
+        <li>Thông tư 05/2024/TT-BXD (sđ TT 32/2025/TT-BXD, TT 09/2025/TT-BXD) quy định chi tiết một số điều của Luật Nhà ở.</li>
+      </ul>
+      <div class="note">Danh sách văn bản sửa đổi theo căn cứ ban hành của Nghị quyết 43/2026/NQ-HĐND và Quyết định 2860/QĐ-UBND tỉnh Đồng Tháp.</div>
+    `
+  },
+  {
+    id: "nq-201-2025",
+    cat: "luat",
+    parentLaw: "luat-nha-o",
+    parentLabel: "Cơ chế thí điểm",
+    code: "Nghị quyết 201/2025/QH15; Nghị định 192/2025/NĐ-CP",
+    title: "Thí điểm cơ chế, chính sách đặc thù phát triển nhà ở xã hội",
+    date: "NQ 201/2025/QH15 thông qua 29/5/2025, hiệu lực 01/6/2025, thực hiện 05 năm; NĐ 192/2025/NĐ-CP hiệu lực 01/7/2025 đến hết 31/5/2030",
+    summary: "Cơ chế đặc thù: Quỹ nhà ở quốc gia; giao chủ đầu tư nhà ở xã hội không qua đấu thầu; thủ tục chấp thuận chủ trương đầu tư đồng thời giao chủ đầu tư.",
+    body: `
+      <ul>
+        <li>Nghị định 192/2025/NĐ-CP quy định trình tự <b>chấp thuận chủ trương đầu tư đồng thời giao chủ đầu tư</b> dự án nhà ở xã hội.</li>
+        <li>Chuyển tiếp (NĐ 192): dự án nhà ở xã hội đã trình thẩm định chủ trương đầu tư nhưng chưa có quyết định thì dừng thủ tục cũ, chuyển sang thủ tục chấp thuận chủ trương đồng thời giao chủ đầu tư (trừ trường hợp khoản 2 Điều 12 NQ 201).</li>
+        <li>Hết thời gian thí điểm, dự án đang thực hiện cơ chế đặc thù được tiếp tục đến khi kết thúc dự án (khoản 3 Điều 14 NQ 201).</li>
+      </ul>
+    `
+  },
+  {
+    id: "dt-nha-o-xa-hoi",
+    cat: "lienquan",
+    parentLaw: "luat-nha-o",
+    parentLabel: "Văn bản địa phương (Đồng Tháp) áp dụng",
+    code: "Nghị quyết 43/2026/NQ-HĐND; Quyết định 2860/QĐ-UBND (Đồng Tháp)",
+    url: "docs/dong-thap-nq-43-2026-ho-tro-noxh.pdf",
+    title: "Đồng Tháp — hỗ trợ dự án nhà ở xã hội; Chương trình phát triển nhà ở 2021–2030",
+    date: "NQ 43/2026 thông qua 09/7/2026, hiệu lực 01/8/2026 (thay NQ 06/2025/NQ-HĐND); QĐ 2860 ký 10/9/2026, hiệu lực từ ngày ký",
+    summary: "Ngân sách tỉnh hỗ trợ 50% chi phí hạ tầng kỹ thuật trong dự án (tối đa 05 tỷ đồng/dự án) và 100% phí, lệ phí thủ tục hành chính cho dự án nhà ở xã hội không dùng vốn đầu tư công.",
+    body: `
+      <h4>Nghị quyết 43/2026/NQ-HĐND — cơ chế hỗ trợ (Điều 2)</h4>
+      <ul>
+        <li>Hỗ trợ <b>50%</b> kinh phí đầu tư hạ tầng kỹ thuật trong phạm vi dự án (giao thông, chiếu sáng công cộng, thoát nước ngoài nhà, thu gom và xử lý nước thải) — <b>không quá 05 tỷ đồng/dự án</b>.</li>
+        <li>Hỗ trợ <b>100%</b> phí, lệ phí thực hiện thủ tục hành chính liên quan dự án.</li>
+        <li>Điều kiện: dự án đã nghiệm thu hoàn thành; áp dụng cho chủ đầu tư nhà ở xã hội không bằng vốn đầu tư công hoặc bằng nguồn tài chính công đoàn.</li>
+      </ul>
+      <h4>Quyết định 2860/QĐ-UBND (10/9/2026)</h4>
+      <p>Phê duyệt điều chỉnh Chương trình phát triển nhà ở tỉnh Đồng Tháp giai đoạn 2021–2030; thay QĐ 1409/QĐ-UBND.HC (Đồng Tháp cũ) và QĐ 3873/QĐ-UBND, QĐ 2288/QĐ-UBND (Tiền Giang cũ). Dự án khu đô thị phải phù hợp chương trình này (tiêu chí tại NQ 40/2026/NQ-HĐND).</p>
+      <div class="note">File PDF NQ 43/2026 đã lưu kèm trang web.</div>
+    `,
+    legal: [
+      { ref: "Điều 2, Nghị quyết 43/2026/NQ-HĐND", url: "docs/dong-thap-nq-43-2026-ho-tro-noxh.pdf", detail: "Cơ chế hỗ trợ chủ đầu tư dự án nhà ở xã hội.", quote: "1. Nhà nước hỗ trợ chủ đầu tư a) Hỗ trợ 50% kinh phí đầu tư xây dựng hệ thống hạ tầng kỹ thuật trong phạm vi của dự án bao gồm: Hệ thống giao thông, chiếu sáng công cộng, thoát nước ngoài nhà, thu gom và xử lý nước thải nhưng không quá 05 tỷ đồng/dự án; b) Hỗ trợ 100% các khoản phí, lệ phí thực hiện thủ tục hành chính liên quan đến dự án đầu tư xây dựng nhà ở xã hội. 2. Nguyên tắc hỗ trợ Dự án đã được nghiệm thu hoàn thành theo quy định của pháp luật về xây dựng. Giá trị hỗ trợ do cơ quan nhà nước có thẩm quyền xác định." }
+    ]
   },
   {
     id: "luat-dau-gia",
@@ -1369,6 +1704,108 @@ const DATA = [
         <li>Một số mức tham khảo (qua nguồn thứ cấp, năm 2025): nhà xưởng sản xuất 1 tầng kết cấu thép ~6,7 triệu đồng/m²; văn phòng/trụ sở hạng B (10–20 tầng) ~15,9 triệu đồng/m²; nhà chung cư 9–20 tầng ~12,8 triệu đồng/m².</li>
       </ul>
       <div class="note"><b>Lưu ý:</b> các mức trên trích qua nguồn tổng hợp thứ cấp, không phải chụp trực tiếp từ Phụ lục chính thức — trước khi dùng để thẩm định/cam kết với nhà đầu tư, cần đối chiếu bản Phụ lục gốc kèm theo Quyết định 425/QĐ-BXD.</div>
+    `
+  },
+  {
+    id: "nd-207-2026",
+    cat: "nd",
+    parentLaw: "luat-xay-dung-2025",
+    code: "Nghị định 207/2026/NĐ-CP",
+    url: "docs/nd-207-2026-nd-cp.pdf",
+    title: "Quản lý chất lượng, thi công xây dựng và bảo trì công trình xây dựng",
+    date: "Ban hành 15/06/2026",
+    summary: "Quy định chi tiết Luật Xây dựng 2025 về quản lý chất lượng, thi công xây dựng, nghiệm thu, bảo trì công trình, kéo dài thời hạn sử dụng công trình.",
+    body: `
+      <p>Áp dụng ở giai đoạn thi công — nghiệm thu — đưa công trình vào sử dụng của dự án; đọc kèm Luật PCCC (nghiệm thu PCCC) khi hướng dẫn nhà đầu tư hoàn thành công trình.</p>
+    `
+  },
+  {
+    id: "nd-269-2025",
+    cat: "nd",
+    parentLaw: "luat-xay-dung-2025",
+    parentLabel: "Văn bản liên quan",
+    code: "Nghị định 269/2025/NĐ-CP",
+    title: "Phát triển đô thị thông minh",
+    date: "Ban hành và hiệu lực từ 14/10/2025",
+    summary: "Khung phát triển đô thị thông minh, chứng nhận khu đô thị thông minh, cơ chế thí điểm và ưu đãi — tham khảo khi xúc tiến dự án khu đô thị quy mô lớn.",
+    body: `
+      <p>Khu đô thị thông minh đã hoàn thành đầu tư trước ngày Nghị định có hiệu lực không bắt buộc phải có chứng nhận khu đô thị thông minh (Điều 46).</p>
+    `
+  },
+  {
+    id: "nd-35-2022",
+    cat: "lienquan",
+    code: "Nghị định 35/2022/NĐ-CP",
+    title: "Quản lý khu công nghiệp và khu kinh tế",
+    date: "Ban hành 28/5/2022, hiệu lực 15/7/2022 — thay Nghị định 82/2018/NĐ-CP; đang có dự thảo nghị định thay thế",
+    summary: "Quy hoạch, thành lập, mở rộng KCN, KKT; đầu tư kinh doanh hạ tầng KCN; chính sách ưu đãi KCN hỗ trợ, KCN chuyên ngành, KCN sinh thái — căn cứ khi xúc tiến dự án vào KCN.",
+    body: `
+      <p>Dự án trong KCN, KKT: Ban quản lý các KCN/KKT là cơ quan đăng ký đầu tư (Điều 27 Luật Đầu tư 2025).</p>
+      <div class="note">Bộ Tài chính đang dự thảo nghị định thay thế Nghị định 35/2022/NĐ-CP — theo dõi khi ban hành.</div>
+    `
+  },
+  {
+    id: "nd-32-2024-ccn",
+    cat: "lienquan",
+    code: "Nghị định 32/2024/NĐ-CP (sđ NĐ 303/2026/NĐ-CP)",
+    url: "docs/nd-303-2026-nd-cp.pdf",
+    title: "Quản lý, phát triển cụm công nghiệp",
+    date: "Ban hành 15/3/2024 — sửa đổi bởi Nghị định 303/2026/NĐ-CP (ban hành 01/8/2026, hiệu lực 15/9/2026)",
+    summary: "Thành lập, mở rộng cụm công nghiệp; đầu tư hạ tầng CCN; di dời cơ sở sản xuất vào CCN. Xây dựng, phát triển hạ tầng CCN là ngành, nghề ưu đãi đầu tư (Phụ lục NĐ 96/2026/NĐ-CP).",
+    body: `
+      <ul>
+        <li><b>Nghị định 303/2026/NĐ-CP</b> (hiệu lực 15/9/2026) sửa đổi, bổ sung nhiều điều; thay cụm từ "phương án phát triển" bằng "phương hướng phát triển" cụm công nghiệp; thay "Bộ Tài nguyên và Môi trường" bằng "Bộ Nông nghiệp và Môi trường"; bãi bỏ điểm c khoản 1 Điều 9.</li>
+        <li>Các Điều 6, 11, 12 Nghị định 139/2025/NĐ-CP hết hiệu lực từ 15/9/2026.</li>
+      </ul>
+    `
+  },
+  {
+    id: "luat-pccc",
+    cat: "lienquan",
+    code: "Luật số 55/2024/QH15 (sđ Luật 118/2025/QH15, Luật 135/2025/QH15)",
+    title: "Luật Phòng cháy, chữa cháy và cứu nạn, cứu hộ",
+    date: "Hiệu lực từ 01/7/2025 — sửa đổi bởi Luật 118/2025/QH15 và Luật Xây dựng 135/2025/QH15 (hiệu lực 01/7/2026)",
+    summary: "Mọi dự án có công trình xây dựng đều phải tính đến PCCC: thẩm định thiết kế về PCCC (Điều 17), nghiệm thu và kiểm tra nghiệm thu PCCC trước khi đưa vào sử dụng (Điều 18), bảo hiểm cháy, nổ bắt buộc (Điều 48).",
+    body: `
+      <ul>
+        <li><b>Thẩm định thiết kế PCCC (Điều 17):</b> cơ quan chuyên môn về xây dựng thẩm định cùng báo cáo nghiên cứu khả thi; cơ quan Công an thẩm định các nội dung điểm e, g khoản 1 Điều 16 ở bước thiết kế triển khai sau khi dự án được phê duyệt.</li>
+        <li><b>Nghiệm thu PCCC (Điều 18):</b> chủ đầu tư tự nghiệm thu; công trình thuộc diện thẩm định thiết kế PCCC chỉ được đưa vào sử dụng sau khi cơ quan quản lý chuyên ngành chấp thuận kết quả nghiệm thu.</li>
+        <li><b>Bảo hiểm cháy, nổ bắt buộc (Điều 48):</b> với cơ sở thuộc danh mục do Chính phủ quy định.</li>
+        <li>Văn bản hướng dẫn: <b>Nghị định 105/2025/NĐ-CP</b> (ban hành 15/5/2025) — danh mục công trình thuộc diện thẩm định thiết kế PCCC, mẫu hồ sơ.</li>
+      </ul>
+      <div class="note">Trích dẫn theo bản hợp nhất Luật PCCC của Văn phòng Quốc hội (2026), đã gộp sửa đổi của Luật 118/2025/QH15 và Luật Xây dựng 135/2025/QH15 (cụm từ "thiết kế xây dựng triển khai sau thiết kế cơ sở" nay là "thiết kế xây dựng triển khai sau khi dự án được phê duyệt").</div>
+    `,
+    legal: [
+      { ref: "Khoản 1 Điều 17, Luật PCCC và CNCH", detail: "Phân công thẩm định thiết kế về PCCC.", quote: "1. Việc thẩm định thiết kế về phòng cháy và chữa cháy đối với dự án đầu tư xây dựng công trình, công trình và phương tiện giao thông, trừ công trình tạm theo quy định của pháp luật về xây dựng được quy định như sau: ... b) Cơ quan chuyên môn về xây dựng tổ chức thẩm định các nội dung quy định tại các điểm a, b, c, d và đ khoản 1 Điều 16 của Luật này đối với dự án thuộc diện phải thẩm định thiết kế về phòng cháy và chữa cháy khi thực hiện thẩm định Báo cáo nghiên cứu khả thi đầu tư xây dựng công trình theo quy định của pháp luật về xây dựng; ... d) Cơ quan Công an tổ chức thẩm định các nội dung quy định tại điểm e và điểm g khoản 1 Điều 16 của Luật này đối với báo cáo kinh tế - kỹ thuật đầu tư xây dựng, thiết kế xây dựng triển khai sau khi dự án được phê duyệt của công trình thuộc diện phải thẩm định thiết kế về phòng cháy và chữa cháy; ..." },
+      { ref: "Khoản 4 Điều 18, Luật PCCC và CNCH", detail: "Chỉ đưa công trình vào sử dụng sau khi được chấp thuận kết quả nghiệm thu PCCC.", quote: "4. Công trình, phương tiện giao thông thuộc diện phải thẩm định thiết kế về phòng cháy và chữa cháy sau khi tổ chức nghiệm thu về phòng cháy và chữa cháy phải được cơ quan quản lý chuyên ngành kiểm tra công tác nghiệm thu về phòng cháy và chữa cháy; chỉ được đưa công trình, phần công trình, hạng mục công trình, phương tiện giao thông vào khai thác, sử dụng sau khi được cơ quan quản lý chuyên ngành chấp thuận kết quả nghiệm thu về phòng cháy và chữa cháy." },
+      { ref: "Khoản 1 Điều 48, Luật PCCC và CNCH", detail: "Bảo hiểm cháy, nổ bắt buộc.", quote: "1. Cơ quan, tổ chức, cá nhân phải tham gia bảo hiểm cháy, nổ bắt buộc đối với tài sản của cơ sở thuộc danh mục cơ sở phải mua bảo hiểm cháy, nổ bắt buộc và thực hiện theo quy định của pháp luật về bảo hiểm." }
+    ]
+  },
+  {
+    id: "luat-ppp",
+    cat: "lienquan",
+    code: "Luật số 64/2020/QH14 (sđ Luật 03/2022, 57/2024, 90/2025)",
+    title: "Luật Đầu tư theo phương thức đối tác công tư (PPP)",
+    date: "Hiệu lực từ 01/01/2021 — sửa đổi, bổ sung bởi Luật 03/2022/QH15, 57/2024/QH15, 90/2025/QH15",
+    summary: "Áp dụng khi dự án hạ tầng/dịch vụ công được thực hiện theo hợp đồng PPP (BOT, BTO, BOO, O&M, BT…) giữa Nhà nước và nhà đầu tư.",
+    body: `
+      <p>Khác với dự án đầu tư kinh doanh thông thường theo Luật Đầu tư — dự án PPP có quyết định chủ trương đầu tư, phê duyệt dự án và lựa chọn nhà đầu tư theo Luật PPP.</p>
+    `
+  },
+  {
+    id: "nd-377-2026",
+    cat: "nd",
+    parentLaw: "luat-ppp",
+    code: "Nghị định 377/2026/NĐ-CP",
+    title: "Sửa đổi, bổ sung các Nghị định hướng dẫn Luật Đầu tư theo phương thức đối tác công tư",
+    date: "Ban hành 01/10/2026, hiệu lực từ 01/10/2026",
+    summary: "Sửa đổi đồng thời các Nghị định 180/2025/NĐ-CP (PPP trong khoa học, công nghệ, đổi mới sáng tạo, chuyển đổi số), 243/2025/NĐ-CP, 257/2025/NĐ-CP và 312/2025/NĐ-CP; bãi bỏ Nghị định 69/2019/NĐ-CP.",
+    body: `
+      <ul>
+        <li>Bãi bỏ Nghị định 69/2019/NĐ-CP về sử dụng tài sản công để thanh toán cho nhà đầu tư dự án BT.</li>
+        <li>Quy định chuyển tiếp (Điều 49) cho dự án PPP đã có quyết định chủ trương đầu tư, đang lập/phát hành hồ sơ mời thầu, đã ký hợp đồng.</li>
+        <li>Ban hành kèm mẫu quyết định phê duyệt dự án PPP mới.</li>
+      </ul>
     `
   },
   {
@@ -1467,11 +1904,20 @@ function matches(item, q) {
 const DATA_INDEX = new Map(DATA.map((d, i) => [d.id, i]));
 const DATA_BY_ID = new Map(DATA.map(d => [d.id, d]));
 
+function ancestorChain(item) {
+  const chain = [item];
+  let cur = item;
+  while (cur.parentLaw && DATA_BY_ID.has(cur.parentLaw) && chain.length < 6) {
+    cur = DATA_BY_ID.get(cur.parentLaw);
+    chain.unshift(cur);
+  }
+  return chain;
+}
+
 function groupSortKey(item) {
-  const anchorId = item.parentLaw || item.id;
-  const anchorIdx = DATA_INDEX.has(anchorId) ? DATA_INDEX.get(anchorId) : 9999;
-  const childRank = item.parentLaw ? 1 : 0;
-  return [anchorIdx, childRank, DATA_INDEX.get(item.id)];
+  const chain = ancestorChain(item);
+  const idx = c => DATA_INDEX.get(c.id);
+  return [idx(chain[0]), chain[1] ? idx(chain[1]) : -1, chain.length, idx(item)];
 }
 
 function render() {
@@ -1495,6 +1941,7 @@ function render() {
     card.className = 'card';
     card.dataset.open = openIds.has(item.id) ? 'true' : 'false';
     if (item.parentLaw) card.dataset.child = 'true';
+    if (ancestorChain(item).length > 2) card.dataset.depth = '2';
 
     const parentItem = item.parentLaw ? DATA_BY_ID.get(item.parentLaw) : null;
 
@@ -1506,7 +1953,7 @@ function render() {
     head.innerHTML = `
       <span class="badge ${item.cat}">${CAT_LABEL[item.cat]}</span>
       <div class="card-main">
-        ${parentItem ? `<div class="parent-breadcrumb">↳ Hướng dẫn thi hành: ${parentItem.title}</div>` : ''}
+        ${parentItem ? `<div class="parent-breadcrumb">↳ ${item.parentLabel || 'Hướng dẫn thi hành'}: ${parentItem.title}</div>` : ''}
         <div class="card-title-row">
           <span class="card-title">${highlight(item.title, q)}</span>
           ${codeBadge(item, q)}
@@ -1662,17 +2109,18 @@ const PROCESS_DATA = [
     tasks: [
       "Xác định nhóm dự án A/B/C theo Luật Đầu tư công 2024 (làm căn cứ đầu vào).",
       "Đối chiếu Phụ lục III/IV/V Nghị định 08/2022/NĐ-CP để xác định dự án thuộc nhóm I, II, III hay IV theo mức độ tác động môi trường.",
-      "Lập báo cáo ĐTM nếu thuộc diện bắt buộc (dự án nhóm I).",
+      "Lập báo cáo ĐTM nếu thuộc diện bắt buộc (dự án nhóm I, hoặc nhóm II thuộc điểm c, d, đ, e khoản 4 Điều 28) — từ 01/01/2026 chủ dự án tự tổ chức thực hiện ĐTM.",
       "Xin giấy phép môi trường trước khi vận hành chính thức nếu phát sinh nước thải, khí thải, chất thải nguy hại."
     ],
     legal: [
-      { ref: "Điều 30, Luật Bảo vệ môi trường 2020 (số 72/2020/QH14)", url: "https://hethongphapluat.com/luat-bao-ve-moi-truong-2020/dieu-30", detail: "Đối tượng phải thực hiện đánh giá tác động môi trường — dự án đầu tư nhóm I." },
+      { ref: "Điều 30, Luật Bảo vệ môi trường (VBHN 98/VBHN-VPQH)", url: "docs/luat-bvmt-vbhn-98-2026.pdf", detail: "Đối tượng phải đánh giá tác động môi trường: dự án nhóm I và dự án nhóm II thuộc điểm c, d, đ, e khoản 4 Điều 28 — không chỉ riêng nhóm I.", quote: "1. Đối tượng phải thực hiện đánh giá tác động môi trường bao gồm: a) Dự án đầu tư nhóm I quy định tại khoản 3 Điều 28 của Luật này; b) Dự án đầu tư nhóm II quy định tại các điểm c, d, đ và e khoản 4 Điều 28 của Luật này. 2. Đối tượng quy định tại khoản 1 Điều này không phải thực hiện đánh giá tác động môi trường khi thuộc một trong các trường hợp sau đây: a) Dự án đầu tư công khẩn cấp theo quy định của pháp luật về đầu tư công; b) Dự án đầu tư không phải thực hiện đánh giá tác động môi trường theo quy định của luật, nghị quyết của Quốc hội." },
+      { ref: "Điều 31, Luật Bảo vệ môi trường (sđ Luật 146/2025/QH15)", url: "docs/luat-bvmt-vbhn-98-2026.pdf", detail: "Từ 01/01/2026: ĐTM do chủ dự án đầu tư tự tổ chức thực hiện, đồng thời với lập báo cáo nghiên cứu khả thi.", quote: "1. Đánh giá tác động môi trường do chủ dự án đầu tư tổ chức thực hiện. Đánh giá tác động môi trường được thực hiện đồng thời với quá trình lập báo cáo nghiên cứu khả thi hoặc tài liệu tương đương với báo cáo nghiên cứu khả thi của dự án đầu tư, dự án thành phần hoặc phân kỳ đầu tư của dự án. Kết quả đánh giá tác động môi trường được thể hiện bằng báo cáo đánh giá tác động môi trường." },
       { ref: "Điều 32, Luật Bảo vệ môi trường 2020", url: "https://www.luatmoitruong.vn/luat-bao-ve-moi-truong/chuong-iv.-danh-gia-moi-truong-chien-luoc-danh-gia-tac-dong-moi-truong-giay-phep-moi-truong/muc-3.-danh-gia-tac-dong-moi-truong/dieu-32.-noi-dung-cua-bao-cao-danh-gia-tac-dong-moi-truong", detail: "Nội dung báo cáo đánh giá tác động môi trường: xuất xứ dự án, căn cứ pháp lý/kỹ thuật, các tác động môi trường chính." },
       { ref: "Nghị định 08/2022/NĐ-CP (sđ bởi NĐ 05/2025/NĐ-CP, NĐ 48/2026/NĐ-CP)", url: "https://thuvienphapluat.vn/van-ban/Tai-nguyen-Moi-truong/Nghi-dinh-08-2022-ND-CP-huong-dan-Luat-Bao-ve-moi-truong-479457.aspx", detail: "Tiêu chí và danh mục chi tiết dự án nhóm I (Phụ lục III), nhóm II (Phụ lục IV), nhóm III (Phụ lục V) — kết hợp tiêu chí quy mô (nhóm A/B/C), nguy cơ ô nhiễm và yếu tố nhạy cảm môi trường." }
     ]
   },
   {
-    title: "Giấy phép xây dựng & triển khai thi công",
+    title: "Giấy phép xây dựng, PCCC & triển khai thi công",
     cat: "lienquan",
     summary: "Hoàn thiện thiết kế, xin giấy phép xây dựng (trừ trường hợp được miễn) và triển khai thi công công trình của dự án. Nhóm dự án (A/B/C theo Luật Đầu tư công) quyết định cấp thẩm định thiết kế.",
     authority: "Sở Xây dựng / cơ quan chuyên môn về xây dựng",
@@ -1681,11 +2129,16 @@ const PROCESS_DATA = [
       "Xác định nhóm dự án (A/B/C) để biết cấp thẩm định thiết kế xây dựng.",
       "Khảo sát xây dựng, lập và thẩm định thiết kế, dự toán xây dựng.",
       "Xin giấy phép xây dựng (nếu công trình không thuộc diện miễn phép).",
-      "Ký hợp đồng thi công, giám sát thi công xây dựng công trình."
+      "Thẩm định thiết kế về PCCC (cùng báo cáo nghiên cứu khả thi và ở bước thiết kế triển khai) nếu công trình thuộc diện phải thẩm định.",
+      "Ký hợp đồng thi công, giám sát thi công xây dựng công trình.",
+      "Nghiệm thu hoàn thành công trình và nghiệm thu PCCC — chỉ đưa vào sử dụng sau khi được chấp thuận kết quả nghiệm thu PCCC."
     ],
     legal: [
       { ref: "Khoản 2, Điều 43, Luật Xây dựng 2025 (số 135/2025/QH15)", url: "https://thuvienphapluat.vn/van-ban/Xay-dung-Do-thi/Luat-Xay-dung-2025-so-135-2025-QH15-675213.aspx", detail: "Công trình xây dựng phải có giấy phép xây dựng, trừ các trường hợp được miễn: công trình bí mật nhà nước; công trình khẩn cấp, cấp bách; công trình thuộc dự án đầu tư công đặc biệt hoặc dự án theo thủ tục đầu tư đặc biệt; công trình xây dựng tạm; công trình trên đất quốc phòng, an ninh." },
-      { ref: "Nghị định 217/2026/NĐ-CP", url: "https://thuvienphapluat.vn/van-ban/Xay-dung-Do-thi/Nghi-dinh-217-2026-ND-CP-huong-dan-Luat-Xay-dung-quan-ly-hoat-dong-xay-dung-696494.aspx", detail: "Hướng dẫn Luật Xây dựng 2025 về quản lý hoạt động xây dựng (lập/thẩm định/phê duyệt dự án, thiết kế, khảo sát, cấp phép xây dựng) — thay thế Nghị định 175/2024/NĐ-CP từ 01/7/2026." }
+      { ref: "Nghị định 217/2026/NĐ-CP", url: "https://thuvienphapluat.vn/van-ban/Xay-dung-Do-thi/Nghi-dinh-217-2026-ND-CP-huong-dan-Luat-Xay-dung-quan-ly-hoat-dong-xay-dung-696494.aspx", detail: "Hướng dẫn Luật Xây dựng 2025 về quản lý hoạt động xây dựng (lập/thẩm định/phê duyệt dự án, thiết kế, khảo sát, cấp phép xây dựng) — thay thế Nghị định 175/2024/NĐ-CP từ 01/7/2026." },
+      { ref: "Nghị định 207/2026/NĐ-CP", url: "docs/nd-207-2026-nd-cp.pdf", detail: "Quản lý chất lượng, thi công xây dựng và bảo trì công trình xây dựng (ban hành 15/6/2026) — căn cứ nghiệm thu hoàn thành công trình." },
+      { ref: "Khoản 1 Điều 17, Luật PCCC và CNCH", detail: "Thẩm định thiết kế về PCCC.", quote: "1. Việc thẩm định thiết kế về phòng cháy và chữa cháy đối với dự án đầu tư xây dựng công trình, công trình và phương tiện giao thông, trừ công trình tạm theo quy định của pháp luật về xây dựng được quy định như sau: ... b) Cơ quan chuyên môn về xây dựng tổ chức thẩm định các nội dung quy định tại các điểm a, b, c, d và đ khoản 1 Điều 16 của Luật này đối với dự án thuộc diện phải thẩm định thiết kế về phòng cháy và chữa cháy khi thực hiện thẩm định Báo cáo nghiên cứu khả thi đầu tư xây dựng công trình theo quy định của pháp luật về xây dựng; ... d) Cơ quan Công an tổ chức thẩm định các nội dung quy định tại điểm e và điểm g khoản 1 Điều 16 của Luật này đối với báo cáo kinh tế - kỹ thuật đầu tư xây dựng, thiết kế xây dựng triển khai sau khi dự án được phê duyệt của công trình thuộc diện phải thẩm định thiết kế về phòng cháy và chữa cháy; ..." },
+      { ref: "Khoản 4 Điều 18, Luật PCCC và CNCH", detail: "Nghiệm thu PCCC trước khi đưa công trình vào sử dụng.", quote: "4. Công trình, phương tiện giao thông thuộc diện phải thẩm định thiết kế về phòng cháy và chữa cháy sau khi tổ chức nghiệm thu về phòng cháy và chữa cháy phải được cơ quan quản lý chuyên ngành kiểm tra công tác nghiệm thu về phòng cháy và chữa cháy; chỉ được đưa công trình, phần công trình, hạng mục công trình, phương tiện giao thông vào khai thác, sử dụng sau khi được cơ quan quản lý chuyên ngành chấp thuận kết quả nghiệm thu về phòng cháy và chữa cháy." }
     ],
     note: "Luật Xây dựng 2014 đã hết hiệu lực từ 01/7/2026, thay bằng Luật Xây dựng 2025 — số điều đã thay đổi (giấy phép xây dựng nay ở Điều 43, không còn ở Điều 89/95 như luật cũ). Cần cập nhật lại mọi checklist hồ sơ theo luật mới."
   },
@@ -1725,86 +2178,104 @@ const PROCESS_DATA = [
   }
 ];
 
-const stepsEl = document.getElementById('steps');
-let openSteps = new Set();
+const flowchartEl = document.getElementById('flowchart');
+const flowDetailEl = document.getElementById('flowDetail');
+let activeStepIdx = null;
 
-function renderSteps() {
-  stepsEl.innerHTML = '';
+const FLOW_ARROW_SVG = `<svg viewBox="0 0 24 24" fill="none"><path d="M4 12h14M14 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+
+function buildFlowNode(step, i) {
+  const node = document.createElement('div');
+  node.className = 'flow-node';
+  node.tabIndex = 0;
+  node.setAttribute('role', 'button');
+  node.setAttribute('aria-expanded', activeStepIdx === i ? 'true' : 'false');
+  if (activeStepIdx === i) node.dataset.active = 'true';
+  node.innerHTML = `
+    <div class="flow-node-num">${i + 1}</div>
+    <div class="flow-node-title">${step.title}</div>
+    <span class="badge ${step.cat}">${CAT_LABEL[step.cat]}</span>
+  `;
+  const select = () => {
+    activeStepIdx = (activeStepIdx === i) ? null : i;
+    renderFlowchart();
+    renderFlowDetail();
+    if (activeStepIdx !== null) {
+      requestAnimationFrame(() => flowDetailEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' }));
+    }
+  };
+  node.addEventListener('click', select);
+  node.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); select(); } });
+  return node;
+}
+
+function renderFlowchart() {
+  flowchartEl.innerHTML = '';
   PROCESS_DATA.forEach((step, i) => {
-    const row = document.createElement('div');
-    row.className = 'step';
-    row.dataset.open = openSteps.has(i) ? 'true' : 'false';
+    if (i === 0) {
+      flowchartEl.appendChild(buildFlowNode(step, i));
+      return;
+    }
+    const pair = document.createElement('div');
+    pair.className = 'flow-pair';
+    const arrow = document.createElement('div');
+    arrow.className = 'flow-arrow';
+    arrow.innerHTML = FLOW_ARROW_SVG;
+    pair.appendChild(arrow);
+    pair.appendChild(buildFlowNode(step, i));
+    flowchartEl.appendChild(pair);
+  });
+}
 
-    const rail = document.createElement('div');
-    rail.className = 'step-rail';
-    rail.innerHTML = `<div class="step-num">${i + 1}</div><div class="step-line"></div>`;
-
-    const card = document.createElement('div');
-    card.style.flex = '1';
-    card.style.minWidth = '0';
-
-    const cardInner = document.createElement('div');
-    cardInner.className = 'step-card';
-
-    const head = document.createElement('div');
-    head.className = 'step-head';
-    head.tabIndex = 0;
-    head.setAttribute('role', 'button');
-    head.setAttribute('aria-expanded', openSteps.has(i) ? 'true' : 'false');
-    head.innerHTML = `
-      <div class="step-main">
-        <div class="step-title-row">
+function renderFlowDetail() {
+  if (activeStepIdx === null) {
+    flowDetailEl.innerHTML = `<div class="flow-detail-empty">Bấm vào 1 ô trong sơ đồ ở trên để xem công việc chính và căn cứ pháp lý cụ thể của bước đó.</div>`;
+    return;
+  }
+  const step = PROCESS_DATA[activeStepIdx];
+  flowDetailEl.innerHTML = `
+    <div class="flow-detail-head">
+      <div>
+        <div class="flow-detail-title-row">
           <span class="badge ${step.cat}">${CAT_LABEL[step.cat]}</span>
-          <span class="step-title">${step.title}</span>
+          <span class="flow-detail-title">Bước ${activeStepIdx + 1}. ${step.title}</span>
         </div>
-        <div class="step-summary">${step.summary}</div>
+        <div class="flow-detail-summary">${step.summary}</div>
         <div class="step-tags">
           ${step.authority ? `<span class="step-tag meta-authority">${step.authority}</span>` : ''}
           ${step.duration ? `<span class="step-tag meta-duration">${step.duration}</span>` : ''}
         </div>
       </div>
-      <svg class="chevron" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    `;
-    const toggle = () => {
-      const isOpen = row.dataset.open === 'true';
-      row.dataset.open = isOpen ? 'false' : 'true';
-      head.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
-      if (isOpen) openSteps.delete(i); else openSteps.add(i);
-    };
-    head.addEventListener('click', toggle);
-    head.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); } });
-
-    const body = document.createElement('div');
-    body.className = 'step-body';
-    body.innerHTML = `
-      <div class="step-body-inner">
-        <h4>Công việc chính</h4>
-        <ul>${step.tasks.map(t => `<li>${t}</li>`).join('')}</ul>
-        <h4>Căn cứ pháp lý cụ thể</h4>
-        ${renderLegalList(step.legal)}
-        ${step.note ? `<div class="note">${step.note}</div>` : ''}
-      </div>
-    `;
-
-    cardInner.appendChild(head);
-    cardInner.appendChild(body);
-    card.appendChild(cardInner);
-    row.appendChild(rail);
-    row.appendChild(card);
-    stepsEl.appendChild(row);
+      <button class="flow-detail-close" type="button" aria-label="Đóng" title="Đóng">✕</button>
+    </div>
+    <div class="step-body-inner" style="padding-top:0">
+      <h4>Công việc chính</h4>
+      <ul>${step.tasks.map(t => `<li>${t}</li>`).join('')}</ul>
+      <h4>Căn cứ pháp lý cụ thể</h4>
+      ${renderLegalList(step.legal)}
+      ${step.note ? `<div class="note">${step.note}</div>` : ''}
+    </div>
+  `;
+  flowDetailEl.querySelector('.flow-detail-close').addEventListener('click', () => {
+    activeStepIdx = null;
+    renderFlowchart();
+    renderFlowDetail();
   });
 }
-renderSteps();
+
+renderFlowchart();
+renderFlowDetail();
 
 /* ---------------- Ưu đãi theo địa bàn (Đồng Tháp) ---------------- */
 
 const INCENTIVE_LEGAL = [
   { ref: "Điều 15, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Khung ưu đãi chung: khoản 2 xác định địa bàn ưu đãi gồm địa bàn khó khăn/đặc biệt khó khăn và KCN, CCN, KCX, KCNC, khu kinh tế…", quote: "2. Địa bàn ưu đãi đầu tư bao gồm: a) Địa bàn có điều kiện kinh tế - xã hội khó khăn, địa bàn có điều kiện kinh tế - xã hội đặc biệt khó khăn; b) Khu công nghiệp, cụm công nghiệp, khu chế xuất, khu công nghệ cao, khu nông nghiệp ứng dụng công nghệ cao, khu công nghệ số tập trung, khu thương mại tự do, trung tâm tài chính quốc tế, khu kinh tế. 3. Căn cứ ngành, nghề, địa bàn ưu đãi đầu tư quy định tại khoản 1 và khoản 2 Điều này, Chính phủ ban hành, sửa đổi, bổ sung Danh mục ngành, nghề ưu đãi đầu tư và Danh mục địa bàn ưu đãi đầu tư." },
   { ref: "Nghị định 96/2026/NĐ-CP", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Nghi-dinh-96-2026-ND-CP-huong-dan-Luat-Dau-tu-690303.aspx", detail: "Hướng dẫn thi hành Luật Đầu tư — nguyên tắc xác định địa bàn ưu đãi." },
-  { ref: "Quyết định 1717/QĐ-UBND (12/6/2026)", detail: "UBND tỉnh Đồng Tháp — xác định và công bố địa bàn ưu đãi đầu tư cấp xã trên địa bàn tỉnh. Văn bản nội bộ, cần đối chiếu bản đã ký chính thức." },
+  { ref: "Quyết định 1717/QĐ-UBND (12/6/2026)", url: "docs/dong-thap-qd-1717-2026-dia-ban-uu-dai.pdf", detail: "UBND tỉnh Đồng Tháp — xác định và công bố địa bàn ưu đãi đầu tư cấp xã (hiệu lực từ ngày ký). Bản sao y đã lưu kèm trang web.", quote: "Điều 1. Xác định và công bố địa bàn ưu đãi đầu tư cấp xã trên địa bàn tỉnh Đồng Tháp (Chi tiết tại Phụ lục đính kèm). ... Điều 3. Điều khoản thi hành 1. Quyết định này có hiệu lực kể từ ngày ký." },
+  { ref: "Nghị quyết 56/2026/NQ-HĐND (25/9/2026)", url: "docs/dong-thap-nq-56-2026-mien-tien-thue-dat.pdf", detail: "HĐND tỉnh Đồng Tháp — mức miễn tiền thuê đất cho dự án xã hội hóa và dự án phi lợi nhuận theo địa bàn, ngành nghề (hiệu lực 05/10/2026)." },
   { ref: "Nghị quyết 1663/NQ-UBTVQH15 (16/6/2025)", detail: "Cùng với Luật Tổ chức chính quyền địa phương (16/6/2025) — là cơ sở của việc sắp xếp đơn vị hành chính 2 cấp (tỉnh, xã), làm căn cứ xác định lại địa bàn ưu đãi thay cho đơn vị cấp huyện trước đây." },
   { ref: "Điều 19–20, Nghị định 320/2025/NĐ-CP", url: "https://thuvienphapluat.vn/van-ban/Doanh-nghiep/Nghi-dinh-320-2025-ND-CP-huong-dan-Luat-Thue-thu-nhap-doanh-nghiep-665051.aspx", detail: "Mức thuế suất ưu đãi và thời gian miễn/giảm thuế TNDN cụ thể (hiệu lực 15/12/2025)." },
-  { ref: "Điều 39, Nghị định 103/2024/NĐ-CP", url: "https://thuvienphapluat.vn/van-ban/Bat-dong-san/Nghi-dinh-103-2024-ND-CP-tien-su-dung-dat-tien-thue-dat-550020.aspx", detail: "Miễn, giảm tiền thuê đất, tiền sử dụng đất theo địa bàn/ngành nghề (sửa đổi bởi Nghị định 291/2025/NĐ-CP) — không phải Nghị định 50/2026/NĐ-CP." },
+  { ref: "Điều 39, Nghị định 103/2024/NĐ-CP", url: "https://thuvienphapluat.vn/van-ban/Bat-dong-san/Nghi-dinh-103-2024-ND-CP-tien-su-dung-dat-tien-thue-dat-550020.aspx", detail: "Miễn, giảm tiền thuê đất, tiền sử dụng đất theo địa bàn/ngành nghề (sửa đổi bởi NĐ 261/2025, NĐ 291/2025, NĐ 50/2026) — căn cứ mức miễn theo địa bàn là Điều 39." },
   { ref: "Khoản 11 Điều 16, Luật 107/2016/QH13", url: "https://thuvienphapluat.vn/van-ban/Xuat-nhap-khau/Luat-thue-xuat-khau-thue-nhap-khau-2016-280693.aspx", detail: "Miễn thuế nhập khẩu hàng hóa tạo tài sản cố định (sửa đổi bởi Luật 90/2025/QH15); chi tiết tại Điều 14 Nghị định 134/2016/NĐ-CP (sửa đổi bởi Nghị định 18/2021/NĐ-CP và Nghị định 182/2025/NĐ-CP)." },
   { ref: "Điều 13, Thông tư 45/2013/TT-BTC", url: "https://thuvienphapluat.vn/van-ban/Doanh-nghiep/Thong-tu-45-2013-TT-BTC-Che-do-quan-ly-su-dung-va-trich-khau-hao-tai-san-co-dinh-183508.aspx", detail: "Khấu hao nhanh TSCĐ, tối đa gấp 2 lần mức khấu hao đường thẳng (sửa đổi bởi TT 147/2016, TT 28/2017, TT 30/2025/TT-BTC)." },
   { ref: "Nghị định 182/2024/NĐ-CP", url: "https://thuvienphapluat.vn/van-ban/Doanh-nghiep/Nghi-dinh-182-2024-ND-CP-quan-ly-su-dung-Quy-Ho-tro-dau-tu-638056.aspx", detail: "Đào tạo nhân lực, chuyển giao công nghệ, tín dụng đầu tư Nhà nước, Quỹ Hỗ trợ đầu tư." }
@@ -1820,6 +2291,7 @@ const INCENTIVE_DATA = [
       { label: "Thuế suất TNDN", detail: "10% trong 15 năm (mức phổ thông 20%).", ref: "Điểm c khoản 1, Điều 19 NĐ 320/2025/NĐ-CP" },
       { label: "Miễn/giảm thuế TNDN", detail: "Miễn 4 năm, giảm 50% số thuế phải nộp trong 9 năm tiếp theo.", ref: "Khoản 1, Điều 20 NĐ 320/2025/NĐ-CP" },
       { label: "Miễn tiền thuê đất (thuê trực tiếp từ Nhà nước)", detail: "11 năm (mức thường) — 15 năm (kèm ngành ưu đãi đầu tư) — toàn bộ thời gian thuê (kèm ngành đặc biệt ưu đãi đầu tư).", ref: "Khoản 2; điểm b/c/d/đ khoản 3, Điều 39 NĐ 103/2024/NĐ-CP (sđ NĐ 291/2025/NĐ-CP)" },
+      { label: "Miễn tiền thuê đất — dự án xã hội hóa (giáo dục, y tế, văn hóa, thể thao, môi trường…)", detail: "25 năm — 30 năm (kèm ngành ưu đãi đầu tư) — toàn bộ thời gian thuê (kèm ngành đặc biệt ưu đãi đầu tư); dự án phi lợi nhuận: toàn bộ thời gian thuê. Tính sau thời gian miễn trong xây dựng cơ bản.", ref: "Điều 3 NQ 56/2026/NQ-HĐND tỉnh Đồng Tháp (hiệu lực 05/10/2026)" },
       { label: "Miễn thuế NK hàng hóa tạo TSCĐ", detail: "Miễn 100% (máy móc, thiết bị, phương tiện vận tải chuyên dùng, vật tư xây dựng trong nước chưa sản xuất được).", ref: "Khoản 11 Điều 16 Luật 107/2016/QH13; Điều 14 NĐ 134/2016/NĐ-CP (sđ NĐ 182/2025)" },
       { label: "Miễn thuế NK nguyên liệu, vật tư, linh kiện (5 năm kể từ khi sản xuất)", detail: "Có được miễn.", ref: "Khoản 13 Điều 16 Luật 107/2016/QH13; Điều 15 NĐ 134/2016/NĐ-CP (sđ NĐ 182/2025)" },
       { label: "Khấu hao nhanh TSCĐ", detail: "Tối đa gấp 2 lần mức khấu hao theo phương pháp đường thẳng.", ref: "Điểm a khoản 2, Điều 13 TT 45/2013/TT-BTC (sđ TT 147/2016, 28/2017, 30/2025/TT-BTC)" },
@@ -1835,6 +2307,7 @@ const INCENTIVE_DATA = [
       { label: "Thuế suất TNDN", detail: "17% trong 10 năm; nếu dự án thuộc ngành nghề ưu đãi nhóm cao thì hưởng mức 10%/15 năm như địa bàn đặc biệt khó khăn.", ref: "Điểm b khoản 4, Điều 19 NĐ 320/2025/NĐ-CP" },
       { label: "Miễn/giảm thuế TNDN", detail: "Miễn 2 năm, giảm 50% số thuế phải nộp trong 4 năm tiếp theo (hoặc hưởng như địa bàn đặc biệt khó khăn nếu thuộc ngành ưu đãi nhóm cao).", ref: "Khoản 2, Điều 20 NĐ 320/2025/NĐ-CP" },
       { label: "Miễn tiền thuê đất (thuê trực tiếp từ Nhà nước)", detail: "7 năm (mức thường) — 11 năm (kèm ngành ưu đãi đầu tư) — 15 năm (kèm ngành đặc biệt ưu đãi đầu tư).", ref: "Khoản 2; điểm b/c/d/đ khoản 3, Điều 39 NĐ 103/2024/NĐ-CP (sđ NĐ 291/2025/NĐ-CP)" },
+      { label: "Miễn tiền thuê đất — dự án xã hội hóa (giáo dục, y tế, văn hóa, thể thao, môi trường…)", detail: "20 năm — 25 năm (kèm ngành ưu đãi đầu tư) — 30 năm (kèm ngành đặc biệt ưu đãi đầu tư); dự án phi lợi nhuận: toàn bộ thời gian thuê. Tính sau thời gian miễn trong xây dựng cơ bản.", ref: "Điều 3 NQ 56/2026/NQ-HĐND tỉnh Đồng Tháp (hiệu lực 05/10/2026)" },
       { label: "Miễn thuế NK hàng hóa tạo TSCĐ", detail: "Miễn 100%, áp dụng như địa bàn đặc biệt khó khăn.", ref: "Khoản 11 Điều 16 Luật 107/2016/QH13; Điều 14 NĐ 134/2016/NĐ-CP (sđ NĐ 182/2025)" },
       { label: "Miễn thuế NK nguyên liệu, vật tư, linh kiện (5 năm)", detail: "Không được miễn, trừ khi dự án thuộc ngành nghề đặc biệt ưu đãi đầu tư.", ref: "Khoản 13 Điều 16 Luật 107/2016/QH13; Điều 15 NĐ 134/2016/NĐ-CP (sđ NĐ 182/2025)" },
       { label: "Khấu hao nhanh TSCĐ", detail: "Tối đa gấp 2 lần mức khấu hao theo phương pháp đường thẳng, áp dụng như địa bàn đặc biệt khó khăn.", ref: "Điểm a khoản 2, Điều 13 TT 45/2013/TT-BTC (sđ TT 147/2016, 28/2017, 30/2025/TT-BTC)" },
@@ -2076,7 +2549,7 @@ const LAND_METHOD_LEGAL = {
   ],
   dau_thau_ndt: [
     { ref: "Luật Đấu thầu 2023 (22/2023/QH15)", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-thau-2023-22-2023-QH15-518805.aspx", detail: "Lựa chọn nhà đầu tư thực hiện dự án đầu tư kinh doanh có sử dụng đất." },
-    { ref: "Nghị định 274/2026/NĐ-CP", url: "https://vanban.chinhphu.vn/?docid=218807&pageid=27160", detail: "Hướng dẫn chi tiết lựa chọn nhà đầu tư — thay thế Nghị định 23/2024/NĐ-CP và 115/2024/NĐ-CP." }
+    { ref: "Nghị định 274/2026/NĐ-CP", url: "https://vanban.chinhphu.vn/?docid=218807&pageid=27160", detail: "Hướng dẫn chi tiết lựa chọn nhà đầu tư — từ 21/8/2026 các NĐ 23/2024, 115/2024 (trừ Điều 69), 225/2025 hết hiệu lực." }
   ],
   chuyen_muc_dich: [
     { ref: "Khoản 8, Điều 24, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Dự án có đề nghị chuyển mục đích sử dụng đất — thuộc diện phải chấp thuận chủ trương đầu tư (đã tính vào Bước 1).", quote: "8. Dự án đầu tư mà nhà đầu tư có đề nghị Nhà nước giao đất, cho thuê đất không đấu giá quyền sử dụng đất, đấu thầu lựa chọn nhà đầu tư thực hiện dự án có sử dụng đất; dự án có đề nghị chuyển mục đích sử dụng đất theo quy định của pháp luật về đất đai..." },
@@ -2096,7 +2569,8 @@ const PROJECT_GROUP_LEGAL = [
 ];
 
 const MOITRUONG_LEGAL = [
-  { ref: "Điều 28, 30, Luật Bảo vệ môi trường 2020 (số 72/2020/QH14)", url: "https://hethongphapluat.com/luat-bao-ve-moi-truong-2020/dieu-30", detail: "Điều 28: tiêu chí phân loại dự án nhóm I/II/III/IV. Điều 30: dự án nhóm I phải lập báo cáo đánh giá tác động môi trường (ĐTM) trước khi triển khai." },
+  { ref: "Điều 28, Luật Bảo vệ môi trường (VBHN 98/VBHN-VPQH)", url: "docs/luat-bvmt-vbhn-98-2026.pdf", detail: "Tiêu chí về môi trường để phân loại dự án đầu tư thành nhóm I/II/III/IV: quy mô, công suất, loại hình; diện tích đất, mặt nước, khu vực biển; yếu tố nhạy cảm về môi trường." },
+  { ref: "Điều 30, Luật Bảo vệ môi trường (VBHN 98/VBHN-VPQH)", url: "docs/luat-bvmt-vbhn-98-2026.pdf", detail: "Đối tượng phải đánh giá tác động môi trường: dự án nhóm I và dự án nhóm II thuộc điểm c, d, đ, e khoản 4 Điều 28 — không chỉ riêng nhóm I.", quote: "1. Đối tượng phải thực hiện đánh giá tác động môi trường bao gồm: a) Dự án đầu tư nhóm I quy định tại khoản 3 Điều 28 của Luật này; b) Dự án đầu tư nhóm II quy định tại các điểm c, d, đ và e khoản 4 Điều 28 của Luật này. 2. Đối tượng quy định tại khoản 1 Điều này không phải thực hiện đánh giá tác động môi trường khi thuộc một trong các trường hợp sau đây: a) Dự án đầu tư công khẩn cấp theo quy định của pháp luật về đầu tư công; b) Dự án đầu tư không phải thực hiện đánh giá tác động môi trường theo quy định của luật, nghị quyết của Quốc hội." },
   { ref: "Nghị định 08/2022/NĐ-CP (sđ NĐ 05/2025, NĐ 48/2026)", url: "https://thuvienphapluat.vn/van-ban/Tai-nguyen-Moi-truong/Nghi-dinh-08-2022-ND-CP-huong-dan-Luat-Bao-ve-moi-truong-479457.aspx", detail: "Phụ lục III/IV/V — danh mục chi tiết dự án nhóm I/II/III theo từng ngành, lĩnh vực cụ thể. Cần tra đúng phụ lục để xác định chính xác, không suy đoán từ mô tả chung." }
 ];
 
