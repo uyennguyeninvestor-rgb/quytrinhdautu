@@ -593,6 +593,39 @@
     .flow-node { width: 104px; padding: 9px 6px; }
     .flow-node-title { font-size: 11.5px; }
   }
+  .flow-node-days {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent-warm);
+    background: var(--accent-warm-soft);
+    border-radius: 5px;
+    padding: 2px 6px;
+    white-space: nowrap;
+  }
+  .timeline-card {
+    margin-top: 18px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    padding: 18px;
+  }
+  .timeline-card h3 {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 18px;
+    margin: 0 0 4px;
+  }
+  .timeline-sub { color: var(--text-muted); font-size: 13.5px; margin-bottom: 12px; }
+  .timeline-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  .timeline-table th, .timeline-table td { text-align: left; padding: 8px 6px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .timeline-table th { font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); }
+  .timeline-table td.num { font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .timeline-table tr.parallel td { color: var(--text-muted); }
+  .timeline-table tr.total td { font-weight: 700; border-top: 2px solid var(--text); border-bottom: none; }
+  .timeline-step-link { color: var(--accent); cursor: pointer; text-decoration: underline; text-underline-offset: 2px; background: none; border: 0; padding: 0; font: inherit; text-align: left; }
+  @media (max-width: 600px) {
+    .timeline-table th:nth-child(3), .timeline-table td:nth-child(3) { display: none; }
+  }
   .flow-detail {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -915,9 +948,10 @@
   </div>
 
   <div id="processView" style="display:none">
-    <p class="process-intro">Sơ đồ quy trình chung tham khảo khi hướng dẫn nhà đầu tư triển khai một dự án cụ thể, từ tiếp cận đến vận hành. <b>Bấm vào từng ô trong sơ đồ</b> để xem công việc chính và điều luật cụ thể áp dụng. Trình tự có thể thay đổi tuỳ loại dự án (ví dụ dự án không thuộc diện chấp thuận chủ trương thì bỏ qua bước 4). <b>Cần trả lời nhanh cho dự án cụ thể (thẩm quyền/địa bàn/ngành nghề)?</b> Dùng tab "Sơ đồ tra cứu nhanh dự án".</p>
+    <p class="process-intro">Sơ đồ 15 bước thực hiện một dự án đầu tư tại <b>tỉnh Đồng Tháp</b>, từ tiếp cận đến vận hành — mỗi bước ghi rõ <b>cơ quan đầu mối</b> và <b>thời hạn giải quyết</b>. <b>Bấm vào từng ô</b> để xem công việc, hồ sơ và điều luật cụ thể. Không phải dự án nào cũng đi đủ 15 bước: ví dụ dự án tự thỏa thuận đất với người dân, không thuộc diện chấp thuận chủ trương thì bỏ qua bước 4 và 7. Bảng <b>lộ trình mẫu</b> bên dưới cộng sẵn tổng số ngày.</p>
     <div class="flowchart" id="flowchart"></div>
     <div class="flow-detail" id="flowDetail"></div>
+    <div class="timeline-card" id="timelineCard"></div>
   </div>
 
   <div id="incentiveView" style="display:none">
@@ -1998,8 +2032,9 @@ const PROCESS_DATA = [
     title: "Tiếp cận nhà đầu tư & rà soát ngành, nghề",
     cat: "luat",
     summary: "Xác định ngành nghề mục tiêu của dự án, kiểm tra ngay có thuộc danh mục ngành nghề có điều kiện hoặc hạn chế tiếp cận thị trường với nhà đầu tư nước ngoài hay không.",
-    authority: "Cơ quan xúc tiến đầu tư",
-    duration: null,
+    days: "Tư vấn",
+    authority: "Sở Tài chính tỉnh Đồng Tháp — đầu mối xúc tiến, hướng dẫn thủ tục đầu tư; Ban Quản lý các khu công nghiệp tỉnh nếu dự án trong KCN",
+    duration: "Tư vấn trực tiếp — không phải thủ tục hành chính",
     tasks: [
       "Ghi nhận ngành nghề, quy mô vốn, địa điểm dự kiến của nhà đầu tư.",
       "Đối chiếu ngành nghề mục tiêu với danh mục ngành, nghề đầu tư kinh doanh có điều kiện.",
@@ -2014,8 +2049,9 @@ const PROCESS_DATA = [
     title: "Giới thiệu địa bàn & chính sách ưu đãi đầu tư",
     cat: "uudai",
     summary: "Xác định dự án có thuộc địa bàn ưu đãi, ngành nghề ưu đãi hoặc diện ưu đãi đặc biệt (bán dẫn, AI, năng lượng xanh…) hay không để tư vấn đúng chính sách.",
-    authority: "Cơ quan xúc tiến đầu tư",
-    duration: null,
+    days: "Tư vấn",
+    authority: "Sở Tài chính tỉnh Đồng Tháp",
+    duration: "Tư vấn trực tiếp — tra tab \"Ưu đãi theo địa bàn (Đồng Tháp)\"",
     tasks: [
       "Tra danh mục địa bàn ưu đãi đầu tư theo đơn vị hành chính hiện hành (tỉnh/xã, không còn cấp huyện).",
       "Đối chiếu ngành nghề dự án với danh mục ngành, nghề ưu đãi đầu tư.",
@@ -2030,11 +2066,13 @@ const PROCESS_DATA = [
     title: "Xác định thẩm quyền chấp thuận chủ trương đầu tư",
     cat: "luat",
     summary: "Xác định dự án thuộc thẩm quyền Quốc hội, Thủ tướng Chính phủ hay Chủ tịch UBND cấp tỉnh để trình đúng cấp, tránh chậm hồ sơ do trình sai thẩm quyền.",
-    authority: "Cơ quan xúc tiến đầu tư / Sở Tài chính",
-    duration: null,
+    days: "Xác định ngay",
+    authority: "Sở Tài chính / Ban Quản lý các khu công nghiệp tỉnh Đồng Tháp",
+    duration: "Xác định ngay khi có thông tin quy mô, địa điểm, nguồn đất",
     tasks: [
       "Kiểm tra dự án có thuộc diện phải chấp thuận chủ trương đầu tư hay không.",
-      "Nếu có, xác định đúng cấp thẩm quyền theo quy mô, tính chất dự án."
+      "Nếu có, xác định đúng cấp thẩm quyền theo quy mô, tính chất dự án.",
+      "Dự án nhà đầu tư tự thỏa thuận nhận quyền sử dụng đất đã đúng mục đích (ví dụ đất cơ sở sản xuất phi nông nghiệp) và không thuộc Điều 24: không phải chấp thuận chủ trương — chuyển thẳng bước 8."
     ],
     legal: [
       { ref: "Điều 24, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Liệt kê 20 khoản dự án thuộc diện phải chấp thuận chủ trương đầu tư — nền tảng để tra Điều 25 xác định đúng cấp thẩm quyền.", quote: "8. Dự án đầu tư mà nhà đầu tư có đề nghị Nhà nước giao đất, cho thuê đất không đấu giá quyền sử dụng đất, đấu thầu lựa chọn nhà đầu tư thực hiện dự án có sử dụng đất; dự án có đề nghị chuyển mục đích sử dụng đất... 19. Dự án đầu tư khác thuộc diện chấp thuận chủ trương đầu tư của Thủ tướng Chính phủ theo quy định của pháp luật. 20. Dự án đầu tư có yêu cầu áp dụng cơ chế, chính sách đặc biệt, khác với quy định của luật, nghị quyết của Quốc hội." },
@@ -2045,7 +2083,8 @@ const PROCESS_DATA = [
     title: "Hồ sơ chấp thuận chủ trương đầu tư (nếu thuộc diện)",
     cat: "nd",
     summary: "Với dự án thuộc diện phải chấp thuận chủ trương, chuẩn bị hồ sơ và theo dõi thời hạn thẩm định liên ngành. Dự án không thuộc diện này bỏ qua bước 4, chuyển thẳng bước 5.",
-    authority: "Sở Tài chính / Bộ Tài chính / Ban quản lý KCN, KCX, KCNC, KKT",
+    days: "26–38 ngày",
+    authority: "Sở Tài chính (dự án ngoài KCN) / Ban Quản lý các khu công nghiệp (trong KCN) — trình UBND tỉnh",
     duration: "26 ngày (thẩm quyền UBND cấp tỉnh) · 38 ngày (thẩm quyền Thủ tướng Chính phủ)",
     tasks: [
       "Soạn văn bản đề nghị thực hiện dự án (kèm cam kết chịu chi phí, rủi ro nếu không được chấp thuận).",
@@ -2062,111 +2101,200 @@ const PROCESS_DATA = [
     title: "Thành lập tổ chức kinh tế — Giấy chứng nhận đăng ký doanh nghiệp (ERC)",
     cat: "lienquan",
     summary: "Với nhà đầu tư nước ngoài, bước lập pháp nhân (ERC) nay thực hiện trước bước xin Giấy chứng nhận đăng ký đầu tư (IRC) — đảo trình tự so với Luật Đầu tư 2020.",
-    authority: "Cơ quan đăng ký kinh doanh",
-    duration: null,
+    days: "3 ngày",
+    authority: "Sở Tài chính tỉnh Đồng Tháp (cơ quan đăng ký kinh doanh)",
+    duration: "03 ngày làm việc kể từ ngày nhận hồ sơ hợp lệ",
     tasks: [
       "Xác định loại hình doanh nghiệp, vốn điều lệ, người đại diện theo pháp luật.",
       "Chuẩn bị và nộp hồ sơ đăng ký doanh nghiệp."
     ],
     legal: [
       { ref: "Luật Doanh nghiệp 2020 (số 59/2020/QH14)", url: "https://thuvienphapluat.vn/van-ban/Doanh-nghiep/Luat-Doanh-nghiep-so-59-2020-QH14-427301.aspx", detail: "Quy định thành lập, tổ chức quản lý doanh nghiệp — nền tảng của bước ERC." },
-      { ref: "Điều 19, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Nhà đầu tư nước ngoài lập pháp nhân qua ERC trước, sau đó mới xin IRC.", quote: "2. Nhà đầu tư nước ngoài được thành lập tổ chức kinh tế thực hiện dự án đầu tư trước khi thực hiện thủ tục cấp, điều chỉnh Giấy chứng nhận đăng ký đầu tư và phải đáp ứng điều kiện tiếp cận thị trường đối với nhà đầu tư nước ngoài quy định tại Điều 8 của Luật này khi thực hiện thủ tục thành lập tổ chức kinh tế." }
+      { ref: "Điều 19, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Nhà đầu tư nước ngoài lập pháp nhân qua ERC trước, sau đó mới xin IRC.", quote: "2. Nhà đầu tư nước ngoài được thành lập tổ chức kinh tế thực hiện dự án đầu tư trước khi thực hiện thủ tục cấp, điều chỉnh Giấy chứng nhận đăng ký đầu tư và phải đáp ứng điều kiện tiếp cận thị trường đối với nhà đầu tư nước ngoài quy định tại Điều 8 của Luật này khi thực hiện thủ tục thành lập tổ chức kinh tế." },
+      { ref: "Khoản 5 Điều 26, Luật Doanh nghiệp (VBHN 2025)", detail: "Thời hạn cấp đăng ký doanh nghiệp: 03 ngày làm việc.", quote: "5. Trong thời hạn 03 ngày làm việc kể từ ngày nhận hồ sơ, Cơ quan đăng ký kinh doanh có trách nhiệm xem xét tính hợp lệ của hồ sơ đăng ký doanh nghiệp và cấp đăng ký doanh nghiệp; trường hợp hồ sơ chưa hợp lệ, Cơ quan đăng ký kinh doanh phải thông báo bằng văn bản nội dung cần sửa đổi, bổ sung cho người thành lập doanh nghiệp. Trường hợp từ chối đăng ký doanh nghiệp thì phải thông báo bằng văn bản cho người thành lập doanh nghiệp và nêu rõ lý do." }
     ]
   },
   {
     title: "Cấp Giấy chứng nhận đăng ký đầu tư (IRC)",
     cat: "luat",
-    summary: "Áp dụng với dự án của nhà đầu tư nước ngoài và một số tổ chức kinh tế theo luật định. Đây là bước xác lập chính thức dự án đầu tư.",
-    authority: "Sở Tài chính / Ban quản lý KCN, KCX, KCNC, KKT",
-    duration: "15 ngày làm việc kể từ ngày nhận đủ hồ sơ hợp lệ",
+    summary: "Bắt buộc với dự án của nhà đầu tư nước ngoài và tổ chức kinh tế có vốn nước ngoài chi phối. Nhà đầu tư trong nước không bắt buộc — nếu có nhu cầu vẫn được cấp, và có thể làm song song với thủ tục môi trường, xây dựng.",
+    days: "5–10 ngày",
+    authority: "Sở Tài chính (dự án ngoài KCN) / Ban Quản lý các khu công nghiệp (dự án trong KCN)",
+    duration: "05 ngày làm việc (sau khi có quyết định chấp thuận chủ trương) · 10 ngày làm việc (dự án không thuộc diện chấp thuận chủ trương)",
     tasks: [
       "Nộp đề xuất dự án đầu tư: mục tiêu, quy mô, vốn đầu tư và phương án huy động vốn, địa điểm, tiến độ, hiện trạng sử dụng đất/rừng/biển (nếu có).",
-      "Cơ quan đăng ký đầu tư đánh giá hồ sơ và cấp Giấy chứng nhận đăng ký đầu tư."
+      "Cơ quan đăng ký đầu tư đánh giá hồ sơ và cấp Giấy chứng nhận đăng ký đầu tư.",
+      "Nhà đầu tư trong nước: không phải xin IRC (điểm a khoản 2 Điều 26); nếu cần (vay vốn, hưởng ưu đãi…) thì xin theo khoản 4 Điều 26 — hồ sơ theo khoản 1 Điều 39 NĐ 96/2026.",
+      "Thủ tục khác yêu cầu IRC/chủ trương mà dự án không thuộc diện phải có: nhà đầu tư không phải nộp (khoản 11 Điều 52 Luật Đầu tư 2025)."
     ],
     legal: [
       { ref: "Điều 26, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Dự án thuộc diện phải cấp IRC: dự án của nhà đầu tư nước ngoài; dự án của tổ chức kinh tế bị nước ngoài chi phối theo khoản 1 Điều 20.", quote: "1. Các dự án phải thực hiện thủ tục cấp Giấy chứng nhận đăng ký đầu tư bao gồm: a) Dự án đầu tư của nhà đầu tư nước ngoài; b) Dự án đầu tư của tổ chức kinh tế quy định tại khoản 1 Điều 20 của Luật này. 2. Các dự án không phải thực hiện thủ tục cấp Giấy chứng nhận đăng ký đầu tư bao gồm: a) Dự án đầu tư của nhà đầu tư trong nước; b) Dự án đầu tư của tổ chức kinh tế quy định tại khoản 2 Điều 20 của Luật này; c) Đầu tư theo hình thức góp vốn, mua cổ phần, mua phần vốn góp của tổ chức kinh tế." },
       { ref: "Điều 27, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Thẩm quyền cấp IRC: Ban quản lý KCN/KCX/KCNC/KKT (dự án trong khu); Sở Tài chính (dự án ngoài khu); cơ quan nơi đặt văn phòng điều hành (dự án liên tỉnh hoặc vừa trong vừa ngoài khu).", quote: "1. Ban quản lý khu công nghiệp, khu chế xuất, khu công nghệ cao, khu kinh tế cấp, điều chỉnh, thu hồi Giấy chứng nhận đăng ký đầu tư đối với dự án đầu tư trong khu công nghiệp... 2. Sở Tài chính cấp, điều chỉnh, thu hồi Giấy chứng nhận đăng ký đầu tư đối với dự án đầu tư ngoài khu công nghiệp, khu chế xuất, khu công nghệ cao, khu kinh tế... 3. Cơ quan đăng ký đầu tư nơi nhà đầu tư thực hiện dự án đầu tư đặt hoặc dự kiến đặt văn phòng điều hành... cấp, điều chỉnh, thu hồi Giấy chứng nhận đăng ký đầu tư đối với: a) Dự án đầu tư thực hiện tại 02 đơn vị hành chính cấp tỉnh trở lên; b) Dự án đầu tư thực hiện ở trong và ngoài khu công nghiệp..." },
-      { ref: "Điều 19, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Nhà đầu tư nước ngoài được thành lập tổ chức kinh tế (ERC) trước khi làm thủ tục cấp IRC.", quote: "2. Nhà đầu tư nước ngoài được thành lập tổ chức kinh tế thực hiện dự án đầu tư trước khi thực hiện thủ tục cấp, điều chỉnh Giấy chứng nhận đăng ký đầu tư và phải đáp ứng điều kiện tiếp cận thị trường đối với nhà đầu tư nước ngoài quy định tại Điều 8 của Luật này khi thực hiện thủ tục thành lập tổ chức kinh tế." }
+      { ref: "Điều 19, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Nhà đầu tư nước ngoài được thành lập tổ chức kinh tế (ERC) trước khi làm thủ tục cấp IRC.", quote: "2. Nhà đầu tư nước ngoài được thành lập tổ chức kinh tế thực hiện dự án đầu tư trước khi thực hiện thủ tục cấp, điều chỉnh Giấy chứng nhận đăng ký đầu tư và phải đáp ứng điều kiện tiếp cận thị trường đối với nhà đầu tư nước ngoài quy định tại Điều 8 của Luật này khi thực hiện thủ tục thành lập tổ chức kinh tế." },
+      { ref: "Khoản 4 Điều 26, Luật 143/2025/QH15", url: "docs/luat-dau-tu-2025-so-143-2025-qh15.pdf", detail: "Nhà đầu tư trong nước được xin IRC nếu có nhu cầu.", quote: "4. Trường hợp nhà đầu tư có nhu cầu cấp Giấy chứng nhận đăng ký đầu tư đối với dự án đầu tư quy định tại điểm a và điểm b khoản 2 Điều này, nhà đầu tư thực hiện thủ tục cấp Giấy chứng nhận đăng ký đầu tư." },
+      { ref: "Khoản 1 Điều 38, Nghị định 96/2026/NĐ-CP", detail: "Cấp IRC trong 05 ngày làm việc sau khi nhận quyết định chấp thuận chủ trương.", quote: "1. Thủ tục cấp, điều chỉnh Giấy chứng nhận đăng ký đầu tư đối với dự án đầu tư được chấp thuận chủ trương đầu tư đồng thời với chấp thuận nhà đầu tư và thuộc diện cấp Giấy chứng nhận đăng ký đầu tư được thực hiện như sau: a) Căn cứ Quyết định chấp thuận chủ trương đầu tư, Quyết định chấp thuận điều chỉnh chủ trương đầu tư, cơ quan đăng ký đầu tư cấp, điều chỉnh Giấy chứng nhận đăng ký đầu tư trong thời hạn 05 ngày làm việc kể từ ngày nhận được Quyết định chấp thuận chủ trương đầu tư, Quyết định chấp thuận điều chỉnh chủ trương đầu tư; ..." },
+      { ref: "Khoản 3 Điều 39, Nghị định 96/2026/NĐ-CP", detail: "Dự án không thuộc diện chấp thuận chủ trương: cấp IRC trong 10 ngày làm việc; lưu ý điều kiện suất đầu tư trên diện tích đất do UBND tỉnh quy định (điểm d).", quote: "3. Cơ quan đăng ký đầu tư lấy ý kiến các cơ quan quản lý nhà nước tại địa phương trong trường hợp cần thiết và cấp Giấy chứng nhận đăng ký đầu tư cho nhà đầu tư trong thời hạn 10 ngày làm việc kể từ ngày nhận được hồ sơ hợp lệ khi dự án đáp ứng các điều kiện sau: a) Không thuộc ngành, nghề cấm đầu tư kinh doanh theo quy định tại Điều 6 của Luật Đầu tư và điều ước quốc tế về đầu tư; b) Có địa điểm thực hiện dự án đầu tư được xác định trên cơ sở thông tin về tài liệu chứng minh quyền sử dụng đất ...; c) Dự án đầu tư phù hợp với quy hoạch quy định tại khoản 7 Điều 32 của Nghị định này; d) Đáp ứng điều kiện về suất đầu tư trên một diện tích đất do Ủy ban nhân dân cấp tỉnh quy định căn cứ vào điều kiện thực tế của địa phương và được Thường trực Hội đồng nhân dân tỉnh thông qua (nếu có), số lượng lao động sử dụng (nếu có); đ) Đáp ứng điều kiện tiếp cận thị trường đối với nhà đầu tư nước ngoài; ..." },
+      { ref: "Khoản 11 Điều 52, Luật 143/2025/QH15", url: "docs/luat-dau-tu-2025-so-143-2025-qh15.pdf", detail: "Không phải nộp IRC/chủ trương cho thủ tục khác nếu dự án không thuộc diện phải có.", quote: "11. Trường hợp pháp luật quy định thành phần hồ sơ thực hiện thủ tục hành chính phải có Giấy chứng nhận đăng ký đầu tư, văn bản chấp thuận chủ trương đầu tư, nhưng dự án đầu tư không thuộc trường hợp cấp Giấy chứng nhận đăng ký đầu tư, chấp thuận chủ trương đầu tư theo quy định của Luật này thì nhà đầu tư không phải nộp Giấy chứng nhận đăng ký đầu tư, văn bản chấp thuận chủ trương đầu tư." }
     ]
   },
   {
-    title: "Thủ tục đất đai: giao đất, cho thuê đất, chuyển mục đích sử dụng đất",
+    title: "Đất do Nhà nước giao, cho thuê, cho chuyển mục đích sử dụng",
     cat: "lienquan",
     summary: "Xác định phương thức tiếp cận đất đai phù hợp với hình thức lựa chọn nhà đầu tư và thực hiện các thủ tục đất đai để có mặt bằng triển khai dự án.",
-    authority: "Sở Nông nghiệp và Môi trường / UBND cấp tỉnh",
-    duration: null,
+    days: "Tùy thủ tục",
+    authority: "Sở Nông nghiệp và Môi trường thẩm định — UBND tỉnh quyết định giao đất, cho thuê đất, chuyển mục đích (UBND cấp xã với hộ gia đình, cá nhân)",
+    duration: "Theo từng thủ tục đất đai — phụ thuộc bồi thường, giải phóng mặt bằng",
     tasks: [
       "Xác định phương thức: giao đất, cho thuê đất (đấu giá/không đấu giá), hoặc chuyển mục đích sử dụng đất.",
       "Thực hiện bồi thường, hỗ trợ, tái định cư nếu dự án có thu hồi đất.",
-      "Ký hợp đồng thuê đất / nhận quyết định giao đất."
+      "Ký hợp đồng thuê đất / nhận quyết định giao đất.",
+      "Nếu nhà đầu tư tự thỏa thuận với người dân (chuyển nhượng, góp vốn, thuê quyền sử dụng đất): bỏ qua bước này, làm bước 8."
     ],
     legal: [
       { ref: "Chương IX (Điều 116–127), Luật Đất đai 2024 (số 31/2024/QH15)", url: "https://hethongphapluat.vn/luat-dat-dai-2024/dieu-116", detail: "Quy định về giao đất, cho thuê đất, chuyển mục đích sử dụng đất để thực hiện dự án đầu tư." }
     ]
   },
   {
+    title: "Đất tự thỏa thuận: chấp thuận nhận quyền sử dụng đất & đăng ký biến động",
+    cat: "lienquan",
+    summary: "Nhà đầu tư nhận chuyển nhượng, nhận góp vốn hoặc thuê quyền sử dụng đất của người đang sử dụng đất. Cần văn bản chấp thuận của UBND tỉnh trước khi ký hợp đồng, sau đó công chứng hợp đồng và đăng ký biến động để đứng tên tổ chức.",
+    days: "15 + 15 ngày",
+    authority: "Sở Nông nghiệp và Môi trường (thẩm định, trình UBND tỉnh chấp thuận) → Văn phòng Đăng ký đất đai (đăng ký biến động)",
+    duration: "Chấp thuận: 15 ngày làm việc · Đăng ký biến động: 15 ngày làm việc (10 ngày xử lý + 05 ngày nộp nghĩa vụ tài chính; không tính thời gian nhà đầu tư chậm nộp thuế)",
+    tasks: [
+      "Nộp văn bản đề nghị chấp thuận cho tổ chức kinh tế nhận chuyển nhượng, thuê, nhận góp vốn bằng quyền sử dụng đất (Mẫu số 49, Nghị định 151/2025/NĐ-CP sđ NĐ 226/2025/NĐ-CP) kèm trích lục vị trí khu đất.",
+      "Sau khi có văn bản chấp thuận của UBND tỉnh: ký hợp đồng chuyển nhượng/góp vốn/thuê và công chứng.",
+      "Nộp hồ sơ đăng ký biến động tại Văn phòng Đăng ký đất đai; nộp nghĩa vụ tài chính (thuế) để được cấp Giấy chứng nhận đứng tên tổ chức.",
+      "Nếu đất nông nghiệp: người sử dụng đất hoặc nhà đầu tư làm thủ tục chuyển mục đích sang đất cơ sở sản xuất phi nông nghiệp (thẩm quyền UBND cấp xã với hộ gia đình, cá nhân)."
+    ],
+    legal: [
+      { ref: "Điểm c khoản 3 Điều 127, Luật Đất đai 2024", url: "docs/luat-dat-dai-2024-so-31-2024-qh15.pdf", detail: "Điều kiện sử dụng đất qua thỏa thuận nhận quyền sử dụng đất — phải có văn bản chấp thuận của UBND cấp tỉnh. (Trích bản gốc 2024.)", quote: "3. Điều kiện sử dụng đất để thực hiện dự án phát triển kinh tế - xã hội thông qua thỏa thuận về nhận quyền sử dụng đất quy định tại khoản 1 Điều này bao gồm: a) Phù hợp với quy hoạch sử dụng đất cấp huyện đã được phê duyệt và công bố; b) Chủ đầu tư phải đáp ứng các điều kiện quy định tại Điều 122 của Luật này; ... c) Có văn bản chấp thuận của Ủy ban nhân dân cấp tỉnh về việc thỏa thuận về nhận quyền sử dụng đất để thực hiện dự án." },
+      { ref: "Thời hạn chấp thuận 15 ngày làm việc; Mẫu số 49 NĐ 151/2025/NĐ-CP (sđ NĐ 226/2025/NĐ-CP)", detail: "Thời hạn và mẫu hồ sơ theo hướng dẫn thủ tục của Sở Tài chính tỉnh Đồng Tháp (2026) — chưa có trích dẫn nguyên văn được xác minh." },
+      { ref: "Đăng ký biến động 15 ngày làm việc", detail: "Văn phòng Đăng ký đất đai: 10 ngày xử lý + 05 ngày thực hiện nghĩa vụ tài chính — theo hướng dẫn thủ tục của Sở Tài chính tỉnh Đồng Tháp (2026) — chưa có trích dẫn nguyên văn được xác minh." }
+    ]
+  },
+  {
     title: "Đánh giá tác động môi trường / giấy phép môi trường",
     cat: "lienquan",
-    summary: "Xác định dự án có thuộc nhóm phải lập báo cáo đánh giá tác động môi trường (ĐTM) hoặc xin giấy phép môi trường trước khi vận hành chính thức.",
-    authority: "Sở Nông nghiệp và Môi trường / Bộ Nông nghiệp và Môi trường (tuỳ quy mô)",
-    duration: null,
+    summary: "Xác định dự án thuộc diện lập báo cáo ĐTM, xin giấy phép môi trường hay chỉ đăng ký môi trường. Dự án nhà máy quy mô vừa thường chỉ cần đăng ký môi trường trước khi thi công.",
+    days: "Trước thi công",
+    authority: "Sở Nông nghiệp và Môi trường (ĐTM, giấy phép môi trường, đăng ký môi trường thuộc UBND tỉnh) / UBND cấp xã (đăng ký môi trường quy mô nhỏ)",
+    duration: "Đăng ký môi trường: nộp trước khi thi công · ĐTM, giấy phép môi trường: theo thời hạn thẩm định từng loại",
     tasks: [
       "Xác định nhóm dự án A/B/C theo Luật Đầu tư công 2024 (làm căn cứ đầu vào).",
       "Đối chiếu Phụ lục III/IV/V Nghị định 08/2022/NĐ-CP để xác định dự án thuộc nhóm I, II, III hay IV theo mức độ tác động môi trường.",
       "Lập báo cáo ĐTM nếu thuộc diện bắt buộc (dự án nhóm I, hoặc nhóm II thuộc điểm c, d, đ, e khoản 4 Điều 28) — từ 01/01/2026 chủ dự án tự tổ chức thực hiện ĐTM.",
-      "Xin giấy phép môi trường trước khi vận hành chính thức nếu phát sinh nước thải, khí thải, chất thải nguy hại."
+      "Xin giấy phép môi trường trước khi vận hành chính thức nếu phát sinh nước thải, khí thải, chất thải nguy hại.",
+      "Đăng ký môi trường tại UBND tỉnh (qua Sở Nông nghiệp và Môi trường) nếu nước thải phải xử lý từ 50 m³/ngày trở lên hoặc bụi, khí thải phải xử lý từ 20.000 m³/giờ trở lên; dưới ngưỡng này đăng ký tại UBND cấp xã. Hồ sơ: Mẫu số 47 Phụ lục II Thông tư 02/2022/TT-BTNMT (sđ TT 07/2025/TT-BTNMT)."
     ],
     legal: [
       { ref: "Điều 30, Luật Bảo vệ môi trường (VBHN 98/VBHN-VPQH)", url: "docs/luat-bvmt-vbhn-98-2026.pdf", detail: "Đối tượng phải đánh giá tác động môi trường: dự án nhóm I và dự án nhóm II thuộc điểm c, d, đ, e khoản 4 Điều 28 — không chỉ riêng nhóm I.", quote: "1. Đối tượng phải thực hiện đánh giá tác động môi trường bao gồm: a) Dự án đầu tư nhóm I quy định tại khoản 3 Điều 28 của Luật này; b) Dự án đầu tư nhóm II quy định tại các điểm c, d, đ và e khoản 4 Điều 28 của Luật này. 2. Đối tượng quy định tại khoản 1 Điều này không phải thực hiện đánh giá tác động môi trường khi thuộc một trong các trường hợp sau đây: a) Dự án đầu tư công khẩn cấp theo quy định của pháp luật về đầu tư công; b) Dự án đầu tư không phải thực hiện đánh giá tác động môi trường theo quy định của luật, nghị quyết của Quốc hội." },
       { ref: "Điều 31, Luật Bảo vệ môi trường (sđ Luật 146/2025/QH15)", url: "docs/luat-bvmt-vbhn-98-2026.pdf", detail: "Từ 01/01/2026: ĐTM do chủ dự án đầu tư tự tổ chức thực hiện, đồng thời với lập báo cáo nghiên cứu khả thi.", quote: "1. Đánh giá tác động môi trường do chủ dự án đầu tư tổ chức thực hiện. Đánh giá tác động môi trường được thực hiện đồng thời với quá trình lập báo cáo nghiên cứu khả thi hoặc tài liệu tương đương với báo cáo nghiên cứu khả thi của dự án đầu tư, dự án thành phần hoặc phân kỳ đầu tư của dự án. Kết quả đánh giá tác động môi trường được thể hiện bằng báo cáo đánh giá tác động môi trường." },
       { ref: "Điều 32, Luật Bảo vệ môi trường 2020", url: "https://www.luatmoitruong.vn/luat-bao-ve-moi-truong/chuong-iv.-danh-gia-moi-truong-chien-luoc-danh-gia-tac-dong-moi-truong-giay-phep-moi-truong/muc-3.-danh-gia-tac-dong-moi-truong/dieu-32.-noi-dung-cua-bao-cao-danh-gia-tac-dong-moi-truong", detail: "Nội dung báo cáo đánh giá tác động môi trường: xuất xứ dự án, căn cứ pháp lý/kỹ thuật, các tác động môi trường chính." },
-      { ref: "Nghị định 08/2022/NĐ-CP (sđ bởi NĐ 05/2025/NĐ-CP, NĐ 48/2026/NĐ-CP)", url: "https://thuvienphapluat.vn/van-ban/Tai-nguyen-Moi-truong/Nghi-dinh-08-2022-ND-CP-huong-dan-Luat-Bao-ve-moi-truong-479457.aspx", detail: "Tiêu chí và danh mục chi tiết dự án nhóm I (Phụ lục III), nhóm II (Phụ lục IV), nhóm III (Phụ lục V) — kết hợp tiêu chí quy mô (nhóm A/B/C), nguy cơ ô nhiễm và yếu tố nhạy cảm môi trường." }
+      { ref: "Nghị định 08/2022/NĐ-CP (sđ bởi NĐ 05/2025/NĐ-CP, NĐ 48/2026/NĐ-CP)", url: "https://thuvienphapluat.vn/van-ban/Tai-nguyen-Moi-truong/Nghi-dinh-08-2022-ND-CP-huong-dan-Luat-Bao-ve-moi-truong-479457.aspx", detail: "Tiêu chí và danh mục chi tiết dự án nhóm I (Phụ lục III), nhóm II (Phụ lục IV), nhóm III (Phụ lục V) — kết hợp tiêu chí quy mô (nhóm A/B/C), nguy cơ ô nhiễm và yếu tố nhạy cảm môi trường." },
+      { ref: "Ngưỡng phân cấp đăng ký môi trường (Nghị quyết 66.19/2026/NQ-CP, Phụ lục IX)", detail: "Cấp tỉnh: nước thải ≥ 50 m³/ngày hoặc khí thải ≥ 20.000 m³/giờ; còn lại cấp xã — theo hướng dẫn thủ tục của Sở Tài chính tỉnh Đồng Tháp (2026) — chưa có trích dẫn nguyên văn được xác minh." }
     ]
   },
   {
-    title: "Giấy phép xây dựng, PCCC & triển khai thi công",
+    title: "Quy hoạch tổng mặt bằng & đấu nối hạ tầng kỹ thuật",
     cat: "lienquan",
-    summary: "Hoàn thiện thiết kế, xin giấy phép xây dựng (trừ trường hợp được miễn) và triển khai thi công công trình của dự án. Nhóm dự án (A/B/C theo Luật Đầu tư công) quyết định cấp thẩm định thiết kế.",
-    authority: "Sở Xây dựng / cơ quan chuyên môn về xây dựng",
-    duration: null,
+    summary: "Chuẩn bị đầu vào cho thẩm định Báo cáo nghiên cứu khả thi: quy hoạch tổng mặt bằng (nếu khu đất chưa có quy hoạch chi tiết) và thỏa thuận đấu nối giao thông, bến thủy nội địa.",
+    days: "5–15 ngày",
+    authority: "UBND cấp xã/phường (quy hoạch tổng mặt bằng; bến thủy nội địa) · Sở Xây dựng (đấu nối, nút giao với đường tỉnh)",
+    duration: "Quy hoạch tổng mặt bằng: 15 ngày làm việc · Chấp thuận thiết kế, cấp phép thi công nút giao đường tỉnh: 05 ngày làm việc",
     tasks: [
-      "Xác định nhóm dự án (A/B/C) để biết cấp thẩm định thiết kế xây dựng.",
-      "Khảo sát xây dựng, lập và thẩm định thiết kế, dự toán xây dựng.",
-      "Xin giấy phép xây dựng (nếu công trình không thuộc diện miễn phép).",
-      "Thẩm định thiết kế về PCCC (cùng báo cáo nghiên cứu khả thi và ở bước thiết kế triển khai) nếu công trình thuộc diện phải thẩm định.",
-      "Ký hợp đồng thi công, giám sát thi công xây dựng công trình.",
-      "Nghiệm thu hoàn thành công trình và nghiệm thu PCCC — chỉ đưa vào sử dụng sau khi được chấp thuận kết quả nghiệm thu PCCC."
+      "Khu đất đã nằm trong quy hoạch chi tiết (ví dụ trong cụm công nghiệp): không phải lập quy hoạch tổng mặt bằng, chỉ cần tuân thủ QCVN 01:2021/BXD.",
+      "Khu đất chưa có quy hoạch chi tiết (ví dụ khoảng 1,5 ha ngoài khu, cụm): lập, chấp thuận quy hoạch tổng mặt bằng theo quy trình rút gọn tại UBND cấp xã/phường.",
+      "Đấu nối với đường tỉnh: chấp thuận thiết kế và cấp phép thi công nút giao tại Sở Xây dựng (Điều 4, 5 Quyết định 18/2026/QĐ-UBND tỉnh Đồng Tháp).",
+      "Có nhu cầu bến thủy nội địa: thỏa thuận thông số kỹ thuật và công bố hoạt động tại UBND cấp xã."
     ],
     legal: [
-      { ref: "Khoản 2, Điều 43, Luật Xây dựng 2025 (số 135/2025/QH15)", url: "https://thuvienphapluat.vn/van-ban/Xay-dung-Do-thi/Luat-Xay-dung-2025-so-135-2025-QH15-675213.aspx", detail: "Công trình xây dựng phải có giấy phép xây dựng, trừ các trường hợp được miễn: công trình bí mật nhà nước; công trình khẩn cấp, cấp bách; công trình thuộc dự án đầu tư công đặc biệt hoặc dự án theo thủ tục đầu tư đặc biệt; công trình xây dựng tạm; công trình trên đất quốc phòng, an ninh." },
-      { ref: "Nghị định 217/2026/NĐ-CP", url: "https://thuvienphapluat.vn/van-ban/Xay-dung-Do-thi/Nghi-dinh-217-2026-ND-CP-huong-dan-Luat-Xay-dung-quan-ly-hoat-dong-xay-dung-696494.aspx", detail: "Hướng dẫn Luật Xây dựng 2025 về quản lý hoạt động xây dựng (lập/thẩm định/phê duyệt dự án, thiết kế, khảo sát, cấp phép xây dựng) — thay thế Nghị định 175/2024/NĐ-CP từ 01/7/2026." },
-      { ref: "Nghị định 207/2026/NĐ-CP", url: "docs/nd-207-2026-nd-cp.pdf", detail: "Quản lý chất lượng, thi công xây dựng và bảo trì công trình xây dựng (ban hành 15/6/2026) — căn cứ nghiệm thu hoàn thành công trình." },
-      { ref: "Khoản 1 Điều 17, Luật PCCC và CNCH", url: "docs/luat-pccc-vbhn-2026.pdf", detail: "Thẩm định thiết kế về PCCC.", quote: "1. Việc thẩm định thiết kế về phòng cháy và chữa cháy đối với dự án đầu tư xây dựng công trình, công trình và phương tiện giao thông, trừ công trình tạm theo quy định của pháp luật về xây dựng được quy định như sau: ... b) Cơ quan chuyên môn về xây dựng tổ chức thẩm định các nội dung quy định tại các điểm a, b, c, d và đ khoản 1 Điều 16 của Luật này đối với dự án thuộc diện phải thẩm định thiết kế về phòng cháy và chữa cháy khi thực hiện thẩm định Báo cáo nghiên cứu khả thi đầu tư xây dựng công trình theo quy định của pháp luật về xây dựng; ... d) Cơ quan Công an tổ chức thẩm định các nội dung quy định tại điểm e và điểm g khoản 1 Điều 16 của Luật này đối với báo cáo kinh tế - kỹ thuật đầu tư xây dựng, thiết kế xây dựng triển khai sau khi dự án được phê duyệt của công trình thuộc diện phải thẩm định thiết kế về phòng cháy và chữa cháy; ..." },
-      { ref: "Khoản 4 Điều 18, Luật PCCC và CNCH", url: "docs/luat-pccc-vbhn-2026.pdf", detail: "Nghiệm thu PCCC trước khi đưa công trình vào sử dụng.", quote: "4. Công trình, phương tiện giao thông thuộc diện phải thẩm định thiết kế về phòng cháy và chữa cháy sau khi tổ chức nghiệm thu về phòng cháy và chữa cháy phải được cơ quan quản lý chuyên ngành kiểm tra công tác nghiệm thu về phòng cháy và chữa cháy; chỉ được đưa công trình, phần công trình, hạng mục công trình, phương tiện giao thông vào khai thác, sử dụng sau khi được cơ quan quản lý chuyên ngành chấp thuận kết quả nghiệm thu về phòng cháy và chữa cháy." }
-    ],
-    note: "Luật Xây dựng 2014 đã hết hiệu lực từ 01/7/2026, thay bằng Luật Xây dựng 2025 — số điều đã thay đổi (giấy phép xây dựng nay ở Điều 43, không còn ở Điều 89/95 như luật cũ). Cần cập nhật lại mọi checklist hồ sơ theo luật mới."
+      { ref: "Quy hoạch tổng mặt bằng theo quy trình rút gọn (Nghị định 34/2026/NĐ-CP)", detail: "UBND cấp xã/phường, 15 ngày làm việc — theo hướng dẫn thủ tục của Sở Tài chính tỉnh Đồng Tháp (2026) — chưa có trích dẫn nguyên văn được xác minh." },
+      { ref: "Quyết định 18/2026/QĐ-UBND tỉnh Đồng Tháp (27/01/2026), Điều 4–5", detail: "Chấp thuận thiết kế, cấp phép thi công nút giao với đường tỉnh — Sở Xây dựng, 05 ngày làm việc — theo hướng dẫn thủ tục của Sở Tài chính tỉnh Đồng Tháp (2026) — chưa có trích dẫn nguyên văn được xác minh." }
+    ]
   },
   {
-    title: "Đăng ký thuế, hưởng ưu đãi & giấy phép lao động nước ngoài",
+    title: "Thẩm định Báo cáo nghiên cứu khả thi & giấy phép xây dựng",
+    cat: "lienquan",
+    summary: "Dự án kinh doanh có công trình ảnh hưởng lớn đến an toàn, lợi ích cộng đồng (ví dụ nhà máy chế biến cấp II) phải được Sở Xây dựng thẩm định Báo cáo nghiên cứu khả thi. Đã thẩm định thì được miễn giấy phép xây dựng.",
+    days: "16 ngày",
+    authority: "Sở Xây dựng tỉnh Đồng Tháp",
+    duration: "16 ngày kể từ ngày nhận đủ hồ sơ hợp lệ",
+    tasks: [
+      "Xác định loại, cấp công trình và nhóm dự án (A/B/C) để biết dự án có thuộc diện cơ quan chuyên môn về xây dựng thẩm định không.",
+      "Nộp hồ sơ thẩm định Báo cáo nghiên cứu khả thi (Điều 35 NĐ 217/2026/NĐ-CP), kèm kết quả đăng ký môi trường, quy hoạch tổng mặt bằng, thỏa thuận đấu nối.",
+      "Được miễn giấy phép xây dựng nếu Báo cáo nghiên cứu khả thi đã được cơ quan chuyên môn về xây dựng thẩm định và phê duyệt (điểm e khoản 2 Điều 43 Luật Xây dựng 2025); trường hợp khác xin giấy phép xây dựng."
+    ],
+    legal: [
+      { ref: "Khoản 1 Điều 27, Luật Xây dựng 2025 (135/2025/QH15)", detail: "Dự án phải được cơ quan chuyên môn về xây dựng thẩm định.", quote: "1. Các dự án sau đây phải được cơ quan chuyên môn về xây dựng thẩm định: a) Dự án đầu tư công; b) Dự án PPP; c) Dự án đầu tư kinh doanh có quy mô lớn hoặc có công trình ảnh hưởng lớn đến an toàn, lợi ích cộng đồng theo quy định của Chính phủ." },
+      { ref: "Điểm e khoản 2 Điều 43, Luật Xây dựng 2025", detail: "Miễn giấy phép xây dựng khi Báo cáo nghiên cứu khả thi đã được thẩm định.", quote: "2. Trước khi khởi công xây dựng công trình, chủ đầu tư phải có giấy phép xây dựng trừ các trường hợp sau đây: ... e) Công trình xây dựng thuộc dự án đầu tư xây dựng đã được cơ quan chuyên môn về xây dựng thẩm định Báo cáo nghiên cứu khả thi, Báo cáo nghiên cứu khả thi điều chỉnh và đã được phê duyệt theo quy định; ..." },
+      { ref: "Điểm c khoản 1 Điều 37, Nghị định 217/2026/NĐ-CP", detail: "Thời hạn thẩm định 16 ngày — theo hướng dẫn thủ tục của Sở Tài chính tỉnh Đồng Tháp (2026) — chưa có trích dẫn nguyên văn được xác minh." },
+      { ref: "Nghị định 217/2026/NĐ-CP", url: "https://thuvienphapluat.vn/van-ban/Xay-dung-Do-thi/Nghi-dinh-217-2026-ND-CP-huong-dan-Luat-Xay-dung-quan-ly-hoat-dong-xay-dung-696494.aspx", detail: "Hướng dẫn Luật Xây dựng 2025 về quản lý hoạt động xây dựng (lập/thẩm định/phê duyệt dự án, thiết kế, khảo sát, cấp phép xây dựng) — thay thế Nghị định 175/2024/NĐ-CP từ 01/7/2026." }
+    ],
+    note: "Luật Xây dựng 2014 hết hiệu lực từ 01/7/2026 — số điều đã thay đổi (giấy phép xây dựng nay ở Điều 43)."
+  },
+  {
+    title: "Thẩm định thiết kế về phòng cháy, chữa cháy",
+    cat: "lienquan",
+    summary: "Công trình thuộc diện thẩm định thiết kế PCCC (ví dụ nhà xưởng diện tích sàn trên 2.000 m², khối tích trên 15.000 m³) phải được Công an tỉnh thẩm định trước khi thi công.",
+    days: "6 ngày",
+    authority: "Phòng Cảnh sát PCCC và CNCH — Công an tỉnh Đồng Tháp",
+    duration: "Không quá 06 ngày làm việc (dự án quan trọng quốc gia, nhóm A: không quá 10 ngày)",
+    tasks: [
+      "Hồ sơ: văn bản đề nghị thẩm định (Mẫu số PC11, NĐ 105/2025/NĐ-CP); giấy tờ hợp pháp về đất đai; hồ sơ thiết kế kỹ thuật hoặc bản vẽ thi công thể hiện nội dung điểm e, g khoản 1 Điều 16 Luật PCCC và CNCH.",
+      "Nhận văn bản thẩm định thiết kế về PCCC (Mẫu số PC12) trước khi thi công phần liên quan."
+    ],
+    legal: [
+      { ref: "Điểm a khoản 6 Điều 9, Nghị định 105/2025/NĐ-CP", detail: "Thời hạn thẩm định thiết kế PCCC của cơ quan Công an.", quote: "6. Xử lý hồ sơ đề nghị thẩm định thiết kế về phòng cháy và chữa cháy: a) Đối với công trình thuộc dự án không phân biệt nguồn vốn đầu tư đáp ứng tiêu chí phân loại dự án quan trọng quốc gia, dự án nhóm A theo quy định của pháp luật về đầu tư công, thời hạn thẩm định thiết kế về phòng cháy và chữa cháy không quá 10 ngày từ ngày nhận đủ hồ sơ hợp lệ. Đối với các công trình còn lại không quá 06 ngày làm việc từ ngày nhận đủ hồ sơ hợp lệ; ..." },
+      { ref: "Khoản 1 Điều 17, Luật PCCC và CNCH", url: "docs/luat-pccc-vbhn-2026.pdf", detail: "Thẩm định thiết kế về PCCC.", quote: "1. Việc thẩm định thiết kế về phòng cháy và chữa cháy đối với dự án đầu tư xây dựng công trình, công trình và phương tiện giao thông, trừ công trình tạm theo quy định của pháp luật về xây dựng được quy định như sau: ... b) Cơ quan chuyên môn về xây dựng tổ chức thẩm định các nội dung quy định tại các điểm a, b, c, d và đ khoản 1 Điều 16 của Luật này đối với dự án thuộc diện phải thẩm định thiết kế về phòng cháy và chữa cháy khi thực hiện thẩm định Báo cáo nghiên cứu khả thi đầu tư xây dựng công trình theo quy định của pháp luật về xây dựng; ... d) Cơ quan Công an tổ chức thẩm định các nội dung quy định tại điểm e và điểm g khoản 1 Điều 16 của Luật này đối với báo cáo kinh tế - kỹ thuật đầu tư xây dựng, thiết kế xây dựng triển khai sau khi dự án được phê duyệt của công trình thuộc diện phải thẩm định thiết kế về phòng cháy và chữa cháy; ..." }
+    ]
+  },
+  {
+    title: "Thi công, nghiệm thu & kiểm tra công tác nghiệm thu",
+    cat: "lienquan",
+    summary: "Chủ đầu tư tự tổ chức thi công, nghiệm thu. Công trình ảnh hưởng lớn đến an toàn, lợi ích cộng đồng được Sở Xây dựng kiểm tra công tác nghiệm thu; công trình thuộc diện thẩm định PCCC phải được chấp thuận nghiệm thu PCCC trước khi đưa vào sử dụng.",
+    days: "12–16 ngày",
+    authority: "Sở Xây dựng (kiểm tra công tác nghiệm thu) · Công an tỉnh (nghiệm thu PCCC)",
+    duration: "Kiểm tra nghiệm thu hoàn thành: không quá 12 ngày làm việc (công trình cấp II trở xuống) / 16 ngày làm việc (cấp I, cấp đặc biệt) · Kiểm tra trong thi công: văn bản trong 10 ngày làm việc sau mỗi lần kiểm tra",
+    tasks: [
+      "Khởi công: thông tin khởi công được cập nhật lên cơ sở dữ liệu quốc gia về hoạt động xây dựng — Sở Xây dựng căn cứ đó lập kế hoạch kiểm tra trong thi công (không quá 02 lần với công trình cấp II trở xuống).",
+      "Hoàn thành: gửi báo cáo hoàn thành thi công xây dựng (Phụ lục VI NĐ 207/2026/NĐ-CP) đến Sở Xây dựng để kiểm tra công tác nghiệm thu hoàn thành.",
+      "Nghiệm thu PCCC và chỉ đưa công trình vào sử dụng khi được chấp thuận kết quả nghiệm thu PCCC."
+    ],
+    legal: [
+      { ref: "Khoản 4 Điều 57, Luật Xây dựng 2025", detail: "Công trình ảnh hưởng lớn đến an toàn, lợi ích cộng đồng phải được kiểm tra công tác nghiệm thu.", quote: "4. Các công trình xây dựng thuộc dự án quan trọng quốc gia, công trình có quy mô lớn, kỹ thuật phức tạp, công trình ảnh hưởng lớn đến an toàn, lợi ích cộng đồng phải được cơ quan có thẩm quyền kiểm tra công tác nghiệm thu trong quá trình thi công và khi hoàn thành thi công xây dựng trước khi đưa công trình vào khai thác, sử dụng như sau: ... b) Cơ quan chuyên môn về xây dựng tổ chức kiểm tra công tác nghiệm thu của chủ đầu tư đối với công trình xây dựng không thuộc trường hợp quy định tại điểm a khoản này." },
+      { ref: "Khoản 4 Điều 27, Nghị định 207/2026/NĐ-CP", url: "docs/nd-207-2026-nd-cp.pdf", detail: "Thời hạn kiểm tra nghiệm thu hoàn thành: 12 / 16 ngày làm việc.", quote: "4. Trình tự kiểm tra công tác nghiệm thu hoàn thành công trình của cơ quan chuyên môn về xây dựng: a) Chủ đầu tư gửi 01 báo cáo hoàn thành thi công xây dựng hạng mục công trình, công trình xây dựng theo quy định tại Phụ lục VI Nghị định này tới cơ quan chuyên môn về xây dựng ...; b) ... Thời hạn ra văn bản của cơ quan chuyên môn về xây dựng không quá 16 ngày làm việc đối với công trình cấp I, cấp đặc biệt và 12 ngày làm việc đối với công trình còn lại kể từ khi nhận được hồ sơ đề nghị kiểm tra công tác nghiệm thu." },
+      { ref: "Khoản 3 Điều 27, Nghị định 207/2026/NĐ-CP", url: "docs/nd-207-2026-nd-cp.pdf", detail: "Kiểm tra trong quá trình thi công: số lần và thời hạn ra văn bản.", quote: "3. ... a) Cơ quan chuyên môn về xây dựng thực hiện kiểm tra không quá 03 lần đối với công trình cấp đặc biệt và công trình cấp I, không quá 02 lần đối với các công trình còn lại trong quá trình từ khi khởi công xây dựng đến khi hoàn thành công trình ...; b) ... ra văn bản thông báo kết quả kiểm tra trong quá trình thi công xây dựng công trình gửi chủ đầu tư; thời hạn ra văn bản không quá 10 ngày làm việc kể từ ngày tổ chức kiểm tra." },
+      { ref: "Điều 52, Nghị định 207/2026/NĐ-CP", url: "docs/nd-207-2026-nd-cp.pdf", detail: "Hiệu lực 01/7/2026; Nghị định 06/2021/NĐ-CP hết hiệu lực.", quote: "1. Nghị định này có hiệu lực thi hành từ ngày 01 tháng 7 năm 2026. 2. Nghị định số 06/2021/NĐ-CP ngày 26 tháng 01 năm 2021 của Chính phủ quy định chi tiết một số nội dung về quản lý chất lượng, thi công xây dựng và bảo trì công trình xây dựng đã được sửa đổi, bổ sung một số điều theo Nghị định số 35/2023/NĐ-CP, Nghị định số 175/2024/NĐ-CP, Nghị định số 14/2026/NĐ-CP, Nghị định số 67/2026/NĐ-CP hết hiệu lực kể từ ngày Nghị định này có hiệu lực thi hành." },
+      { ref: "Khoản 4 Điều 18, Luật PCCC và CNCH", url: "docs/luat-pccc-vbhn-2026.pdf", detail: "Nghiệm thu PCCC trước khi đưa công trình vào sử dụng.", quote: "4. Công trình, phương tiện giao thông thuộc diện phải thẩm định thiết kế về phòng cháy và chữa cháy sau khi tổ chức nghiệm thu về phòng cháy và chữa cháy phải được cơ quan quản lý chuyên ngành kiểm tra công tác nghiệm thu về phòng cháy và chữa cháy; chỉ được đưa công trình, phần công trình, hạng mục công trình, phương tiện giao thông vào khai thác, sử dụng sau khi được cơ quan quản lý chuyên ngành chấp thuận kết quả nghiệm thu về phòng cháy và chữa cháy." }
+    ],
+    note: "Nghị định 06/2021/NĐ-CP đã hết hiệu lực từ 01/7/2026 (thay bằng Nghị định 207/2026/NĐ-CP) — không còn dùng mốc gửi hồ sơ trước 10 ngày, phụ lục hồ sơ theo NĐ 06/2021."
+  },
+  {
+    title: "Giấy phép ngành, đăng ký thuế, ưu đãi & lao động nước ngoài",
     cat: "lienquan",
     summary: "Hoàn tất đăng ký thuế và thủ tục hưởng ưu đãi (nếu có), đồng thời xin giấy phép lao động cho chuyên gia, nhà quản lý nước ngoài trước khi đi vào vận hành.",
-    authority: "Cơ quan thuế / Sở Nội vụ (lao động)",
+    days: "Tùy ngành",
+    authority: "Thuế tỉnh Đồng Tháp (thuế, ưu đãi thuế) · Sở Nội vụ (giấy phép lao động) · Bộ, ngành cấp giấy phép kinh doanh chuyên ngành (nếu có)",
     duration: "Giấy phép lao động: hiệu lực tối đa 2 năm, gia hạn 1 lần tối đa 2 năm",
     tasks: [
       "Đăng ký mã số thuế, kê khai để áp dụng ưu đãi thuế TNDN nếu dự án thuộc diện ưu đãi.",
-      "Chuẩn bị hồ sơ và xin giấy phép lao động cho người lao động nước ngoài (trừ trường hợp được miễn)."
+      "Chuẩn bị hồ sơ và xin giấy phép lao động cho người lao động nước ngoài (trừ trường hợp được miễn).",
+      "Ngành có điều kiện: xin giấy phép/giấy chứng nhận đủ điều kiện kinh doanh trước khi hoạt động. Ví dụ xuất khẩu gạo — Bộ Công Thương cấp Giấy chứng nhận đủ điều kiện (NĐ 107/2018/NĐ-CP), 15 ngày làm việc; điều kiện: có ít nhất 01 kho chuyên dùng và 01 cơ sở xay, xát hoặc chế biến thóc, gạo (sở hữu hoặc thuê tối thiểu 05 năm)."
     ],
     legal: [
       { ref: "Luật Thuế TNDN 2025 (số 67/2025/QH15)", url: "https://thuvienphapluat.vn/van-ban/Doanh-nghiep/Luat-Thue-thu-nhap-doanh-nghiep-2025-so-67-2025-QH15-580594.aspx", detail: "Căn cứ áp dụng mức thuế suất ưu đãi, thời gian miễn/giảm thuế cho dự án đầu tư." },
       { ref: "Điều 151, Bộ luật Lao động 2019", url: "https://hethongphapluat.com/bo-luat-lao-dong-2019/dieu-151", detail: "Người lao động nước ngoài làm việc tại Việt Nam phải có giấy phép lao động, trừ trường hợp được miễn." },
-      { ref: "Nghị định 152/2020/NĐ-CP", url: "https://thuvienphapluat.vn/van-ban/Lao-dong-Tien-luong/Nghi-dinh-152-2020-ND-CP-quan-ly-nguoi-lao-dong-nuoc-ngoai-lam-viec-tai-Viet-Nam-280261.aspx", detail: "Hồ sơ, trình tự cấp giấy phép lao động cho người nước ngoài." }
+      { ref: "Nghị định 152/2020/NĐ-CP", url: "https://thuvienphapluat.vn/van-ban/Lao-dong-Tien-luong/Nghi-dinh-152-2020-ND-CP-quan-ly-nguoi-lao-dong-nuoc-ngoai-lam-viec-tai-Viet-Nam-280261.aspx", detail: "Hồ sơ, trình tự cấp giấy phép lao động cho người nước ngoài." },
+      { ref: "Nghị định 107/2018/NĐ-CP (kinh doanh xuất khẩu gạo)", detail: "Ví dụ giấy phép ngành: Bộ Công Thương, 15 ngày làm việc — theo hướng dẫn thủ tục của Sở Tài chính tỉnh Đồng Tháp (2026) — chưa có trích dẫn nguyên văn được xác minh; cần kiểm tra văn bản sửa đổi mới nhất." }
     ]
   },
   {
     title: "Giám sát, điều chỉnh & báo cáo trong quá trình thực hiện",
     cat: "luat",
     summary: "Theo dõi tiến độ triển khai so với cam kết tại IRC/chủ trương đầu tư; thực hiện điều chỉnh khi dự án thay đổi thuộc các trường hợp bắt buộc theo luật.",
-    authority: "Cơ quan đăng ký đầu tư",
+    days: "Suốt dự án",
+    authority: "Sở Tài chính / Ban Quản lý các khu công nghiệp tỉnh Đồng Tháp",
     duration: null,
     tasks: [
       "Theo dõi tiến độ giải ngân, xây dựng so với cam kết trong hồ sơ dự án.",
@@ -2198,6 +2326,7 @@ function buildFlowNode(step, i) {
   node.innerHTML = `
     <div class="flow-node-num">${i + 1}</div>
     <div class="flow-node-title">${step.title}</div>
+    ${step.days ? `<span class="flow-node-days">${step.days}</span>` : ''}
     <span class="badge ${step.cat}">${CAT_LABEL[step.cat]}</span>
   `;
   const select = () => {
@@ -2267,8 +2396,51 @@ function renderFlowDetail() {
   });
 }
 
+const TIMELINE_SAMPLE = [
+  { step: 8, task: "UBND tỉnh chấp thuận việc thỏa thuận nhận quyền sử dụng đất", agency: "Sở Nông nghiệp và Môi trường → UBND tỉnh", days: 15 },
+  { step: 8, task: "Công chứng hợp đồng, đăng ký biến động đất đai (gồm 05 ngày nộp nghĩa vụ tài chính)", agency: "Văn phòng Đăng ký đất đai", days: 15 },
+  { step: 9, task: "Đăng ký môi trường (nộp trước khi thi công, không có bước thẩm định)", agency: "UBND tỉnh hoặc UBND cấp xã", days: 0, parallel: true },
+  { step: 10, task: "Quy hoạch tổng mặt bằng — chỉ khi khu đất chưa có quy hoạch chi tiết", agency: "UBND cấp xã/phường", days: 15, optional: true },
+  { step: 10, task: "Chấp thuận thiết kế, cấp phép thi công nút giao đường tỉnh", agency: "Sở Xây dựng", days: 5, optional: true },
+  { step: 11, task: "Thẩm định Báo cáo nghiên cứu khả thi (được miễn giấy phép xây dựng)", agency: "Sở Xây dựng", days: 16 },
+  { step: 12, task: "Thẩm định thiết kế về PCCC", agency: "Công an tỉnh", days: 6 },
+  { step: 13, task: "Kiểm tra công tác nghiệm thu hoàn thành (công trình cấp II)", agency: "Sở Xây dựng", days: 12 },
+  { step: 6, task: "Giấy chứng nhận đăng ký đầu tư — nếu nhà đầu tư trong nước có nhu cầu (làm song song)", agency: "Sở Tài chính", days: 10, parallel: true }
+];
+
+function renderTimeline() {
+  const el = document.getElementById('timelineCard');
+  const core = TIMELINE_SAMPLE.filter(r => !r.parallel && !r.optional).reduce((a, r) => a + r.days, 0);
+  const opt = TIMELINE_SAMPLE.filter(r => r.optional).reduce((a, r) => a + r.days, 0);
+  const rows = TIMELINE_SAMPLE.map(r => `
+    <tr class="${r.parallel ? 'parallel' : ''}">
+      <td><button type="button" class="timeline-step-link" data-goto-step="${r.step - 1}">Bước ${r.step}</button></td>
+      <td>${r.task}${r.optional ? ' <i>(tùy dự án)</i>' : ''}${r.parallel ? ' <i>(song song, không cộng)</i>' : ''}</td>
+      <td>${r.agency}</td>
+      <td class="num">${r.days ? r.days + ' ngày' : '—'}</td>
+    </tr>`).join('');
+  el.innerHTML = `
+    <h3>Lộ trình mẫu tại Đồng Tháp — tổng thời gian dự kiến</h3>
+    <div class="timeline-sub">Tình huống: nhà đầu tư trong nước làm nhà máy chế biến (dự án nhóm B, công trình cấp II) trên đất tự nhận chuyển nhượng của người dân, đúng mục đích đất sản xuất — <b>không thuộc diện chấp thuận chủ trương</b>. Thời hạn tính theo ngày làm việc, kể từ khi nhận đủ hồ sơ hợp lệ.</div>
+    <table class="timeline-table">
+      <thead><tr><th>Bước</th><th>Thủ tục</th><th>Cơ quan đầu mối</th><th>Thời hạn</th></tr></thead>
+      <tbody>${rows}
+        <tr class="total"><td></td><td colspan="2">Tổng thời gian giải quyết thủ tục (cộng tuần tự)</td><td class="num">${core}–${core + opt} ngày</td></tr>
+      </tbody>
+    </table>
+    <div class="note">Khoảng <b>${core} ngày làm việc</b> nếu khu đất đã có quy hoạch chi tiết (ví dụ trong cụm công nghiệp) và không đấu nối đường tỉnh; tối đa khoảng <b>${core + opt} ngày làm việc</b> nếu phải lập quy hoạch tổng mặt bằng và xin đấu nối. Chưa gồm thời gian nhà đầu tư chuẩn bị hồ sơ, đàm phán đất, nộp thuế chậm và thời gian thi công. Ngành có điều kiện cộng thêm thời hạn cấp giấy phép ngành (ví dụ xuất khẩu gạo: 15 ngày làm việc tại Bộ Công Thương). Dự án thuộc diện chấp thuận chủ trương cộng thêm bước 4 (26 ngày — thẩm quyền UBND tỉnh).</div>
+  `;
+  el.querySelectorAll('[data-goto-step]').forEach(btn => btn.addEventListener('click', () => {
+    activeStepIdx = Number(btn.dataset.gotoStep);
+    renderFlowchart();
+    renderFlowDetail();
+    requestAnimationFrame(() => flowDetailEl.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+  }));
+}
+
 renderFlowchart();
 renderFlowDetail();
+renderTimeline();
 
 /* ---------------- Ưu đãi theo địa bàn (Đồng Tháp) ---------------- */
 
