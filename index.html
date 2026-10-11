@@ -252,6 +252,16 @@
   }
   .chip:hover { border-color: var(--accent); }
   .chip .dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+  .chip-count { font-size: 11px; font-weight: 700; opacity: .7; font-variant-numeric: tabular-nums; }
+  .chip-local { border-style: dashed; }
+  .field-head {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 10px;
+    margin: 26px 0 10px; padding-bottom: 6px; border-bottom: 2px solid var(--accent);
+  }
+  .field-head:first-child { margin-top: 6px; }
+  .field-name { font-family: Georgia, "Times New Roman", serif; font-size: 19px; font-weight: 700; color: var(--accent); }
+  .field-count { font-size: 12px; color: var(--text-muted); white-space: nowrap; }
+  .local-tag { display: inline-block; font-size: 11px; font-weight: 700; color: var(--accent-warm); background: var(--accent-warm-soft); border-radius: 5px; padding: 2px 7px; margin-bottom: 4px; }
   .chip[data-active="true"] {
     background: var(--accent);
     border-color: var(--accent);
@@ -1882,7 +1892,6 @@ const DATA = [
 ];
 
 const CAT_LABEL = { luat: "Luật gốc", nd: "Nghị định/Thủ tục", uudai: "Ưu đãi đầu tư", diaban: "Địa bàn", lienquan: "Luật liên quan" };
-const MAIN_TAB_CATS = ["luat", "nd", "lienquan"];
 
 const LINK_ICON = `<svg viewBox="0 0 24 24" fill="none"><path d="M14 5h5v5M19 5l-8 8M9 5H6a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 const QUOTE_CHEVRON = `<svg class="quote-chevron" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
@@ -1924,23 +1933,48 @@ const searchInput = document.getElementById('searchInput');
 const resultCount = document.getElementById('resultCount');
 const emptyState = document.getElementById('emptyState');
 
-let activeCats = new Set();
+const LAW_FIELDS = [
+  { id: "dau-tu", label: "Luật Đầu tư", ids: ["luat-2025", "luat-24-2026", "nghi-dinh-96", "quy-ho-tro-dau-tu", "tham-quyen", "irc-erc", "nganh-uu-dai", "uu-dai-dac-biet", "dieu-kien-kinh-doanh", "quy-trinh-xuc-tien"] },
+  { id: "dau-thau", label: "Luật Đấu thầu", ids: ["luat-dau-thau", "nd-214-2025", "nd-349-2026", "tt-dau-thau-mau", "nd-274-2026", "nq-40-46-2026-dt"] },
+  { id: "dat-dai", label: "Luật Đất đai", ids: ["luat-dat-dai", "nd-102-2024", "nd-103-2024", "nq-56-2026-dt"] },
+  { id: "dau-gia", label: "Luật Đấu giá tài sản", ids: ["luat-dau-gia", "nd-172-2024"] },
+  { id: "nha-o-bds", label: "Luật Nhà ở & Kinh doanh bất động sản", ids: ["luat-nha-o", "nd-95-100-2024", "nq-201-2025", "dt-nha-o-xa-hoi", "luat-kd-bds", "nd-96-2024-bds"] },
+  { id: "xay-dung", label: "Luật Xây dựng", ids: ["luat-xay-dung-2025", "nd-217-2026", "nd-206-2026", "qd-425-bxd", "nd-207-2026", "nd-269-2025"] },
+  { id: "moi-truong", label: "Luật Bảo vệ môi trường", ids: ["luat-bvmt", "nd-08-2022"] },
+  { id: "pccc", label: "Luật Phòng cháy, chữa cháy", ids: ["luat-pccc"] },
+  { id: "doanh-nghiep", label: "Luật Doanh nghiệp", ids: ["luat-doanh-nghiep"] },
+  { id: "thue", label: "Luật Thuế (TNDN, xuất nhập khẩu)", ids: ["luat-thue-tndn", "nd-320-2025", "uu-dai-thue-nk-khauhao", "khau-hao-nhanh"] },
+  { id: "dau-tu-cong-ppp", label: "Luật Đầu tư công & PPP", ids: ["luat-dau-tu-cong", "luat-ppp", "nd-377-2026"] },
+  { id: "kcn", label: "Khu công nghiệp, cụm công nghiệp", ids: ["nd-35-2022", "nd-32-2024-ccn"] }
+];
+const LOCAL_IDS = new Set(["nq-56-2026-dt", "nq-40-46-2026-dt", "dt-nha-o-xa-hoi"]);
+const FIELD_INDEX = new Map();
+LAW_FIELDS.forEach((f, i) => f.ids.forEach(id => FIELD_INDEX.set(id, i)));
+const fieldIdxOf = item => FIELD_INDEX.has(item.id) ? FIELD_INDEX.get(item.id) : LAW_FIELDS.length;
+
+let activeField = null;
+let localOnly = false;
 let openIds = new Set();
 
 function buildChips() {
-  MAIN_TAB_CATS.forEach(cat => {
+  const make = (label, count, onClick, isActive) => {
     const btn = document.createElement('button');
     btn.className = 'chip';
-    btn.dataset.cat = cat;
-    btn.dataset.active = 'false';
-    btn.innerHTML = `<span class="dot"></span>${CAT_LABEL[cat]}`;
-    btn.addEventListener('click', () => {
-      if (activeCats.has(cat)) activeCats.delete(cat); else activeCats.add(cat);
-      btn.dataset.active = activeCats.has(cat) ? 'true' : 'false';
-      render();
-    });
+    btn.type = 'button';
+    btn.dataset.active = isActive() ? 'true' : 'false';
+    btn.innerHTML = `${label}${count !== null ? ` <span class="chip-count">${count}</span>` : ''}`;
+    btn.addEventListener('click', () => { onClick(); refreshChips(); render(); });
+    btn._isActive = isActive;
     chipRow.appendChild(btn);
-  });
+  };
+  make('Tất cả luật', null, () => { activeField = null; }, () => activeField === null);
+  LAW_FIELDS.forEach((f, i) => make(f.label, f.ids.length, () => { activeField = activeField === i ? null : i; }, () => activeField === i));
+  make('Văn bản Đồng Tháp', LOCAL_IDS.size, () => { localOnly = !localOnly; }, () => localOnly);
+  chipRow.lastChild.classList.add('chip-local');
+}
+
+function refreshChips() {
+  chipRow.querySelectorAll('.chip').forEach(btn => { btn.dataset.active = btn._isActive() ? 'true' : 'false'; });
 }
 
 function highlight(text, q) {
@@ -1977,20 +2011,31 @@ function groupSortKey(item) {
 function render() {
   const q = searchInput.value.trim();
   const filtered = DATA.filter(item => {
-    const catOk = activeCats.size === 0 || activeCats.has(item.cat);
-    return catOk && matches(item, q);
+    const fieldOk = activeField === null || fieldIdxOf(item) === activeField;
+    const localOk = !localOnly || LOCAL_IDS.has(item.id);
+    return fieldOk && localOk && matches(item, q);
   });
   filtered.sort((a, b) => {
-    const ka = groupSortKey(a), kb = groupSortKey(b);
+    const ka = [fieldIdxOf(a), ...groupSortKey(a)], kb = [fieldIdxOf(b), ...groupSortKey(b)];
     for (let i = 0; i < ka.length; i++) { if (ka[i] !== kb[i]) return ka[i] - kb[i]; }
     return 0;
   });
 
   listEl.innerHTML = '';
   emptyState.style.display = filtered.length === 0 ? 'block' : 'none';
-  resultCount.textContent = q || activeCats.size ? `${filtered.length} / ${DATA.length} mục` : `${DATA.length} mục`;
+  resultCount.textContent = q || activeField !== null || localOnly ? `${filtered.length} / ${DATA.length} mục` : `${DATA.length} mục`;
 
+  let lastField = -1;
   filtered.forEach(item => {
+    const fi = fieldIdxOf(item);
+    if (fi !== lastField) {
+      lastField = fi;
+      const fieldItems = filtered.filter(x => fieldIdxOf(x) === fi).length;
+      const h = document.createElement('div');
+      h.className = 'field-head';
+      h.innerHTML = `<span class="field-name">${fi < LAW_FIELDS.length ? LAW_FIELDS[fi].label : 'Khác'}</span><span class="field-count">${fieldItems} văn bản</span>`;
+      listEl.appendChild(h);
+    }
     const card = document.createElement('div');
     card.className = 'card';
     card.dataset.open = openIds.has(item.id) ? 'true' : 'false';
@@ -2007,6 +2052,7 @@ function render() {
     head.innerHTML = `
       <span class="badge ${item.cat}">${CAT_LABEL[item.cat]}</span>
       <div class="card-main">
+        ${LOCAL_IDS.has(item.id) ? '<span class="local-tag">Văn bản tỉnh Đồng Tháp</span>' : ''}
         ${parentItem ? `<div class="parent-breadcrumb">↳ ${item.parentLabel || 'Hướng dẫn thi hành'}: ${parentItem.title}</div>` : ''}
         <div class="card-title-row">
           <span class="card-title">${highlight(item.title, q)}</span>
