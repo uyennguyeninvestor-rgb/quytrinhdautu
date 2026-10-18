@@ -686,6 +686,10 @@
   .sub-item-skip .sub-title { text-decoration: line-through; }
   .sub-skip-line { background: var(--surface-alt); }
   @media (max-width: 600px) { .mode-switch { width: 100%; } .mode-switch button { flex: 1; padding: 8px 8px; font-size: 13px; } }
+  .zone-head { font-family: Georgia, "Times New Roman", serif; font-size: 20px; margin: 30px 0 6px; color: var(--accent); }
+  .zone-table-wrap { overflow-x: auto; margin-top: 10px; }
+  .zone-table td { font-size: 13px; }
+  .zone-type { font-size: 11px; color: var(--text-muted); }
   .flow-node-subs { font-size: 11px; color: var(--text-muted); }
   .sub-list-label { font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); font-weight: 700; margin: 0 0 8px; }
   .sub-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 8px; margin-bottom: 16px; }
@@ -1058,8 +1062,22 @@
     </div>
     <div id="incentiveList" style="margin-top:14px"></div>
     <div class="note">
-      <b>Về nguồn dữ liệu địa bàn:</b> danh sách xã/phường đã được <b>đối chiếu với bản sao y Quyết định 1717/QĐ-UBND ngày 12/6/2026</b> (UBND tỉnh ký số, hiệu lực từ ngày ký): khớp số lượng 28 xã/phường đặc biệt khó khăn và 30 xã/phường khó khăn; một vài dòng trong bản scan mờ, không đọc được tự động — nên mở file PDF lưu kèm để kiểm tra khi cần cam kết với nhà đầu tư. <b>Miễn tiền thuê đất cho dự án xã hội hóa/phi lợi nhuận:</b> áp dụng Nghị quyết 56/2026/NQ-HĐND (hiệu lực 05/10/2026). Riêng căn cứ miễn tiền thuê đất/tiền sử dụng đất là <b>Điều 39 Nghị định 103/2024/NĐ-CP</b> (sửa đổi bởi Nghị định 291/2025/NĐ-CP) — <b>không phải</b> Nghị định 50/2026/NĐ-CP (văn bản này chỉ hướng dẫn Nghị quyết 254/2025/QH15 về xử lý vướng mắc tính tiền sử dụng đất/tiền thuê đất khi chuyển mục đích sử dụng đất, không phải căn cứ miễn giảm theo địa bàn).
+      <b>Về nguồn dữ liệu địa bàn:</b> danh sách xã/phường đã đối chiếu với bản sao y <b>Quyết định 1717/QĐ-UBND ngày 12/6/2026</b> (UBND tỉnh ký số, hiệu lực từ ngày ký) và Bảng tổng hợp ưu đãi đầu tư của tỉnh — khớp đủ 28 xã/phường đặc biệt khó khăn và 30 xã/phường khó khăn; các xã/phường còn lại không thuộc địa bàn ưu đãi.
+      <b>Dự án trong KCN, CCN, KCX</b> hưởng ưu đãi như địa bàn khó khăn; <b>khu kinh tế, khu công nghệ cao</b> như địa bàn đặc biệt khó khăn (khoản 7 Điều 22 NĐ 96/2026); dự án nằm trên nhiều xã xác định theo xã có phần lớn diện tích (khoản 6). Nếu cùng lúc đáp ứng nhiều mức, áp dụng mức cao nhất.
+      <b>Miễn tiền thuê đất:</b> dự án thông thường theo Điều 39 NĐ 103/2024/NĐ-CP (sđ NĐ 261/2025, 291/2025, 50/2026); dự án xã hội hóa, phi lợi nhuận theo Nghị quyết 56/2026/NQ-HĐND (hiệu lực 05/10/2026). Đất thương mại, dịch vụ và nhà ở thương mại không được miễn, giảm (điểm a khoản 1 Điều 157 Luật Đất đai).
+        </div>
+    <h3 class="zone-head">Khu kinh tế, khu công nghiệp, cụm công nghiệp theo Quy hoạch tỉnh</h3>
+    <p class="process-intro" style="margin-top:0;">Danh mục theo <b>Quyết định 1410/QĐ-UBND ngày 13/5/2026</b> phê duyệt điều chỉnh Quy hoạch tỉnh Đồng Tháp (Phụ lục II, III, IV). Gõ tên khu, cụm hoặc xã/phường để tìm vị trí, diện tích, tình trạng và mức ưu đãi địa bàn.</p>
+    <div class="search-row">
+      <div class="search-box">
+        <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke-width="2"/><path d="M21 21l-4.3-4.3" stroke-width="2" stroke-linecap="round"/></svg>
+        <input id="zoneSearch" type="text" placeholder="Tìm KCN, CCN, khu kinh tế hoặc xã/phường: VD Tân Phước, Sa Đéc, Gia Thuận…" autocomplete="off" />
+      </div>
+      <span class="result-count" id="zoneCount"></span>
     </div>
+    <div class="chips" id="zoneChips" style="margin-top:10px;"></div>
+    <div class="zone-table-wrap"><table class="timeline-table zone-table" id="zoneTable"></table></div>
+    <div id="zoneLegal"></div>
   </div>
 
   <div id="wizardView" style="display:none">
@@ -1942,6 +1960,30 @@ const DATA = [
     `
   },
   {
+    id: "qd-1410-2026-dt",
+    cat: "lienquan",
+    code: "Quyết định 1410/QĐ-UBND (13/5/2026)",
+    url: "docs/dong-thap-qd-1410-2026-quy-hoach-tinh.pdf",
+    title: "Đồng Tháp — điều chỉnh Quy hoạch tỉnh thời kỳ 2021–2030, tầm nhìn 2050",
+    date: "Ký 13/5/2026 — căn cứ Luật Quy hoạch (10/12/2025), NĐ 70/2026/NĐ-CP, NQ 24/NQ-HĐND (11/5/2026)",
+    summary: "Quy hoạch tỉnh sau hợp nhất (5.938,64 km²) kèm 30 phụ lục danh mục: khu kinh tế, KCN, CCN, vùng sản xuất nông nghiệp tập trung, khu du lịch, giao thông, điện, thương mại, dự án ưu tiên thực hiện — căn cứ để đánh giá dự án có phù hợp quy hoạch không.",
+    body: `
+      <h4>Phụ lục quan trọng cho xúc tiến đầu tư</h4>
+      <ul>
+        <li><b>Phụ lục II — Khu kinh tế:</b> Khu kinh tế cửa khẩu tỉnh Đồng Tháp (31.936 ha); Khu kinh tế ven biển Gò Công (26.700 ha). <a href="docs/dong-thap-qd-1410-pl2-khu-kinh-te.pdf">PDF</a></li>
+        <li><b>Phụ lục III — Khu công nghiệp:</b> 35 KCN — 6 đang hoạt động, 4 đang đầu tư xây dựng, <b>14 KCN ưu tiên kêu gọi đầu tư</b>, 11 KCN dự kiến mở mới khi đủ điều kiện; tổng 8.626,76 ha. <a href="docs/dong-thap-qd-1410-pl3-khu-cong-nghiep.pdf">PDF</a></li>
+        <li><b>Phụ lục IV — Cụm công nghiệp:</b> 17 CCN đang hoạt động, 5 CCN đang làm thủ tục, 23 CCN kế thừa kêu gọi đầu tư, 21 CCN bổ sung mới, 3 CCN đề xuất mở rộng; tổng 3.854,16 ha. <a href="docs/dong-thap-qd-1410-pl4-cum-cong-nghiep.pdf">PDF</a></li>
+        <li><b>Phụ lục XXIX — Dự án dự kiến ưu tiên thực hiện</b> (giao thông, đô thị, công nghiệp, nông nghiệp…). <a href="docs/dong-thap-qd-1410-pl29-du-an-uu-tien.pdf">PDF</a></li>
+        <li>Các phụ lục khác: hệ thống đô thị (I), vùng sản xuất nông nghiệp tập trung (V), khu du lịch (VI), đường bộ (VIII), đường thủy (IX), cảng (XII–XIII), điện và năng lượng (XIV), hạ tầng thương mại (XXIV), chỉ tiêu sử dụng đất (XXVI)…</li>
+      </ul>
+      <div class="note">Tra nhanh từng KCN, CCN, khu kinh tế (vị trí theo xã/phường mới, diện tích, tình trạng, mức ưu đãi địa bàn) tại tab <b>"Ưu đãi theo địa bàn (Đồng Tháp)"</b>. File PDF quyết định (bản nén) và các phụ lục II, III, IV, XXIX đã lưu kèm trang web.</div>
+    `,
+    legal: [
+      { ref: "Quyết định 1410/QĐ-UBND ngày 13/5/2026", url: "docs/dong-thap-qd-1410-2026-quy-hoach-tinh.pdf", detail: "UBND tỉnh Đồng Tháp phê duyệt điều chỉnh Quy hoạch tỉnh thời kỳ 2021–2030, tầm nhìn 2050 — Phụ lục II, III, IV: danh mục khu kinh tế, KCN, CCN." },
+      { ref: "Khoản 6, 7 Điều 22, Nghị định 96/2026/NĐ-CP", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Nghi-dinh-96-2026-ND-CP-huong-dan-Luat-Dau-tu-690303.aspx", detail: "KCN, CCN, KCX hưởng ưu đãi như địa bàn khó khăn; khu kinh tế, khu công nghệ cao hưởng như địa bàn đặc biệt khó khăn. Dự án trên nhiều xã: xác định theo xã có phần lớn diện tích.", quote: "6. Trường hợp dự án đầu tư được thực hiện trên địa bàn có từ hai đơn vị hành chính cấp xã trở lên thuộc các địa bàn có điều kiện kinh tế - xã hội khác nhau thì địa bàn ưu đãi đầu tư của dự án được xác định theo đơn vị hành chính cấp xã nơi thực hiện phần lớn diện tích sử dụng đất của dự án. Trường hợp diện tích sử dụng đất của dự án giữa các xã bằng nhau thì xác định theo đơn vị hành chính cấp xã có mức ưu đãi cao hơn. 7. Xác định địa bàn ưu đãi đầu tư đối với khu công nghiệp, cụm công nghiệp, khu chế xuất, khu công nghệ cao, khu nông nghiệp ứng dụng công nghệ cao, khu công nghệ số tập trung, khu thương mại tự do, trung tâm tài chính quốc tế, khu kinh tế như sau: a) Khu kinh tế, khu công nghệ cao, khu nông nghiệp ứng dụng công nghệ cao, khu công nghệ số tập trung, khu thương mại tự do và trung tâm tài chính quốc tế là địa bàn ưu đãi đầu tư, được hưởng ưu đãi đầu tư áp dụng đối với địa bàn có điều kiện kinh tế - xã hội đặc biệt khó khăn theo quy định tại khoản 2 Điều này; b) Khu công nghiệp, cụm công nghiệp và khu chế xuất là địa bàn ưu đãi đầu tư, được hưởng ưu đãi đầu tư áp dụng đối với địa bàn có điều kiện kinh tế - xã hội khó khăn theo quy định tại khoản 3 Điều này." }
+    ]
+  },
+  {
     id: "quy-trinh-xuc-tien",
     cat: "nd",
     code: "Quy trình tham khảo",
@@ -2013,9 +2055,10 @@ const LAW_FIELDS = [
   { id: "doanh-nghiep", label: "Luật Doanh nghiệp", ids: ["luat-doanh-nghiep"] },
   { id: "thue", label: "Luật Thuế (TNDN, xuất nhập khẩu)", ids: ["luat-thue-tndn", "nd-320-2025", "uu-dai-thue-nk-khauhao", "khau-hao-nhanh"] },
   { id: "dau-tu-cong-ppp", label: "Luật Đầu tư công & PPP", ids: ["luat-dau-tu-cong", "luat-ppp", "nd-377-2026"] },
-  { id: "kcn", label: "Khu công nghiệp, cụm công nghiệp", ids: ["nd-35-2022", "nd-32-2024-ccn"] }
+  { id: "kcn", label: "Khu công nghiệp, cụm công nghiệp", ids: ["nd-35-2022", "nd-32-2024-ccn"] },
+  { id: "quy-hoach", label: "Luật Quy hoạch (Quy hoạch tỉnh)", ids: ["qd-1410-2026-dt"] }
 ];
-const LOCAL_IDS = new Set(["nq-56-2026-dt", "nq-40-46-2026-dt", "dt-nha-o-xa-hoi"]);
+const LOCAL_IDS = new Set(["nq-56-2026-dt", "nq-40-46-2026-dt", "dt-nha-o-xa-hoi", "qd-1410-2026-dt"]);
 const FIELD_INDEX = new Map();
 LAW_FIELDS.forEach((f, i) => f.ids.forEach(id => FIELD_INDEX.set(id, i)));
 const fieldIdxOf = item => FIELD_INDEX.has(item.id) ? FIELD_INDEX.get(item.id) : LAW_FIELDS.length;
@@ -2034,7 +2077,7 @@ const STATUS = {
   "khau-hao-nhanh": "suadoi", "luat-dau-thau": "suadoi", "nd-214-2025": "suadoi", "nd-349-2026": "hieuluc", "tt-dau-thau-mau": "hieuluc",
   "nd-274-2026": "hieuluc", "nq-40-46-2026-dt": "hieuluc", "luat-kd-bds": "suadoi", "nd-96-2024-bds": "suadoi", "luat-nha-o": "suadoi",
   "nd-95-100-2024": "suadoi", "nq-201-2025": "hieuluc", "dt-nha-o-xa-hoi": "hieuluc", "luat-dau-gia": "suadoi", "nd-172-2024": "hieuluc",
-  "nd-35-2022": "hieuluc", "nd-32-2024-ccn": "suadoi", "luat-pccc": "suadoi", "luat-ppp": "suadoi", "nd-377-2026": "hieuluc"
+  "nd-35-2022": "hieuluc", "nd-32-2024-ccn": "suadoi", "luat-pccc": "suadoi", "luat-ppp": "suadoi", "nd-377-2026": "hieuluc", "qd-1410-2026-dt": "hieuluc"
 };
 const STATUS_LABEL = { hieuluc: "Còn hiệu lực", suadoi: "Đã sửa đổi", sap: "Sắp có hiệu lực", het: "Hết hiệu lực", thamkhao: "Tài liệu tổng hợp" };
 const STATUS_NOTE = { "luat-24-2026": "Sắp có hiệu lực 01/3/2027" };
@@ -2921,6 +2964,7 @@ renderTimeline();
 /* ---------------- Ưu đãi theo địa bàn (Đồng Tháp) ---------------- */
 
 const INCENTIVE_LEGAL = [
+  { ref: "Khoản 6, 7 Điều 22, Nghị định 96/2026/NĐ-CP", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Nghi-dinh-96-2026-ND-CP-huong-dan-Luat-Dau-tu-690303.aspx", detail: "KCN, CCN, KCX hưởng ưu đãi như địa bàn khó khăn; khu kinh tế, khu công nghệ cao hưởng như địa bàn đặc biệt khó khăn. Dự án trên nhiều xã: xác định theo xã có phần lớn diện tích.", quote: "6. Trường hợp dự án đầu tư được thực hiện trên địa bàn có từ hai đơn vị hành chính cấp xã trở lên thuộc các địa bàn có điều kiện kinh tế - xã hội khác nhau thì địa bàn ưu đãi đầu tư của dự án được xác định theo đơn vị hành chính cấp xã nơi thực hiện phần lớn diện tích sử dụng đất của dự án. Trường hợp diện tích sử dụng đất của dự án giữa các xã bằng nhau thì xác định theo đơn vị hành chính cấp xã có mức ưu đãi cao hơn. 7. Xác định địa bàn ưu đãi đầu tư đối với khu công nghiệp, cụm công nghiệp, khu chế xuất, khu công nghệ cao, khu nông nghiệp ứng dụng công nghệ cao, khu công nghệ số tập trung, khu thương mại tự do, trung tâm tài chính quốc tế, khu kinh tế như sau: a) Khu kinh tế, khu công nghệ cao, khu nông nghiệp ứng dụng công nghệ cao, khu công nghệ số tập trung, khu thương mại tự do và trung tâm tài chính quốc tế là địa bàn ưu đãi đầu tư, được hưởng ưu đãi đầu tư áp dụng đối với địa bàn có điều kiện kinh tế - xã hội đặc biệt khó khăn theo quy định tại khoản 2 Điều này; b) Khu công nghiệp, cụm công nghiệp và khu chế xuất là địa bàn ưu đãi đầu tư, được hưởng ưu đãi đầu tư áp dụng đối với địa bàn có điều kiện kinh tế - xã hội khó khăn theo quy định tại khoản 3 Điều này." },
   { ref: "Điều 15, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Khung ưu đãi chung: khoản 2 xác định địa bàn ưu đãi gồm địa bàn khó khăn/đặc biệt khó khăn và KCN, CCN, KCX, KCNC, khu kinh tế…", quote: "2. Địa bàn ưu đãi đầu tư bao gồm: a) Địa bàn có điều kiện kinh tế - xã hội khó khăn, địa bàn có điều kiện kinh tế - xã hội đặc biệt khó khăn; b) Khu công nghiệp, cụm công nghiệp, khu chế xuất, khu công nghệ cao, khu nông nghiệp ứng dụng công nghệ cao, khu công nghệ số tập trung, khu thương mại tự do, trung tâm tài chính quốc tế, khu kinh tế. 3. Căn cứ ngành, nghề, địa bàn ưu đãi đầu tư quy định tại khoản 1 và khoản 2 Điều này, Chính phủ ban hành, sửa đổi, bổ sung Danh mục ngành, nghề ưu đãi đầu tư và Danh mục địa bàn ưu đãi đầu tư." },
   { ref: "Nghị định 96/2026/NĐ-CP", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Nghi-dinh-96-2026-ND-CP-huong-dan-Luat-Dau-tu-690303.aspx", detail: "Hướng dẫn thi hành Luật Đầu tư — nguyên tắc xác định địa bàn ưu đãi." },
   { ref: "Quyết định 1717/QĐ-UBND (12/6/2026)", url: "docs/dong-thap-qd-1717-2026-dia-ban-uu-dai.pdf", detail: "UBND tỉnh Đồng Tháp — xác định và công bố địa bàn ưu đãi đầu tư cấp xã (hiệu lực từ ngày ký). Bản sao y đã lưu kèm trang web.", quote: "Điều 1. Xác định và công bố địa bàn ưu đãi đầu tư cấp xã trên địa bàn tỉnh Đồng Tháp (Chi tiết tại Phụ lục đính kèm). ... Điều 3. Điều khoản thi hành 1. Quyết định này có hiệu lực kể từ ngày ký." },
@@ -3048,6 +3092,32 @@ function renderIncentives() {
 
 communeSearchInput.addEventListener('input', renderIncentives);
 renderIncentives();
+
+const DT_ZONES = [{"t": "KKT", "n": "Khu kinh tế cửa khẩu tỉnh Đồng Tháp", "x": "Toàn bộ xã Thường Phước, phường Hồng Ngự, phường Thường Lạc; một phần xã Tân Hồng, Tân Hộ Cơ, Tân Thành, phường An Bình", "ha": "31.936", "s": "Đã thành lập (QĐ 191/2001, 166/2008/QĐ-TTg)", "g": "K"}, {"t": "KKT", "n": "Khu kinh tế ven biển Gò Công", "x": "Toàn bộ xã Gia Thuận, Tân Điền; một phần xã Tân Đông, Gò Công Đông, Tân Phú Đông", "ha": "26.700", "s": "Dự kiến (Phụ lục II QĐ 1410)", "g": "K"}, {"t": "KCN", "n": "KCN Mỹ Tho", "x": "Phường Trung An", "ha": "80,9", "s": "Đang hoạt động", "g": "A"}, {"t": "KCN", "n": "KCN Tân Hương", "x": "Xã Tân Hương", "ha": "197,3", "s": "Đang hoạt động", "g": "A"}, {"t": "KCN", "n": "KCN Long Giang", "x": "Xã Tân Phước 3", "ha": "540", "s": "Đang hoạt động", "g": "A"}, {"t": "KCN", "n": "KCN Sa Đéc", "x": "Phường Sa Đéc", "ha": "132", "s": "Đang hoạt động", "g": "A"}, {"t": "KCN", "n": "KCN Trần Quốc Toản", "x": "Phường Mỹ Ngãi", "ha": "56,3", "s": "Đang hoạt động", "g": "A"}, {"t": "KCN", "n": "KCN Sông Hậu", "x": "Xã Lai Vung", "ha": "63,5", "s": "Đang hoạt động", "g": "A"}, {"t": "KCN", "n": "KCN Tân Kiều", "x": "Xã Tháp Mười", "ha": "148,7", "s": "Đang đầu tư xây dựng", "g": "A"}, {"t": "KCN", "n": "KCN Bình Đông", "x": "Phường Sơn Qui", "ha": "210,06", "s": "Đang bồi thường GPMB", "g": "A"}, {"t": "KCN", "n": "KCN Tân Phước 1", "x": "Xã Tân Phước 3", "ha": "470", "s": "Đang bồi thường GPMB", "g": "A"}, {"t": "KCN", "n": "KCN Dịch vụ dầu khí Soài Rạp", "x": "Xã Gia Thuận", "ha": "285", "s": "Các KCN đang đầu tư xây dựng", "g": "A"}, {"t": "KCN", "n": "KCN Cao Lãnh III", "x": "Xã Bình Hàng Trung", "ha": "94", "s": "Ưu tiên kêu gọi đầu tư", "g": "B"}, {"t": "KCN", "n": "KCN Tân Phước 2", "x": "Xã Tân Phước 3", "ha": "300", "s": "Ưu tiên kêu gọi đầu tư", "g": "B"}, {"t": "KCN", "n": "KCN Tân Phước 3", "x": "Xã Hưng Thạnh", "ha": "450", "s": "Ưu tiên kêu gọi đầu tư", "g": "B"}, {"t": "KCN", "n": "KCN Tân Phước 4", "x": "Xã Hưng Thạnh", "ha": "440", "s": "Ưu tiên kêu gọi đầu tư", "g": "B"}, {"t": "KCN", "n": "KCN Tân Phước 5", "x": "Xã Tân Phước 3", "ha": "270", "s": "Ưu tiên kêu gọi đầu tư", "g": "B"}, {"t": "KCN", "n": "KCN Tân Phước 6", "x": "Xã Tân Phước 3", "ha": "140", "s": "Ưu tiên kêu gọi đầu tư", "g": "B"}, {"t": "KCN", "n": "KCN Tân Phước 7", "x": "Xã Tân Phước 3", "ha": "450", "s": "Ưu tiên kêu gọi đầu tư", "g": "B"}, {"t": "KCN", "n": "KCN Tân Phước 8", "x": "Xã Hưng Thạnh", "ha": "300", "s": "Ưu tiên kêu gọi đầu tư", "g": "B"}, {"t": "KCN", "n": "KCN Tân Phước 9", "x": "Xã Tân Phước 1", "ha": "185", "s": "Ưu tiên kêu gọi đầu tư", "g": "B"}, {"t": "KCN", "n": "KCN Tân Phước 10", "x": "Xã Tân Phước 1", "ha": "330", "s": "Ưu tiên kêu gọi đầu tư", "g": "B"}, {"t": "KCN", "n": "KCN Lai Vung", "x": "Xã Lai Vung", "ha": "250", "s": "Ưu tiên kêu gọi đầu tư", "g": "B"}, {"t": "KCN", "n": "KCN Gò Công", "x": "Xã Gia Thuận", "ha": "200", "s": "Ưu tiên kêu gọi đầu tư", "g": "B"}, {"t": "KCN", "n": "KCN Mỹ Phước", "x": "Xã Tân Phước 1", "ha": "200", "s": "Ưu tiên kêu gọi đầu tư", "g": "B"}, {"t": "KCN", "n": "KCN Hòa Tân", "x": "Xã Tân Nhuận Đông", "ha": "190", "s": "Ưu tiên kêu gọi đầu tư", "g": "B"}, {"t": "KCN", "n": "KCN Tân Mỹ", "x": "Xã Mỹ An Hưng", "ha": "200", "s": "Dự kiến mở mới khi đủ điều kiện", "g": "C"}, {"t": "KCN", "n": "KCN Sông Hậu 3", "x": "Xã Lai Vung", "ha": "300", "s": "Dự kiến mở mới khi đủ điều kiện", "g": "C"}, {"t": "KCN", "n": "KCN Tân Phước 11", "x": "Xã Tân Phước 1", "ha": "220", "s": "Dự kiến mở mới khi đủ điều kiện", "g": "C"}, {"t": "KCN", "n": "KCN Tân Phước 12", "x": "Xã Tân Phước 3", "ha": "170", "s": "Dự kiến mở mới khi đủ điều kiện", "g": "C"}, {"t": "KCN", "n": "KCN Tân Phước 13", "x": "Xã Tân Phước 1", "ha": "177", "s": "Dự kiến mở mới khi đủ điều kiện", "g": "C"}, {"t": "KCN", "n": "KCN Cao Lãnh II", "x": "Xã Mỹ Hiệp", "ha": "200", "s": "Dự kiến mở mới khi đủ điều kiện", "g": "C"}, {"t": "KCN", "n": "KCN Phú Tân", "x": "Xã Tân Phú Đông", "ha": "225", "s": "Dự kiến mở mới khi đủ điều kiện", "g": "C"}, {"t": "KCN", "n": "KCN Lấp Vò", "x": "Xã Lấp Vò", "ha": "202", "s": "Dự kiến mở mới khi đủ điều kiện", "g": "C"}, {"t": "KCN", "n": "KCN Thường Phước", "x": "Xã Thường Phước", "ha": "500", "s": "Triển khai lập quy hoạch phân khu KCN sau khi quy hoạch chung Khu kinh tế cửa khẩu đến năm 2045 được duyệt", "g": "C"}, {"t": "KCN", "n": "KCN Bình Thạnh", "x": "Phường Hồng Ngự", "ha": "150", "s": "Dự kiến mở mới khi đủ điều kiện", "g": "C"}, {"t": "KCN", "n": "KCN Dinh Bà", "x": "Xã Tân Hộ Cơ", "ha": "300", "s": "Dự kiến mở mới khi đủ điều kiện", "g": "C"}, {"t": "CCN", "n": "CCN Cái Tàu Hạ - An Nhơn", "x": "Xã Phú Hựu", "ha": "41,4", "s": "Đang hoạt động", "g": "A"}, {"t": "CCN", "n": "CCN Vàm Cống", "x": "Xã Lấp Vò", "ha": "18,7", "s": "Đang hoạt động", "g": "A"}, {"t": "CCN", "n": "CCN Bắc Sông Xáng", "x": "Xã Lấp Vò", "ha": "15,4", "s": "Đang hoạt động", "g": "A"}, {"t": "CCN", "n": "CCN Trường Xuân", "x": "Xã Trường Xuân", "ha": "93,1", "s": "Đang hoạt động", "g": "A"}, {"t": "CCN", "n": "CCN Cần Lố", "x": "Phường Mỹ Trà", "ha": "15", "s": "Đang hoạt động", "g": "A"}, {"t": "CCN", "n": "CCN Bình Thành", "x": "Xã Bình Thành", "ha": "49,3", "s": "Đang hoạt động", "g": "A"}, {"t": "CCN", "n": "CCN Phong Mỹ", "x": "Xã Phong Mỹ", "ha": "5,5", "s": "Đang hoạt động", "g": "A"}, {"t": "CCN", "n": "CCN Mỹ Hiệp", "x": "Xã Mỹ Hiệp", "ha": "58", "s": "Đang hoạt động", "g": "A"}, {"t": "CCN", "n": "CCN Phú Cường", "x": "Xã Phú Cường", "ha": "14,5", "s": "Đang hoạt động", "g": "A"}, {"t": "CCN", "n": "CCN Quảng Khánh", "x": "Phường Mỹ Trà", "ha": "50", "s": "Hoàn thành hạ tầng, đưa vào hoạt động giai đoạn 1, diện tích 16,78 ha. Giai đoạn 2 diện tích 33,2 ha", "g": "A"}, {"t": "CCN", "n": "CCN Tân Lập", "x": "Xã Tân Nhuận Đông", "ha": "49,6", "s": "Đang hoạt động", "g": "A"}, {"t": "CCN", "n": "CCN Trung An", "x": "Phường Trung An", "ha": "17,46", "s": "Đang hoạt động", "g": "A"}, {"t": "CCN", "n": "CCN Tân Mỹ Chánh", "x": "Phường Mỹ Phong", "ha": "23,57", "s": "Đang hoạt động", "g": "A"}, {"t": "CCN", "n": "CCN An Thạnh", "x": "Xã Cái Bè", "ha": "9,99", "s": "Đang hoạt động", "g": "A"}, {"t": "CCN", "n": "CCN Gia Thuận 1", "x": "Xã Gia Thuận", "ha": "50", "s": "Đang hoạt động", "g": "A"}, {"t": "CCN", "n": "CCN Gia Thuận 2", "x": "Xã Gia Thuận", "ha": "50", "s": "Đang hoạt động", "g": "A"}, {"t": "CCN", "n": "CCN Tân Dương", "x": "Xã Tân Dương", "ha": "16,6", "s": "Chưa đầu tư hoàn thiện", "g": "A"}, {"t": "CCN", "n": "CCN Định An", "x": "Xã Lai Vung", "ha": "49,9", "s": "Đang làm thủ tục đầu tư, xây dựng hạ tầng", "g": "B"}, {"t": "CCN", "n": "CCN An Hòa", "x": "Phường Hồng Ngự", "ha": "43", "s": "Đang làm thủ tục đầu tư, xây dựng hạ tầng", "g": "B"}, {"t": "CCN", "n": "CCN Tiểu thủ CN", "x": "Phường Mỹ Ngãi", "ha": "50", "s": "Đang làm thủ tục đầu tư, xây dựng hạ tầng", "g": "B"}, {"t": "CCN", "n": "CCN Mỹ Phước Tây", "x": "Phường Mỹ Phước Tây", "ha": "50", "s": "Đang làm thủ tục đầu tư, xây dựng hạ tầng", "g": "B"}, {"t": "CCN", "n": "CCN Thạnh Tân", "x": "Xã Tân Phước 2", "ha": "50", "s": "Đang làm thủ tục đầu tư, xây dựng hạ tầng", "g": "B"}, {"t": "CCN", "n": "CCN Tân Thạnh", "x": "Xã Tân Thạnh", "ha": "74", "s": "Kêu gọi đầu tư (chưa thành lập)", "g": "B"}, {"t": "CCN", "n": "CCN Vĩnh Thới", "x": "Xã Phong Hòa", "ha": "75", "s": "Kêu gọi đầu tư (chưa thành lập)", "g": "B"}, {"t": "CCN", "n": "CCN Phú Hiệp", "x": "Xã Tam Nông", "ha": "75", "s": "Kêu gọi đầu tư (chưa thành lập)", "g": "B"}, {"t": "CCN", "n": "CCN Tân Lập 2", "x": "Xã Tân Nhuận Đông", "ha": "50", "s": "Kêu gọi đầu tư (chưa thành lập)", "g": "B"}, {"t": "CCN", "n": "CCN Phong Hòa", "x": "Xã Phong Hòa", "ha": "75", "s": "Kêu gọi đầu tư (chưa thành lập)", "g": "B"}, {"t": "CCN", "n": "CCN Phú Thành A", "x": "Xã Phú Thọ", "ha": "75", "s": "Kêu gọi đầu tư (chưa thành lập)", "g": "B"}, {"t": "CCN", "n": "CCN Tân Phước", "x": "Xã An Phước", "ha": "75", "s": "Kêu gọi đầu tư (chưa thành lập)", "g": "B"}, {"t": "CCN", "n": "CCN Bình Hưng", "x": "Phường Hồng Ngự", "ha": "75", "s": "Kêu gọi đầu tư (chưa thành lập)", "g": "B"}, {"t": "CCN", "n": "CCN Hòa Bình", "x": "Xã Phú Cường", "ha": "75", "s": "Kêu gọi đầu tư (chưa thành lập)", "g": "B"}, {"t": "CCN", "n": "CCN Phương Thịnh", "x": "Xã Phương Thịnh", "ha": "75", "s": "Kêu gọi đầu tư (chưa thành lập)", "g": "B"}, {"t": "CCN", "n": "CCN Mỹ Thọ", "x": "Xã Mỹ Thọ", "ha": "75", "s": "Kêu gọi đầu tư (chưa thành lập)", "g": "B"}, {"t": "CCN", "n": "CCN Mỹ Hạnh Đông", "x": "Xã Tân Phú", "ha": "50", "s": "Kêu gọi đầu tư (chưa thành lập)", "g": "B"}, {"t": "CCN", "n": "CCN Mỹ Lợi", "x": "Phường Sơn Qui", "ha": "75", "s": "Kêu gọi đầu tư (chưa thành lập)", "g": "B"}, {"t": "CCN", "n": "CCN Bình Xuân", "x": "Phường Bình Xuân", "ha": "75", "s": "Kêu gọi đầu tư (chưa thành lập)", "g": "B"}, {"t": "CCN", "n": "CCN An Cư", "x": "Xã Hội Cư", "ha": "50", "s": "Kêu gọi đầu tư (chưa thành lập)", "g": "B"}, {"t": "CCN", "n": "CCN Phước Lập", "x": "Xã Tân Phước 3", "ha": "60", "s": "Kêu gọi đầu tư (chưa thành lập)", "g": "B"}, {"t": "CCN", "n": "CCN Vĩnh Hựu", "x": "Xã Vĩnh Hựu", "ha": "70", "s": "Kêu gọi đầu tư (chưa thành lập)", "g": "B"}, {"t": "CCN", "n": "CCN Phú Tân", "x": "Xã Tân Phú Đông", "ha": "75", "s": "Kêu gọi đầu tư (chưa thành lập)", "g": "B"}, {"t": "CCN", "n": "CCN Thạnh Hòa", "x": "Xã Tân Phước 2", "ha": "75", "s": "Kêu gọi đầu tư (chưa thành lập)", "g": "B"}, {"t": "CCN", "n": "CCN Phước Trung", "x": "Xã Tân Hòa", "ha": "75", "s": "Kêu gọi đầu tư (chưa thành lập)", "g": "B"}, {"t": "CCN", "n": "CCN Mỹ Phước Tây 2", "x": "Phường Mỹ Phước Tây", "ha": "50", "s": "Kêu gọi đầu tư (chưa thành lập)", "g": "B"}, {"t": "CCN", "n": "CCN Mỹ Hạnh Trung", "x": "Phường Mỹ Phước Tây", "ha": "50", "s": "Kêu gọi đầu tư (chưa thành lập)", "g": "B"}, {"t": "CCN", "n": "CCN Thạnh Phú", "x": "Xã Thạnh Phú", "ha": "50", "s": "Kêu gọi đầu tư (chưa thành lập)", "g": "B"}, {"t": "CCN", "n": "CCN Gia Thuận 1 (mở rộng)", "x": "Xã Gia Thuận", "ha": "25", "s": "Đề xuất mở rộng thêm khi đủ điều kiện", "g": "C"}, {"t": "CCN", "n": "CCN Gia Thuận 2 (mở rộng)", "x": "Xã Gia Thuận", "ha": "13,5", "s": "Đề xuất mở rộng thêm khi đủ điều kiện", "g": "C"}, {"t": "CCN", "n": "CCN Thạnh Tân (mở rộng)", "x": "xã Tân Phước 2", "ha": "25", "s": "Đề xuất mở rộng thêm khi đủ điều kiện", "g": "C"}, {"t": "CCN", "n": "CCN Bình Hiệp", "x": "Xã Lấp Vò", "ha": "64,5", "s": "Bổ sung mới tại kỳ điều chỉnh quy hoạch", "g": "C"}, {"t": "CCN", "n": "CCN Tân Nghĩa", "x": "Phường Mỹ Ngãi", "ha": "75", "s": "Bổ sung mới tại kỳ điều chỉnh quy hoạch", "g": "C"}, {"t": "CCN", "n": "CCN Phú Thành", "x": "Xã An Hòa", "ha": "50", "s": "Bổ sung mới tại kỳ điều chỉnh quy hoạch", "g": "C"}, {"t": "CCN", "n": "CCN Hưng Thạnh 1", "x": "Xã Hưng Thạnh", "ha": "75", "s": "Bổ sung mới tại kỳ điều chỉnh quy hoạch", "g": "C"}, {"t": "CCN", "n": "CCN Hưng Thạnh 2", "x": "Xã Hưng Thạnh", "ha": "75", "s": "Bổ sung mới tại kỳ điều chỉnh quy hoạch", "g": "C"}, {"t": "CCN", "n": "CCN Thường Phước", "x": "Xã Thường Phước", "ha": "68,5", "s": "Bổ sung mới tại kỳ điều chỉnh quy hoạch", "g": "C"}, {"t": "CCN", "n": "CCN Thanh Bình", "x": "Xã Thanh Bình", "ha": "70", "s": "Bổ sung mới tại kỳ điều chỉnh quy hoạch", "g": "C"}, {"t": "CCN", "n": "CCN Long Bình", "x": "Xã Long Bình", "ha": "70", "s": "Bổ sung mới tại kỳ điều chỉnh quy hoạch", "g": "C"}, {"t": "CCN", "n": "CCN Tân Đông", "x": "Xã Tân Đông", "ha": "70", "s": "Bổ sung mới tại kỳ điều chỉnh quy hoạch", "g": "C"}, {"t": "CCN", "n": "CCN Tân Dương 2", "x": "Xã Tân Dương", "ha": "75", "s": "Bổ sung mới tại kỳ điều chỉnh quy hoạch", "g": "C"}, {"t": "CCN", "n": "CCN Gia Thuận 3", "x": "Xã Gia Thuận", "ha": "70", "s": "Bổ sung mới tại kỳ điều chỉnh quy hoạch", "g": "C"}, {"t": "CCN", "n": "CCN Gia Thuận 4", "x": "Xã Gia Thuận", "ha": "37", "s": "Bổ sung mới tại kỳ điều chỉnh quy hoạch", "g": "C"}, {"t": "CCN", "n": "CCN Ba Sao", "x": "Xã Ba Sao", "ha": "75", "s": "Bổ sung mới tại kỳ điều chỉnh quy hoạch", "g": "C"}, {"t": "CCN", "n": "CCN Mỹ Trà", "x": "Phường Mỹ Trà", "ha": "75", "s": "Bổ sung mới tại kỳ điều chỉnh quy hoạch", "g": "C"}, {"t": "CCN", "n": "CCN Tân Điền", "x": "Xã Tân Điền", "ha": "65", "s": "Bổ sung mới tại kỳ điều chỉnh quy hoạch", "g": "C"}, {"t": "CCN", "n": "CCN Tân Lập 1", "x": "Xã Tân Phước 3", "ha": "75", "s": "Bổ sung mới tại kỳ điều chỉnh quy hoạch", "g": "C"}, {"t": "CCN", "n": "CCN Thạnh Mỹ", "x": "Xã Tân Phước 1", "ha": "75", "s": "Bổ sung mới tại kỳ điều chỉnh quy hoạch", "g": "C"}, {"t": "CCN", "n": "CCN Phú Hựu", "x": "Xã Phú Hựu", "ha": "75", "s": "Bổ sung mới tại kỳ điều chỉnh quy hoạch", "g": "C"}, {"t": "CCN", "n": "CCN Tịnh Mỹ", "x": "Phường Cao Lãnh", "ha": "50,64", "s": "Bổ sung mới tại kỳ điều chỉnh quy hoạch", "g": "C"}, {"t": "CCN", "n": "CCN Gáo Lồng Đèn", "x": "Xã Tân Hồng", "ha": "75", "s": "Bổ sung mới tại kỳ điều chỉnh quy hoạch", "g": "C"}, {"t": "CCN", "n": "CCN Thống Nhất", "x": "Xã Tân Hồng", "ha": "50", "s": "Bổ sung mới tại kỳ điều chỉnh quy hoạch", "g": "C"}];
+const ZONE_TYPE_LABEL = { KKT: "Khu kinh tế", KCN: "Khu công nghiệp", CCN: "Cụm công nghiệp" };
+const ZONE_INCENTIVE = { KKT: "Như địa bàn đặc biệt khó khăn", KCN: "Như địa bàn khó khăn", CCN: "Như địa bàn khó khăn" };
+let zoneFilter = 'all';
+function renderZones() {
+  const q = normalizeVN(document.getElementById('zoneSearch').value.trim());
+  const list = DT_ZONES.filter(z => (zoneFilter === 'all' || z.t === zoneFilter || (zoneFilter === 'uutien' && /ưu tiên kêu gọi|kêu gọi đầu tư|bổ sung mới/i.test(z.s))) && (!q || normalizeVN(z.n + ' ' + z.x + ' ' + z.s).includes(q)));
+  document.getElementById('zoneCount').textContent = `${list.length} / ${DT_ZONES.length}`;
+  document.getElementById('zoneTable').innerHTML = `<thead><tr><th>Tên</th><th>Vị trí (xã/phường mới)</th><th>Diện tích (ha)</th><th>Tình trạng</th><th>Ưu đãi địa bàn</th></tr></thead><tbody>${
+    list.map(z => `<tr><td><b>${z.n}</b><div class="zone-type">${ZONE_TYPE_LABEL[z.t]}</div></td><td>${z.x}</td><td class="num">${z.ha || '—'}</td><td>${z.s}</td><td>${ZONE_INCENTIVE[z.t]}</td></tr>`).join('') || '<tr><td colspan="5">Không tìm thấy.</td></tr>'}</tbody>`;
+}
+(function initZones() {
+  const chips = document.getElementById('zoneChips');
+  const opts = [['all', 'Tất cả'], ['KKT', 'Khu kinh tế (2)'], ['KCN', 'Khu công nghiệp (35)'], ['CCN', 'Cụm công nghiệp (69)'], ['uutien', 'Đang kêu gọi đầu tư']];
+  chips.innerHTML = opts.map(([k, l]) => `<button type="button" class="chip" data-zf="${k}" data-active="${k === zoneFilter}">${l}</button>`).join('');
+  chips.querySelectorAll('[data-zf]').forEach(b => b.addEventListener('click', () => {
+    zoneFilter = b.dataset.zf;
+    chips.querySelectorAll('[data-zf]').forEach(x => x.dataset.active = x.dataset.zf === zoneFilter ? 'true' : 'false');
+    renderZones();
+  }));
+  document.getElementById('zoneSearch').addEventListener('input', renderZones);
+  document.getElementById('zoneLegal').innerHTML = '<h4 style="margin-top:14px;">Căn cứ pháp lý</h4>' + renderLegalList([{ ref: "Quyết định 1410/QĐ-UBND ngày 13/5/2026", url: "docs/dong-thap-qd-1410-2026-quy-hoach-tinh.pdf", detail: "UBND tỉnh Đồng Tháp phê duyệt điều chỉnh Quy hoạch tỉnh thời kỳ 2021–2030, tầm nhìn 2050 — Phụ lục II, III, IV: danh mục khu kinh tế, KCN, CCN." }, { ref: "Khoản 6, 7 Điều 22, Nghị định 96/2026/NĐ-CP", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Nghi-dinh-96-2026-ND-CP-huong-dan-Luat-Dau-tu-690303.aspx", detail: "KCN, CCN, KCX hưởng ưu đãi như địa bàn khó khăn; khu kinh tế, khu công nghệ cao hưởng như địa bàn đặc biệt khó khăn. Dự án trên nhiều xã: xác định theo xã có phần lớn diện tích.", quote: "6. Trường hợp dự án đầu tư được thực hiện trên địa bàn có từ hai đơn vị hành chính cấp xã trở lên thuộc các địa bàn có điều kiện kinh tế - xã hội khác nhau thì địa bàn ưu đãi đầu tư của dự án được xác định theo đơn vị hành chính cấp xã nơi thực hiện phần lớn diện tích sử dụng đất của dự án. Trường hợp diện tích sử dụng đất của dự án giữa các xã bằng nhau thì xác định theo đơn vị hành chính cấp xã có mức ưu đãi cao hơn. 7. Xác định địa bàn ưu đãi đầu tư đối với khu công nghiệp, cụm công nghiệp, khu chế xuất, khu công nghệ cao, khu nông nghiệp ứng dụng công nghệ cao, khu công nghệ số tập trung, khu thương mại tự do, trung tâm tài chính quốc tế, khu kinh tế như sau: a) Khu kinh tế, khu công nghệ cao, khu nông nghiệp ứng dụng công nghệ cao, khu công nghệ số tập trung, khu thương mại tự do và trung tâm tài chính quốc tế là địa bàn ưu đãi đầu tư, được hưởng ưu đãi đầu tư áp dụng đối với địa bàn có điều kiện kinh tế - xã hội đặc biệt khó khăn theo quy định tại khoản 2 Điều này; b) Khu công nghiệp, cụm công nghiệp và khu chế xuất là địa bàn ưu đãi đầu tư, được hưởng ưu đãi đầu tư áp dụng đối với địa bàn có điều kiện kinh tế - xã hội khó khăn theo quy định tại khoản 3 Điều này." }]);
+  renderZones();
+})();
+
 
 /* ---------------- Sơ đồ tra cứu nhanh dự án (wizard) ---------------- */
 
@@ -3204,6 +3274,7 @@ const wizardState = {
   resettleCount: '',
   resettleRegion: 'khac',
   inKCN: false,
+  zone: '',
   nganh: new Set(),
   nganhSearch: '',
   communeQuery: '',
@@ -3304,7 +3375,7 @@ const LAND_METHODS = [
   { v: "dau_thau_ndt", label: "Đất công — trúng đấu thầu lựa chọn nhà đầu tư (dự án có sử dụng đất)" },
   { v: "chuyen_muc_dich", label: "Đất dân — nhà đầu tư tự gom/nhận chuyển nhượng, CẦN chuyển mục đích sử dụng đất" },
   { v: "dat_dan_dung_muc_dich", label: "Đất dân — tự thỏa thuận nhận chuyển nhượng/góp vốn/thuê, đất ĐÃ đúng mục đích (không cần chuyển mục đích)" },
-  { v: "thue_lai_kcn", label: "Thuê lại đất trong khu công nghiệp, cụm công nghiệp đã có hạ tầng" },
+  { v: "thue_lai_kcn", label: "Thuê lại đất trong khu công nghiệp, cụm công nghiệp, khu kinh tế đã có hạ tầng" },
   { v: "khong_ap_dung", label: "Không thuộc trường hợp nào ở trên / chưa xác định" }
 ];
 
@@ -3359,6 +3430,7 @@ const DIEU_24_25_LEGAL = [
 ];
 
 const DIABAN_15_LEGAL = [
+  { ref: "Khoản 6, 7 Điều 22, Nghị định 96/2026/NĐ-CP", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Nghi-dinh-96-2026-ND-CP-huong-dan-Luat-Dau-tu-690303.aspx", detail: "KCN, CCN, KCX hưởng ưu đãi như địa bàn khó khăn; khu kinh tế, khu công nghệ cao hưởng như địa bàn đặc biệt khó khăn. Dự án trên nhiều xã: xác định theo xã có phần lớn diện tích.", quote: "6. Trường hợp dự án đầu tư được thực hiện trên địa bàn có từ hai đơn vị hành chính cấp xã trở lên thuộc các địa bàn có điều kiện kinh tế - xã hội khác nhau thì địa bàn ưu đãi đầu tư của dự án được xác định theo đơn vị hành chính cấp xã nơi thực hiện phần lớn diện tích sử dụng đất của dự án. Trường hợp diện tích sử dụng đất của dự án giữa các xã bằng nhau thì xác định theo đơn vị hành chính cấp xã có mức ưu đãi cao hơn. 7. Xác định địa bàn ưu đãi đầu tư đối với khu công nghiệp, cụm công nghiệp, khu chế xuất, khu công nghệ cao, khu nông nghiệp ứng dụng công nghệ cao, khu công nghệ số tập trung, khu thương mại tự do, trung tâm tài chính quốc tế, khu kinh tế như sau: a) Khu kinh tế, khu công nghệ cao, khu nông nghiệp ứng dụng công nghệ cao, khu công nghệ số tập trung, khu thương mại tự do và trung tâm tài chính quốc tế là địa bàn ưu đãi đầu tư, được hưởng ưu đãi đầu tư áp dụng đối với địa bàn có điều kiện kinh tế - xã hội đặc biệt khó khăn theo quy định tại khoản 2 Điều này; b) Khu công nghiệp, cụm công nghiệp và khu chế xuất là địa bàn ưu đãi đầu tư, được hưởng ưu đãi đầu tư áp dụng đối với địa bàn có điều kiện kinh tế - xã hội khó khăn theo quy định tại khoản 3 Điều này." },
   { ref: "Khoản 2, Điều 15, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "2 nhóm địa bàn ưu đãi: (a) khó khăn/đặc biệt khó khăn; (b) KCN, CCN, KCX, KCNC, khu công nghệ số tập trung, khu kinh tế…", quote: "2. Địa bàn ưu đãi đầu tư bao gồm: a) Địa bàn có điều kiện kinh tế - xã hội khó khăn, địa bàn có điều kiện kinh tế - xã hội đặc biệt khó khăn; b) Khu công nghiệp, cụm công nghiệp, khu chế xuất, khu công nghệ cao, khu nông nghiệp ứng dụng công nghệ cao, khu công nghệ số tập trung, khu thương mại tự do, trung tâm tài chính quốc tế, khu kinh tế." },
   { ref: "Điều 19–20, Nghị định 320/2025/NĐ-CP", url: "https://thuvienphapluat.vn/van-ban/Doanh-nghiep/Nghi-dinh-320-2025-ND-CP-huong-dan-Luat-Thue-thu-nhap-doanh-nghiep-665051.aspx", detail: "Mức thuế suất ưu đãi, thời gian miễn/giảm thuế TNDN cụ thể theo địa bàn." },
   { ref: "Điều 39, Nghị định 103/2024/NĐ-CP", url: "https://thuvienphapluat.vn/van-ban/Bat-dong-san/Nghi-dinh-103-2024-ND-CP-tien-su-dung-dat-tien-thue-dat-550020.aspx", detail: "Miễn, giảm tiền thuê đất/tiền sử dụng đất theo địa bàn — chỉ áp dụng khi thuê đất trực tiếp từ Nhà nước." }
@@ -3407,14 +3479,14 @@ const AUTHORITY_LABEL = {
 function computeDiaBan() {
   const q = wizardState.communeQuery.trim();
   const nq = normalizeVN(q);
-  if (!q && !wizardState.inKCN) return { status: "empty" };
+  if (!q && !wizardState.zone) return { status: "empty" };
   if (nq) {
     for (const group of INCENTIVE_DATA) {
       const hit = group.communes.find(c => normalizeVN(c) === nq || normalizeVN(c).includes(nq));
       if (hit) return { status: "found", level: group.level, commune: hit, gid: group.id };
     }
   }
-  if (wizardState.inKCN) return { status: "kcn" };
+  if (wizardState.zone) return { status: "kcn" };
   if (q) return { status: "notfound" };
   return { status: "empty" };
 }
@@ -3437,7 +3509,7 @@ const INVESTOR_LEGAL = {
 const WIZ_PRESETS = [
   { key: "che_bien", label: "Nhà máy chế biến nông sản, thủy sản (gạo, cá tra…)", state: { investorType: "trong_nuoc", landMethod: "dat_dan_dung_muc_dich", nganh: ["A.II.2"], moiTruong: "co", loaiCongTrinh: "nha_xuong" },
     note: "Chế biến, bảo quản nông, thủy sản thuộc ngành <b>đặc biệt ưu đãi</b> (mục A.II.2 Phụ lục II NĐ 96/2026). Nhà máy quy mô vừa thường chỉ cần <b>đăng ký môi trường</b>; nhà xưởng diện tích sàn trên 2.000 m², khối tích trên 15.000 m³ phải <b>thẩm định thiết kế PCCC</b>. Kinh doanh xuất khẩu gạo cần Giấy chứng nhận đủ điều kiện của Bộ Công Thương (NĐ 107/2018/NĐ-CP)." },
-  { key: "giay_da_kcn", label: "Giày da, may mặc trong khu công nghiệp (nhà đầu tư nước ngoài)", state: { investorType: "nuoc_ngoai", inKCN: true, landMethod: "thue_lai_kcn", nganh: [], moiTruong: "co", loaiCongTrinh: "nha_xuong" },
+  { key: "giay_da_kcn", label: "Giày da, may mặc trong khu công nghiệp (nhà đầu tư nước ngoài)", state: { investorType: "nuoc_ngoai", inKCN: true, zone: "kcn", landMethod: "thue_lai_kcn", nganh: [], moiTruong: "co", loaiCongTrinh: "nha_xuong" },
     note: "Giày dép, da thành phẩm <b>không có</b> trong Phụ lục II NĐ 96/2026. Hàng dệt may, sợi có ở mục B.II.9 (ưu đãi) — cần đối chiếu sản phẩm cụ thể. Nếu sản xuất nguyên phụ liệu thuộc Danh mục sản phẩm công nghiệp hỗ trợ ưu tiên phát triển thì là <b>đặc biệt ưu đãi</b> (A.I.3). Dù không thuộc ngành ưu đãi, dự án trong KCN vẫn hưởng <b>ưu đãi theo địa bàn</b>. Ban Quản lý các KCN là cơ quan đăng ký đầu tư." },
   { key: "khu_do_thi", label: "Khu đô thị, khu dân cư (đấu thầu chọn nhà đầu tư)", state: { investorType: "trong_nuoc", landMethod: "dau_thau_ndt", nganh: [], moiTruong: "co", loaiCongTrinh: "chung_cu", datTMDV: true, bds: true },
     note: "Đồng Tháp: dự án đấu thầu khi khu đô thị từ 1 đơn vị ở trở lên hoặc từ <b>20 ha</b>, khu dân cư nông thôn từ <b>3 ha</b> (NQ 40/2026/NQ-HĐND); khu đất phải có trong Danh mục khu đất đấu thầu (NQ 24/NQ-HĐND, sửa bởi NQ 46/NQ-HĐND). Trình tự lựa chọn nhà đầu tư theo NĐ 274/2026/NĐ-CP. Khu đô thị thương mại không thuộc ngành ưu đãi (chỉ khu đô thị chức năng phục vụ công nhân — B.III.2). Nếu nhà đầu tư tự nhận quyền sử dụng đất để làm nhà ở, khu đô thị thì chọn khoản 11 Điều 24 ở Bước 1." },
@@ -3456,7 +3528,7 @@ const WIZ_PRESETS = [
 function applyPreset(key) {
   const p = WIZ_PRESETS.find(x => x.key === key);
   if (!p) return;
-  Object.assign(wizardState, { investorType: '', inKCN: false, landMethod: '', moiTruong: '', loaiCongTrinh: '', conditional: false, xaHoiHoa: false, datTMDV: false, bds: false });
+  Object.assign(wizardState, { investorType: '', inKCN: false, zone: '', landMethod: '', moiTruong: '', loaiCongTrinh: '', conditional: false, xaHoiHoa: false, datTMDV: false, bds: false });
   wizardState.khoan = new Set();
   wizardState.nganh = new Set(p.state.nganh || []);
   const { nganh, ...rest } = p.state;
@@ -3476,17 +3548,22 @@ const STATE_LAND = ["giao_thue_khong_dg", "dau_gia", "dau_thau_ndt", "chuyen_muc
 
 function computeIncentive() {
   const d = computeDiaBan();
-  const area = d.status === 'found' ? d.gid : d.status === 'kcn' ? 'kcn' : (d.status === 'notfound' ? 'none' : null);
+  const zoneArea = wizardState.zone === 'kkt' ? 'dbkk' : (wizardState.zone === 'kcn' || wizardState.zone === 'ccn') ? 'kk' : null;
+  const communeArea = d.status === 'found' ? d.gid : (wizardState.communeQuery.trim() ? 'none' : null);
+  const rank = { dbkk: 2, kk: 1, none: 0 };
+  let area = communeArea;
+  if (zoneArea && (!area || rank[zoneArea] > rank[area])) area = zoneArea;
   const lv = nganhLevel();
   const rows = [];
   if (!area && lv === 'none') return { rows, ready: false };
+  if (area === 'none' && lv === 'none' && !wizardState.xaHoiHoa) return { rows: [{ label: 'Ưu đãi', value: 'Dự án không thuộc ngành ưu đãi, không thuộc địa bàn ưu đãi — không được miễn, giảm thuế TNDN, tiền thuê đất theo ngành/địa bàn (thuế suất phổ thông 20%). Có thể xét ưu đãi theo quy mô vốn, lao động (Điều 19 NĐ 96/2026).', ref: 'Điều 14 Luật 143/2025/QH15; Điều 19 NĐ 96/2026/NĐ-CP' }], ready: true, area, lv };
   if (wizardState.bds) rows.push({ label: "Thuế TNDN", value: "Thu nhập từ chuyển nhượng bất động sản (bán nhà, đất nền) thường KHÔNG được hưởng ưu đãi thuế TNDN, trừ nhà ở xã hội — cần đối chiếu Luật Thuế TNDN 2025 và NĐ 320/2025 trước khi tư vấn; phần hoạt động khác của dự án (nếu có) xét riêng", ref: "Luật 67/2025/QH15; NĐ 320/2025/NĐ-CP — chưa trích nguyên văn" });
   const lvTxt = lv === 'db' ? 'ngành đặc biệt ưu đãi' : lv === 'ud' ? 'ngành ưu đãi' : 'không thuộc ngành ưu đãi';
   // Thuế TNDN
   if (wizardState.bds) {}
   else if (area === 'dbkk') rows.push({ label: "Thuế TNDN", value: "Thuế suất 10% trong 15 năm; miễn 4 năm, giảm 50% trong 9 năm tiếp theo", ref: "Điều 19–20 NĐ 320/2025/NĐ-CP (địa bàn đặc biệt khó khăn)" });
   else if (area === 'kk') rows.push({ label: "Thuế TNDN", value: lv === 'db' ? "Có thể áp dụng mức như địa bàn đặc biệt khó khăn (10% trong 15 năm; miễn 4 năm, giảm 50% 9 năm) vì thuộc ngành đặc biệt ưu đãi — đối chiếu Điều 19–20 NĐ 320/2025" : "Thuế suất 17% trong 10 năm; miễn 2 năm, giảm 50% trong 4 năm tiếp theo", ref: "Điều 19–20 NĐ 320/2025/NĐ-CP (địa bàn khó khăn)" });
-  else if (lv !== 'none' || area === 'kcn') rows.push({ label: "Thuế TNDN", value: `Có ưu đãi theo ${area === 'kcn' ? 'địa bàn KCN' : ''}${area === 'kcn' && lv !== 'none' ? ' và ' : ''}${lv !== 'none' ? lvTxt : ''} — mức cụ thể tra Điều 19–20 NĐ 320/2025/NĐ-CP (chưa tính tự động)`, ref: "Điều 19–20 NĐ 320/2025/NĐ-CP" });
+  else if (lv !== 'none') rows.push({ label: "Thuế TNDN", value: `Dự án ${lvTxt} ngoài địa bàn ưu đãi: chỉ hưởng ưu đãi thuế TNDN nếu ngành thuộc danh mục ưu đãi thuế riêng của Luật Thuế TNDN (khoản 2 Điều 12 Luật 67/2025) — mức 10% hoặc 17% tùy ngành`, ref: "Luật 67/2025/QH15; Điều 19–20 NĐ 320/2025/NĐ-CP (theo Bảng tổng hợp ưu đãi của tỉnh)" });
   else rows.push({ label: "Thuế TNDN", value: "Không có ưu đãi theo địa bàn, ngành — có thể xét theo quy mô vốn, lao động lớn (điểm c khoản 1 Điều 14 Luật Đầu tư)", ref: "Điều 14 Luật 143/2025/QH15" });
   // Tiền thuê đất
   const thueNhaNuoc = STATE_LAND.includes(wizardState.landMethod);
@@ -3506,11 +3583,11 @@ function computeIncentive() {
   } else if (area === 'dbkk' || area === 'kk') {
     const t = { dbkk: { db: "toàn bộ thời gian thuê", ud: "15 năm", none: "11 năm" }, kk: { db: "15 năm", ud: "11 năm", none: "7 năm" } };
     rows.push({ label: "Tiền thuê đất", value: `Miễn ${t[area][lv]} (thuê đất trực tiếp của Nhà nước)`, ref: "Khoản 2, 3 Điều 39 NĐ 103/2024/NĐ-CP (sđ NĐ 291/2025/NĐ-CP)" });
-  } else if (lv !== 'none' || area === 'kcn') {
-    rows.push({ label: "Tiền thuê đất", value: "Có thể được miễn, giảm theo ngành/địa bàn — tra Điều 39 NĐ 103/2024/NĐ-CP (chưa tính tự động cho trường hợp ngoài địa bàn khó khăn)", ref: "Điều 39 NĐ 103/2024/NĐ-CP" });
+  } else if (lv !== 'none') {
+    rows.push({ label: "Tiền thuê đất", value: `Miễn ${lv === 'db' ? '11 năm' : '03 năm'} (ngành ${lv === 'db' ? 'đặc biệt ưu đãi' : 'ưu đãi'}, ngoài địa bàn ưu đãi; thuê đất trực tiếp của Nhà nước)`, ref: "Khoản 3 Điều 39 NĐ 103/2024/NĐ-CP — theo Bảng tổng hợp ưu đãi của tỉnh, chưa đối chiếu nguyên văn" });
   }
   // Thuế nhập khẩu
-  if (area === 'dbkk' || area === 'kk' || area === 'kcn' || lv !== 'none') rows.push({ label: "Thuế nhập khẩu", value: "Miễn thuế nhập khẩu hàng hóa tạo tài sản cố định (máy móc, thiết bị, vật tư trong nước chưa sản xuất được)" + (area === 'dbkk' || lv === 'db' ? "; miễn thuế nhập khẩu nguyên liệu, vật tư, linh kiện 5 năm kể từ khi sản xuất (nếu đủ điều kiện)" : ""), ref: "Khoản 11, 13 Điều 16 Luật 107/2016/QH13; Điều 14–15 NĐ 134/2016/NĐ-CP" });
+  if (area === 'dbkk' || area === 'kk' || lv !== 'none') rows.push({ label: "Thuế nhập khẩu", value: "Miễn thuế nhập khẩu hàng hóa tạo tài sản cố định (máy móc, thiết bị, vật tư trong nước chưa sản xuất được)" + (area === 'dbkk' || lv === 'db' ? "; miễn thuế nhập khẩu nguyên liệu, vật tư, linh kiện 5 năm kể từ khi sản xuất (nếu đủ điều kiện)" : ""), ref: "Khoản 11, 13 Điều 16 Luật 107/2016/QH13; Điều 14–15 NĐ 134/2016/NĐ-CP" });
   return { rows, ready: true, area, lv };
 }
 
@@ -3545,7 +3622,7 @@ function computeRoadmap() {
 function gotoProcess(code) {
   const m = String(code).match(/^(\d+)(?:\.(\d+))?/);
   if (!m) return;
-  processMode = wizardState.inKCN || wizardState.landMethod === 'thue_lai_kcn' ? 'kcn' : 'ngoai';
+  processMode = wizardState.inKCN ? 'kcn' : 'ngoai';
   renderProcessMode(); renderTimeline();
   const tab = document.querySelector('.tab[data-view="process"]');
   if (tab) tab.click();
@@ -3627,10 +3704,11 @@ function renderWizard() {
         <option value="nui" ${wizardState.resettleRegion === 'nui' ? 'selected' : ''}>Miền núi</option>
       </select>
     </div>
-    <label class="wizard-check">
-      <input type="checkbox" id="wizInKCN" ${wizardState.inKCN ? 'checked' : ''} />
-      <span>Dự án đặt trong khu công nghiệp / khu chế xuất / khu công nghệ cao / khu kinh tế</span>
-    </label>
+    <h4 style="margin-top:14px;">Dự án có đặt trong khu, cụm công nghiệp hoặc khu kinh tế không?</h4>
+    <div class="wizard-fields">
+      ${[['', 'Không — đặt ngoài các khu, cụm'], ['kcn', 'Trong khu công nghiệp, khu chế xuất (đầu mối: Ban Quản lý các KCN)'], ['ccn', 'Trong cụm công nghiệp (đầu mối: các sở như ngoài KCN)'], ['kkt', 'Trong khu kinh tế, khu công nghệ cao (đầu mối: Ban Quản lý)']].map(([v, l]) => `
+        <label class="wizard-check"><input type="radio" name="wizZone" data-zone="${v}" ${wizardState.zone === v ? 'checked' : ''} /><span>${l}</span></label>`).join('')}
+    </div>
     <h4 style="margin-top:14px;">Quy mô vốn & lao động (để xét thêm ưu đãi ngoài ngành/địa bàn)</h4>
     <div class="wizard-inline-row">
       <span>Vốn đầu tư dự kiến:</span>
@@ -3679,12 +3757,12 @@ function renderWizard() {
       <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke-width="2"/><path d="M21 21l-4.3-4.3" stroke-width="2" stroke-linecap="round"/></svg>
       <input id="wizCommune" type="text" placeholder="Gõ tên xã/phường (VD: Tháp Mười, Lai Vung…)" autocomplete="off" value="${wizardState.communeQuery}" />
     </div>
-    ${wizardState.inKCN ? '<div class="note">Đã đánh dấu ở Bước 2: dự án đặt trong KCN/KCX/KCNC/KKT.</div>' : ''}
+    ${wizardState.zone ? `<div class="note">Đã chọn ở Bước 2: dự án đặt trong ${{ kcn: 'khu công nghiệp/khu chế xuất', ccn: 'cụm công nghiệp', kkt: 'khu kinh tế/khu công nghệ cao' }[wizardState.zone]} — hưởng ưu đãi như địa bàn ${wizardState.zone === 'kkt' ? '<b>đặc biệt khó khăn</b>' : '<b>khó khăn</b>'} (khoản 7 Điều 22 NĐ 96/2026); nếu xã/phường có mức cao hơn thì áp dụng mức cao hơn.</div>` : ''}
     ${renderResultPanel(
       diaban.status === 'found'
         ? `<span class="result-line">→ Xã/phường <b>${diaban.commune}</b> thuộc <b>${diaban.level}</b> — được hưởng ưu đãi theo địa bàn.</span>`
         : diaban.status === 'kcn'
-          ? `<span class="result-line">→ Dự án trong KCN/KCX/KCNC/KKT — <b>thuộc địa bàn ưu đãi</b> theo điểm b khoản 2 Điều 15, dù không nằm trong danh sách xã/phường khó khăn.</span>`
+          ? `<span class="result-line">→ Dự án trong ${{ kcn: 'KCN/KCX', ccn: 'cụm công nghiệp', kkt: 'khu kinh tế/khu công nghệ cao' }[wizardState.zone] || 'KCN'} — <b>thuộc địa bàn ưu đãi</b>, hưởng như địa bàn ${wizardState.zone === 'kkt' ? 'đặc biệt khó khăn' : 'khó khăn'} (khoản 7 Điều 22 NĐ 96/2026).</span>`
           : diaban.status === 'notfound'
             ? `<span class="result-line">→ Không khớp danh mục xã/phường khó khăn/đặc biệt khó khăn hiện có — kiểm tra lại chính tả hoặc xác nhận dự án không thuộc địa bàn ưu đãi.</span>`
             : `<span class="result-line">Gõ tên xã/phường ở trên để kiểm tra.</span>`,
@@ -3839,7 +3917,7 @@ function renderWizard() {
       <div class="summary-row"><span class="label">Thẩm quyền</span><span>${AUTHORITY_LABEL[auth.tier]}</span></div>
       <div class="summary-row"><span class="label">Địa bàn</span><span>${
         diaban.status === 'found' ? diaban.level + ' (' + diaban.commune + ')' :
-        diaban.status === 'kcn' ? 'Trong KCN/KCX/KCNC/KKT' :
+        diaban.status === 'kcn' ? ({ kcn: 'Trong KCN/KCX — như địa bàn khó khăn', ccn: 'Trong cụm công nghiệp — như địa bàn khó khăn', kkt: 'Trong khu kinh tế/KCNC — như địa bàn đặc biệt khó khăn' }[wizardState.zone] || 'Trong KCN') :
         diaban.status === 'notfound' ? 'Không thuộc địa bàn ưu đãi (theo dữ liệu hiện có)' : 'Chưa xác định'
       }</span></div>
       <div class="summary-row"><span class="label">Ngành nghề</span><span>${nganhHits.length ? `${NGANH_LEVEL_LABEL[nganhLevel()]} — ${nganhHits.map(n => n.label + ' (mục ' + n.k + ')').join('; ')}` : 'Chưa xác định / không thuộc ngành ưu đãi'}${wizardState.conditional ? ' · <b>ngành có điều kiện</b>' : ''}</span></div>
@@ -3860,7 +3938,7 @@ function renderWizard() {
   });
   stepsEl.querySelectorAll('[data-preset-reset]').forEach(el => {
     el.addEventListener('click', () => {
-      Object.assign(wizardState, { investorType: '', preset: '', inKCN: false, landMethod: '', moiTruong: '', loaiCongTrinh: '', conditional: false, xaHoiHoa: false, datTMDV: false, bds: false, communeQuery: '', khoanSearch: '', nganhSearch: '', vonDauTu: '', soLaoDong: '', resettleCount: '' });
+      Object.assign(wizardState, { investorType: '', preset: '', inKCN: false, zone: '', landMethod: '', moiTruong: '', loaiCongTrinh: '', conditional: false, xaHoiHoa: false, datTMDV: false, bds: false, communeQuery: '', khoanSearch: '', nganhSearch: '', vonDauTu: '', soLaoDong: '', resettleCount: '' });
       wizardState.khoan = new Set(); wizardState.nganh = new Set();
       renderWizard();
     });
@@ -3926,8 +4004,7 @@ function renderWizard() {
   if (resettleEl) resettleEl.addEventListener('input', () => { wizardState.resettleCount = resettleEl.value; renderWizard(); });
   const regionEl = document.getElementById('wizRegion');
   if (regionEl) regionEl.addEventListener('change', () => { wizardState.resettleRegion = regionEl.value; renderWizard(); });
-  const inKCNEl = document.getElementById('wizInKCN');
-  if (inKCNEl) inKCNEl.addEventListener('change', () => { wizardState.inKCN = inKCNEl.checked; renderWizard(); });
+  stepsEl.querySelectorAll('[data-zone]').forEach(el => el.addEventListener('change', () => { wizardState.zone = el.dataset.zone; wizardState.inKCN = ['kcn', 'kkt'].includes(wizardState.zone); renderWizard(); }));
   const giaoThongEl = document.getElementById('wizGiaoThong');
   if (giaoThongEl) giaoThongEl.addEventListener('change', () => { wizardState.isGiaoThong = giaoThongEl.checked; renderWizard(); });
   const dienTichEl = document.getElementById('wizDienTich');
