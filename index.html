@@ -674,6 +674,18 @@
   .preset-bar { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; margin-bottom: 16px; }
   .preset-label { font-size: 13px; font-weight: 700; color: var(--text-muted); margin-bottom: 8px; }
   .preset-list { display: flex; flex-wrap: wrap; gap: 6px; }
+  .process-mode { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; margin-bottom: 16px; }
+  .mode-label { font-weight: 700; font-size: 14px; }
+  .mode-switch { display: inline-flex; border: 1.5px solid var(--accent); border-radius: 10px; overflow: hidden; }
+  .mode-switch button { font: inherit; font-size: 14px; font-weight: 600; padding: 8px 14px; border: 0; background: var(--surface); color: var(--accent); cursor: pointer; }
+  .mode-switch button + button { border-left: 1.5px solid var(--accent); }
+  .mode-switch button[data-active="true"] { background: var(--accent); color: #fff; }
+  .mode-hint { flex-basis: 100%; font-size: 13px; color: var(--text-muted); }
+  .mode-badge { font-size: 11.5px; font-weight: 700; padding: 3px 8px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); }
+  .sub-item-skip { opacity: .55; }
+  .sub-item-skip .sub-title { text-decoration: line-through; }
+  .sub-skip-line { background: var(--surface-alt); }
+  @media (max-width: 600px) { .mode-switch { width: 100%; } .mode-switch button { flex: 1; padding: 8px 8px; font-size: 13px; } }
   .flow-node-subs { font-size: 11px; color: var(--text-muted); }
   .sub-list-label { font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); font-weight: 700; margin: 0 0 8px; }
   .sub-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 8px; margin-bottom: 16px; }
@@ -1028,7 +1040,8 @@
   </div>
 
   <div id="processView" style="display:none">
-    <p class="process-intro">Quy trình thực hiện dự án đầu tư tại <b>tỉnh Đồng Tháp</b> gồm <b>7 bước chính</b>. Mỗi bước chính chia thành các <b>bước con hoặc trường hợp cụ thể</b> (ví dụ bước 2: chấp thuận chủ trương, ERC, IRC; bước 3: đất Nhà nước giao hoặc đất tự thỏa thuận) — mỗi bước con ghi rõ <b>áp dụng khi nào</b>, <b>cơ quan đầu mối</b>, <b>thời hạn</b> và căn cứ pháp lý. <b>Bấm vào bước chính</b> để xem các bước con. Bảng <b>lộ trình mẫu</b> bên dưới cộng sẵn tổng số ngày.</p>
+    <p class="process-intro">Quy trình chung thực hiện dự án đầu tư tại <b>tỉnh Đồng Tháp</b> gồm <b>7 bước chính</b>. Chọn trước dự án đặt <b>trong</b> hay <b>ngoài khu công nghiệp</b> — sơ đồ sẽ tự đổi cơ quan đầu mối, thời hạn và làm mờ những bước không phải làm. <b>Bấm vào bước chính</b> để xem các bước con, trường hợp cụ thể và căn cứ pháp lý. Bảng <b>lộ trình mẫu</b> bên dưới cộng sẵn tổng số ngày cho từng trường hợp.</p>
+    <div class="process-mode" id="processMode"></div>
     <div class="flowchart" id="flowchart"></div>
     <div class="flow-detail" id="flowDetail"></div>
     <div class="timeline-card" id="timelineCard"></div>
@@ -1851,11 +1864,13 @@ const DATA = [
     id: "nd-35-2022",
     cat: "lienquan",
     code: "Nghị định 35/2022/NĐ-CP",
+    url: "docs/nd-35-2022-nd-cp.pdf",
     title: "Quản lý khu công nghiệp và khu kinh tế",
     date: "Ban hành 28/5/2022, hiệu lực 15/7/2022 — thay Nghị định 82/2018/NĐ-CP; đang có dự thảo nghị định thay thế",
     summary: "Quy hoạch, thành lập, mở rộng KCN, KKT; đầu tư kinh doanh hạ tầng KCN; chính sách ưu đãi KCN hỗ trợ, KCN chuyên ngành, KCN sinh thái — căn cứ khi xúc tiến dự án vào KCN.",
     body: `
       <p>Dự án trong KCN, KKT: Ban quản lý các KCN/KKT là cơ quan đăng ký đầu tư (Điều 27 Luật Đầu tư 2025).</p>
+      <p><b>Nhiệm vụ của Ban Quản lý KCN đối với dự án trong KCN (khoản 2 Điều 68):</b> cơ quan đăng ký đầu tư; thẩm định dự án, thiết kế xây dựng và kiểm tra công trình (vai trò cơ quan chuyên môn về xây dựng); cấp giấy phép lao động cho người nước ngoài; tiếp nhận khung giá, phí sử dụng hạ tầng; giám sát dự án — xem tab "Quy trình thực hiện dự án", chế độ <b>Trong KCN</b>. File PDF toàn văn đã lưu kèm trang web.</p>
       <div class="note">Bộ Tài chính đang dự thảo nghị định thay thế Nghị định 35/2022/NĐ-CP — theo dõi khi ban hành.</div>
     `
   },
@@ -2607,16 +2622,116 @@ const PROCESS_DATA = [
   }
 ];
 
+const ND35_URL = "docs/nd-35-2022-nd-cp.pdf";
+const Q68 = {
+  b: "b) Thực hiện các nhiệm vụ của cơ quan đăng ký đầu tư, Ban quản lý khu công nghiệp, khu chế xuất, khu công nghệ cao, khu kinh tế theo quy định của pháp luật về đầu tư đối với dự án đầu tư trong khu công nghiệp, khu kinh tế thuộc thẩm quyền của Ban quản lý khu công nghiệp, khu kinh tế; ...",
+  c: "c) Thực hiện thẩm định dự án và thiết kế, dự toán xây dựng đối với dự án, công trình xây dựng trong khu công nghiệp, khu kinh tế; kiểm tra các loại công trình xây dựng trên địa bàn thuộc trách nhiệm quản lý và thực hiện các nhiệm vụ khác của cơ quan chuyên môn về xây dựng theo quy định của pháp luật về xây dựng đối với dự án, công trình xây dựng trong khu công nghiệp, khu kinh tế;",
+  d: "đ) Cấp, cấp lại, gia hạn, thu hồi Giấy phép lao động và xác nhận người lao động nước ngoài không thuộc diện cấp giấy phép lao động cho người nước ngoài làm việc trong khu công nghiệp, khu kinh tế. ...",
+  e: "e) Thực hiện trách nhiệm về bảo vệ môi trường của Ban quản lý khu công nghiệp, khu chế xuất, khu công nghệ cao theo quy định của pháp luật về bảo vệ môi trường;",
+  g: "g) Tiếp nhận đăng ký khung giá và các loại phí sử dụng hạ tầng của nhà đầu tư thực hiện dự án đầu tư xây dựng và kinh doanh kết cấu hạ tầng khu công nghiệp, khu chức năng trong khu kinh tế;",
+  h: "h) Kiểm tra, giám sát, đánh giá việc thực hiện mục tiêu đầu tư quy định tại Quyết định chấp thuận chủ trương đầu tư, Giấy chứng nhận đăng ký đầu tư, tiến độ góp vốn và triển khai dự án đầu tư; việc thực hiện các điều khoản cam kết đối với các dự án được hưởng ưu đãi đầu tư và việc chấp hành quy định của pháp luật về xây dựng, lao động, ... phòng chống cháy nổ, an ninh, trật tự, bảo vệ môi trường đối với các dự án tại khu công nghiệp, khu kinh tế;"
+};
+const L68 = (pt, detail) => ({ ref: `Điểm ${pt === 'd' ? 'đ' : pt} khoản 2 Điều 68, Nghị định 35/2022/NĐ-CP`, url: ND35_URL, detail, quote: Q68[pt] });
+const BQL = "Ban Quản lý các khu công nghiệp tỉnh Đồng Tháp";
+
+const PROCESS_KCN = {
+  groups: {
+    1: { authority: BQL + " (đầu mối một cửa cho dự án trong KCN)" },
+    2: { days: "3–15 ngày", authority: BQL + " · Sở Tài chính (ERC)" },
+    3: { days: "Theo hợp đồng", authority: "Doanh nghiệp hạ tầng KCN", summary: "Trong KCN, nhà đầu tư thuê lại đất đã có hạ tầng của doanh nghiệp đầu tư hạ tầng KCN — không làm thủ tục giao đất, cho thuê đất với Nhà nước." },
+    4: { authority: "Sở Nông nghiệp và Môi trường / UBND theo phân cấp · " + BQL + " (giám sát môi trường trong KCN)" },
+    5: { days: "18–34 ngày", authority: BQL + " (vai trò cơ quan chuyên môn xây dựng) · Công an tỉnh (PCCC)", summary: "KCN đã có quy hoạch chi tiết và hạ tầng nên thường bỏ qua quy hoạch tổng mặt bằng, đấu nối; Ban Quản lý KCN thẩm định dự án, thiết kế và kiểm tra nghiệm thu thay Sở Xây dựng." },
+    6: { authority: "Bộ, ngành chuyên môn · Thuế tỉnh · " + BQL + " (giấy phép lao động)" },
+    7: { authority: BQL }
+  },
+  subs: {
+    "1.1": { authority: BQL + " (đầu mối cho dự án trong KCN); Sở Tài chính phối hợp xúc tiến", tasksAdd: ["Giới thiệu KCN còn quỹ đất, giá thuê lại đất và phí sử dụng hạ tầng — khung giá do doanh nghiệp hạ tầng đăng ký với Ban Quản lý KCN."], legalAdd: [L68('g', "Ban Quản lý KCN tiếp nhận đăng ký khung giá, phí sử dụng hạ tầng KCN.")] },
+    "2.1": { authority: BQL, tasksAdd: ["Dự án sản xuất thuê lại đất trong KCN thường KHÔNG thuộc diện chấp thuận chủ trương (không đề nghị Nhà nước giao, cho thuê đất) — chuyển thẳng 2.3, 2.4."] },
+    "2.2": { authority: BQL + " chấp thuận chủ trương (dự án thuộc thẩm quyền UBND tỉnh, phù hợp quy hoạch)", when: "Ít gặp trong KCN — chỉ khi dự án thuộc Điều 24 Luật Đầu tư", legalAdd: [{ ref: "Khoản 4 Điều 25, Luật 143/2025/QH15", url: "docs/luat-dau-tu-2025-so-143-2025-qh15.pdf", detail: "Dự án thuộc thẩm quyền UBND tỉnh thực hiện trong KCN, phù hợp quy hoạch: Ban Quản lý chấp thuận chủ trương.", quote: "4. Đối với dự án đầu tư quy định tại khoản 3 Điều này thực hiện tại khu công nghiệp, khu chế xuất, khu công nghệ cao, khu công nghệ số tập trung, khu kinh tế phù hợp với quy hoạch đã được cấp có thẩm quyền phê duyệt thì Ban quản lý khu công nghiệp, khu chế xuất, khu công nghệ cao, khu kinh tế chấp thuận chủ trương đầu tư." }] },
+    "2.3": { tasksAdd: ["ERC vẫn làm tại Sở Tài chính (cơ quan đăng ký kinh doanh) — Ban Quản lý KCN không cấp ERC."] },
+    "2.4": { authority: BQL, legalAdd: [L68('b', "Ban Quản lý KCN là cơ quan đăng ký đầu tư đối với dự án trong KCN.")] },
+    "3.1": { skip: "Không áp dụng trong KCN — đất KCN đã được Nhà nước giao, cho thuê cho doanh nghiệp hạ tầng; nhà đầu tư thứ cấp thuê lại đất (xem 3.3)." },
+    "3.2": { skip: "Không áp dụng trong KCN — nhà đầu tư không tự thỏa thuận với người dân mà thuê lại đất của doanh nghiệp hạ tầng (xem 3.3)." },
+    "4.1": { tasksAdd: ["Trong KCN: nước thải phải đấu nối vào hệ thống xử lý nước thải tập trung của KCN theo quy định của KCN; hỏi Ban Quản lý KCN về nơi nộp hồ sơ môi trường theo phân cấp, ủy quyền hiện hành của tỉnh."], legalAdd: [L68('e', "Ban Quản lý KCN thực hiện trách nhiệm bảo vệ môi trường trong KCN theo pháp luật về bảo vệ môi trường.")] },
+    "5.1": { skip: "Thường không phải làm trong KCN — KCN đã có quy hoạch chi tiết và hạ tầng kỹ thuật; đấu nối điện, nước, giao thông nội khu theo hướng dẫn của doanh nghiệp hạ tầng." },
+    "5.2": { authority: BQL + " (thẩm định dự án, thiết kế xây dựng trong KCN)", legalAdd: [L68('c', "Ban Quản lý KCN thẩm định dự án, thiết kế, dự toán và thực hiện nhiệm vụ của cơ quan chuyên môn về xây dựng đối với công trình trong KCN.")] },
+    "5.4": { authority: BQL + " (kiểm tra công tác nghiệm thu) · Công an tỉnh (nghiệm thu PCCC)", legalAdd: [L68('c', "Ban Quản lý KCN kiểm tra các công trình xây dựng trong KCN.")] },
+    "6.3": { authority: BQL, legalAdd: [L68('d', "Ban Quản lý KCN cấp giấy phép lao động cho người nước ngoài làm việc trong KCN.")] },
+    "7.1": { authority: BQL, legalAdd: [L68('h', "Ban Quản lý KCN kiểm tra, giám sát dự án trong KCN.")] }
+  }
+};
+
+PROCESS_DATA[2].subs.push({
+  title: "Thuê lại đất có hạ tầng trong khu công nghiệp",
+  cat: "lienquan",
+  kcnOnly: true,
+  summary: "Nhà đầu tư ký hợp đồng thuê lại đất (hoặc nhà xưởng xây sẵn) với doanh nghiệp đầu tư kinh doanh hạ tầng KCN. Không làm thủ tục giao đất, cho thuê đất, chuyển mục đích với Nhà nước.",
+  when: "Mọi dự án sản xuất, kinh doanh đặt trong KCN",
+  days: "Theo hợp đồng",
+  authority: "Doanh nghiệp hạ tầng KCN (giá thuê, phí hạ tầng theo khung đã đăng ký với Ban Quản lý KCN)",
+  duration: "Theo thỏa thuận giữa hai bên",
+  tasks: [
+    "Khảo sát vị trí, diện tích, giá thuê lại đất và phí sử dụng hạ tầng; thỏa thuận nguyên tắc với doanh nghiệp hạ tầng (thường dùng trong hồ sơ xin IRC).",
+    "Ký hợp đồng thuê lại đất có hạ tầng hoặc thuê nhà xưởng xây sẵn.",
+    "Đất thuê lại không hưởng miễn, giảm tiền thuê đất của Nhà nước — giá theo hợp đồng; ưu đãi địa bàn KCN chủ yếu là ưu đãi thuế."
+  ],
+  legal: [L68('g', "Ban Quản lý KCN tiếp nhận đăng ký khung giá và phí sử dụng hạ tầng của doanh nghiệp hạ tầng KCN.")]
+});
+
+let processMode = 'ngoai';
+function subKey(g, s) { return `${g + 1}.${s + 1}`; }
+function effSub(g, s) {
+  const base = PROCESS_DATA[g].subs[s];
+  if (processMode !== 'kcn') return base;
+  const ov = PROCESS_KCN.subs[subKey(g, s)];
+  if (!ov) return base;
+  return {
+    ...base,
+    ...(ov.authority ? { authority: ov.authority } : {}),
+    ...(ov.when ? { when: ov.when } : {}),
+    skip: ov.skip || null,
+    tasks: [...base.tasks, ...(ov.tasksAdd || [])],
+    legal: [...(ov.legalAdd || []), ...base.legal]
+  };
+}
+function visibleSubIdx(g) {
+  return PROCESS_DATA[g].subs.map((s, i) => i).filter(i => processMode === 'kcn' || !PROCESS_DATA[g].subs[i].kcnOnly);
+}
+function effGroup(g) {
+  const base = PROCESS_DATA[g];
+  const ov = processMode === 'kcn' ? PROCESS_KCN.groups[g + 1] : null;
+  return ov ? { ...base, ...ov } : base;
+}
+
 const flowchartEl = document.getElementById('flowchart');
 const flowDetailEl = document.getElementById('flowDetail');
+const processModeEl = document.getElementById('processMode');
 let activeStepIdx = null;
 let activeSubIdx = 0;
 
 const FLOW_ARROW_SVG = `<svg viewBox="0 0 24 24" fill="none"><path d="M4 12h14M14 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 
+function renderProcessMode() {
+  processModeEl.innerHTML = `
+    <span class="mode-label">Dự án đặt ở đâu?</span>
+    <div class="mode-switch" role="tablist">
+      <button type="button" data-mode="ngoai" data-active="${processMode === 'ngoai'}">Ngoài khu công nghiệp</button>
+      <button type="button" data-mode="kcn" data-active="${processMode === 'kcn'}">Trong khu công nghiệp (KCN, KCX, KKT)</button>
+    </div>
+    <span class="mode-hint">${processMode === 'kcn'
+      ? 'Đầu mối chính: <b>Ban Quản lý các khu công nghiệp tỉnh</b> — cấp IRC, thẩm định xây dựng, kiểm tra nghiệm thu, giấy phép lao động (khoản 2 Điều 68 NĐ 35/2022). Đất: thuê lại của doanh nghiệp hạ tầng.'
+      : 'Đầu mối chính: <b>Sở Tài chính</b>, Sở Nông nghiệp và Môi trường, Sở Xây dựng, Công an tỉnh, UBND cấp xã. Dự án trong cụm công nghiệp (CCN) theo trường hợp này, đất thuê lại của chủ đầu tư hạ tầng CCN.'}</span>`;
+  processModeEl.querySelectorAll('[data-mode]').forEach(b => b.addEventListener('click', () => {
+    processMode = b.dataset.mode;
+    if (activeStepIdx !== null && !visibleSubIdx(activeStepIdx).includes(activeSubIdx)) activeSubIdx = visibleSubIdx(activeStepIdx)[0];
+    renderProcessMode(); renderFlowchart(); renderFlowDetail(); renderTimeline();
+  }));
+}
+
 function openStep(groupIdx, subIdx, scrollBlock) {
   activeStepIdx = groupIdx;
   activeSubIdx = subIdx || 0;
+  if (activeStepIdx !== null && !visibleSubIdx(activeStepIdx).includes(activeSubIdx)) activeSubIdx = visibleSubIdx(activeStepIdx)[0];
   renderFlowchart();
   renderFlowDetail();
   if (activeStepIdx !== null) {
@@ -2624,21 +2739,23 @@ function openStep(groupIdx, subIdx, scrollBlock) {
   }
 }
 
-function buildFlowNode(step, i) {
+function buildFlowNode(i) {
+  const step = effGroup(i);
   const node = document.createElement('div');
   node.className = 'flow-node';
   node.tabIndex = 0;
   node.setAttribute('role', 'button');
   node.setAttribute('aria-expanded', activeStepIdx === i ? 'true' : 'false');
   if (activeStepIdx === i) node.dataset.active = 'true';
-  const n = step.subs.length;
+  const vis = visibleSubIdx(i);
+  const applicable = vis.filter(s => !effSub(i, s).skip).length;
   node.innerHTML = `
     <div class="flow-node-num">${i + 1}</div>
     <div class="flow-node-title">${step.title}</div>
     ${step.days ? `<span class="flow-node-days">${step.days}</span>` : ''}
-    ${n > 1 ? `<span class="flow-node-subs">${n} bước con</span>` : ''}
+    ${vis.length > 1 ? `<span class="flow-node-subs">${applicable}/${vis.length} bước con áp dụng</span>` : ''}
   `;
-  const select = () => openStep(activeStepIdx === i ? null : i, 0);
+  const select = () => openStep(activeStepIdx === i ? null : i, visibleSubIdx(i).find(s => !effSub(i, s).skip) ?? 0);
   node.addEventListener('click', select);
   node.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); select(); } });
   return node;
@@ -2646,23 +2763,25 @@ function buildFlowNode(step, i) {
 
 function renderFlowchart() {
   flowchartEl.innerHTML = '';
-  PROCESS_DATA.forEach((step, i) => {
-    if (i === 0) {
-      flowchartEl.appendChild(buildFlowNode(step, i));
-      return;
-    }
+  PROCESS_DATA.forEach((_, i) => {
+    if (i === 0) { flowchartEl.appendChild(buildFlowNode(i)); return; }
     const pair = document.createElement('div');
     pair.className = 'flow-pair';
     const arrow = document.createElement('div');
     arrow.className = 'flow-arrow';
     arrow.innerHTML = FLOW_ARROW_SVG;
     pair.appendChild(arrow);
-    pair.appendChild(buildFlowNode(step, i));
+    pair.appendChild(buildFlowNode(i));
     flowchartEl.appendChild(pair);
   });
 }
 
 function renderSubDetail(sub, label) {
+  if (sub.skip) return `
+    <div class="sub-detail">
+      <div class="flow-detail-title-row"><span class="sub-detail-title">${label}. ${sub.title}</span></div>
+      <div class="sub-when-line sub-skip-line"><b>Không áp dụng ${processMode === 'kcn' ? 'trong KCN' : ''}:</b> ${sub.skip}</div>
+    </div>`;
   return `
     <div class="sub-detail">
       <div class="flow-detail-title-row">
@@ -2687,29 +2806,31 @@ function renderSubDetail(sub, label) {
 
 function renderFlowDetail() {
   if (activeStepIdx === null) {
-    flowDetailEl.innerHTML = `<div class="flow-detail-empty">Bấm vào 1 bước chính trong sơ đồ ở trên để xem các bước con, trường hợp cụ thể, cơ quan đầu mối, thời hạn và căn cứ pháp lý.</div>`;
+    flowDetailEl.innerHTML = `<div class="flow-detail-empty">Chọn <b>Trong KCN</b> hoặc <b>Ngoài KCN</b> ở trên, rồi bấm vào 1 bước chính trong sơ đồ để xem các bước con, cơ quan đầu mối, thời hạn và căn cứ pháp lý.</div>`;
     return;
   }
-  const step = PROCESS_DATA[activeStepIdx];
   const g = activeStepIdx + 1;
-  const multi = step.subs.length > 1;
-  const sub = step.subs[Math.min(activeSubIdx, step.subs.length - 1)];
+  const step = effGroup(activeStepIdx);
+  const vis = visibleSubIdx(activeStepIdx);
+  const multi = vis.length > 1;
+  const sub = effSub(activeStepIdx, activeSubIdx);
   const subList = multi ? `
-    <div class="sub-list-label">Gồm ${step.subs.length} bước con / trường hợp — bấm để xem chi tiết:</div>
+    <div class="sub-list-label">Gồm ${vis.length} bước con / trường hợp ${processMode === 'kcn' ? '(dự án TRONG KCN)' : '(dự án NGOÀI KCN)'} — bấm để xem chi tiết:</div>
     <div class="sub-list">
-      ${step.subs.map((s, k) => `
-        <button type="button" class="sub-item" data-sub="${k}" ${k === activeSubIdx ? 'data-active="true"' : ''}>
-          <span class="sub-num">${g}.${k + 1}</span>
+      ${vis.map(k => { const s = effSub(activeStepIdx, k); return `
+        <button type="button" class="sub-item${s.skip ? ' sub-item-skip' : ''}" data-sub="${k}" ${k === activeSubIdx ? 'data-active="true"' : ''}>
+          <span class="sub-num">${g}.${k + 1}${s.skip ? ' · không áp dụng' : ''}</span>
           <span class="sub-title">${s.title}</span>
-          <span class="sub-when">${s.when || ''}</span>
-          ${s.days ? `<span class="flow-node-days">${s.days}</span>` : ''}
-        </button>`).join('')}
+          <span class="sub-when">${s.skip ? 'Bỏ qua' : (s.when || '')}</span>
+          ${!s.skip && s.days ? `<span class="flow-node-days">${s.days}</span>` : ''}
+        </button>`; }).join('')}
     </div>` : '';
   flowDetailEl.innerHTML = `
     <div class="flow-detail-head">
       <div>
         <div class="flow-detail-title-row">
           <span class="flow-detail-title">Bước ${g}. ${step.title}</span>
+          <span class="mode-badge">${processMode === 'kcn' ? 'Trong KCN' : 'Ngoài KCN'}</span>
         </div>
         <div class="flow-detail-summary">${step.summary}</div>
         <div class="step-tags">
@@ -2730,23 +2851,46 @@ function renderFlowDetail() {
   }));
 }
 
-const TIMELINE_SAMPLE = [
-  { g: 3, s: 2, task: "UBND tỉnh chấp thuận việc thỏa thuận nhận quyền sử dụng đất", agency: "Sở Nông nghiệp và Môi trường → UBND tỉnh", days: 15 },
-  { g: 3, s: 2, task: "Công chứng hợp đồng, đăng ký biến động đất đai (gồm 05 ngày nộp nghĩa vụ tài chính)", agency: "Văn phòng Đăng ký đất đai", days: 15 },
-  { g: 4, s: 4, task: "Đăng ký môi trường (nộp trước khi thi công, không có bước thẩm định)", agency: "UBND cấp xã hoặc UBND tỉnh", days: 0, parallel: true },
-  { g: 5, s: 1, task: "Quy hoạch tổng mặt bằng — chỉ khi khu đất chưa có quy hoạch chi tiết", agency: "UBND cấp xã/phường", days: 15, optional: true },
-  { g: 5, s: 1, task: "Chấp thuận thiết kế, cấp phép thi công nút giao đường tỉnh", agency: "Sở Xây dựng", days: 5, optional: true },
-  { g: 5, s: 2, task: "Thẩm định Báo cáo nghiên cứu khả thi (được miễn giấy phép xây dựng)", agency: "Sở Xây dựng", days: 16 },
-  { g: 5, s: 3, task: "Thẩm định thiết kế về PCCC", agency: "Công an tỉnh", days: 6 },
-  { g: 5, s: 4, task: "Kiểm tra công tác nghiệm thu hoàn thành (công trình cấp II)", agency: "Sở Xây dựng", days: 12 },
-  { g: 2, s: 4, task: "Giấy chứng nhận đăng ký đầu tư — nếu nhà đầu tư trong nước có nhu cầu (làm song song)", agency: "Sở Tài chính", days: 10, parallel: true }
-];
+const TIMELINE_SAMPLES = {
+  ngoai: {
+    title: "Lộ trình mẫu NGOÀI KCN — tổng thời gian dự kiến",
+    sub: "Tình huống: nhà đầu tư trong nước làm nhà máy chế biến (dự án nhóm B, công trình cấp II) trên đất tự nhận chuyển nhượng của người dân, đúng mục đích đất sản xuất — <b>không thuộc diện chấp thuận chủ trương</b>.",
+    rows: [
+      { g: 3, s: 2, task: "UBND tỉnh chấp thuận việc thỏa thuận nhận quyền sử dụng đất", agency: "Sở Nông nghiệp và Môi trường → UBND tỉnh", days: 15 },
+      { g: 3, s: 2, task: "Công chứng hợp đồng, đăng ký biến động đất đai (gồm 05 ngày nộp nghĩa vụ tài chính)", agency: "Văn phòng Đăng ký đất đai", days: 15 },
+      { g: 4, s: 4, task: "Đăng ký môi trường (nộp trước khi thi công, không có bước thẩm định)", agency: "UBND cấp xã hoặc UBND tỉnh", days: 0, parallel: true },
+      { g: 5, s: 1, task: "Quy hoạch tổng mặt bằng — chỉ khi khu đất chưa có quy hoạch chi tiết", agency: "UBND cấp xã/phường", days: 15, optional: true },
+      { g: 5, s: 1, task: "Chấp thuận thiết kế, cấp phép thi công nút giao đường tỉnh", agency: "Sở Xây dựng", days: 5, optional: true },
+      { g: 5, s: 2, task: "Thẩm định Báo cáo nghiên cứu khả thi (được miễn giấy phép xây dựng)", agency: "Sở Xây dựng", days: 16 },
+      { g: 5, s: 3, task: "Thẩm định thiết kế về PCCC", agency: "Công an tỉnh", days: 6 },
+      { g: 5, s: 4, task: "Kiểm tra công tác nghiệm thu hoàn thành (công trình cấp II)", agency: "Sở Xây dựng", days: 12 },
+      { g: 2, s: 4, task: "Giấy chứng nhận đăng ký đầu tư — nếu nhà đầu tư trong nước có nhu cầu (làm song song)", agency: "Sở Tài chính", days: 10, parallel: true }
+    ],
+    noteExtra: "Khoảng {core} ngày làm việc nếu khu đất đã có quy hoạch chi tiết và không đấu nối đường tỉnh; tối đa khoảng {max} ngày nếu phải lập quy hoạch tổng mặt bằng và xin đấu nối. Dự án thuộc diện chấp thuận chủ trương cộng thêm bước 2.2 (26 ngày — thẩm quyền UBND tỉnh)."
+  },
+  kcn: {
+    title: "Lộ trình mẫu TRONG KCN — tổng thời gian dự kiến",
+    sub: "Tình huống: nhà đầu tư <b>nước ngoài</b> làm nhà máy sản xuất (công trình cấp II) trong KCN, thuê lại đất có hạ tầng — <b>không thuộc diện chấp thuận chủ trương</b>.",
+    rows: [
+      { g: 3, s: 3, task: "Thỏa thuận, ký hợp đồng thuê lại đất với doanh nghiệp hạ tầng KCN", agency: "Doanh nghiệp hạ tầng KCN", days: 0, parallel: true },
+      { g: 2, s: 3, task: "Thành lập doanh nghiệp (ERC) — làm trước IRC", agency: "Sở Tài chính", days: 3 },
+      { g: 2, s: 4, task: "Giấy chứng nhận đăng ký đầu tư (IRC) — bắt buộc với nhà đầu tư nước ngoài", agency: "Ban Quản lý các KCN", days: 10 },
+      { g: 4, s: 4, task: "Đăng ký môi trường / giấy phép môi trường theo nhóm dự án; đấu nối nước thải vào trạm xử lý tập trung của KCN", agency: "Theo phân cấp — hỏi Ban Quản lý KCN", days: 0, parallel: true },
+      { g: 5, s: 2, task: "Thẩm định Báo cáo nghiên cứu khả thi (được miễn giấy phép xây dựng)", agency: "Ban Quản lý các KCN", days: 16, optional: true },
+      { g: 5, s: 3, task: "Thẩm định thiết kế về PCCC", agency: "Công an tỉnh", days: 6 },
+      { g: 5, s: 4, task: "Kiểm tra công tác nghiệm thu hoàn thành (công trình cấp II)", agency: "Ban Quản lý các KCN", days: 12 },
+      { g: 6, s: 3, task: "Giấy phép lao động cho chuyên gia nước ngoài (làm song song)", agency: "Ban Quản lý các KCN", days: 0, parallel: true }
+    ],
+    noteExtra: "Khoảng {core} ngày làm việc nếu dự án không thuộc diện Ban Quản lý thẩm định báo cáo nghiên cứu khả thi; tối đa khoảng {max} ngày nếu phải thẩm định. So với ngoài KCN, dự án trong KCN bỏ được thủ tục đất đai, quy hoạch tổng mặt bằng, đấu nối hạ tầng và làm phần lớn thủ tục tại một đầu mối là Ban Quản lý KCN."
+  }
+};
 
 function renderTimeline() {
   const el = document.getElementById('timelineCard');
-  const core = TIMELINE_SAMPLE.filter(r => !r.parallel && !r.optional).reduce((a, r) => a + r.days, 0);
-  const opt = TIMELINE_SAMPLE.filter(r => r.optional).reduce((a, r) => a + r.days, 0);
-  const rows = TIMELINE_SAMPLE.map(r => `
+  const T = TIMELINE_SAMPLES[processMode];
+  const core = T.rows.filter(r => !r.parallel && !r.optional).reduce((a, r) => a + r.days, 0);
+  const opt = T.rows.filter(r => r.optional).reduce((a, r) => a + r.days, 0);
+  const rows = T.rows.map(r => `
     <tr class="${r.parallel ? 'parallel' : ''}">
       <td><button type="button" class="timeline-step-link" data-goto-g="${r.g - 1}" data-goto-s="${r.s - 1}">Bước ${r.g}.${r.s}</button></td>
       <td>${r.task}${r.optional ? ' <i>(tùy dự án)</i>' : ''}${r.parallel ? ' <i>(song song, không cộng)</i>' : ''}</td>
@@ -2754,21 +2898,22 @@ function renderTimeline() {
       <td class="num">${r.days ? r.days + ' ngày' : '—'}</td>
     </tr>`).join('');
   el.innerHTML = `
-    <h3>Lộ trình mẫu tại Đồng Tháp — tổng thời gian dự kiến</h3>
-    <div class="timeline-sub">Tình huống: nhà đầu tư trong nước làm nhà máy chế biến (dự án nhóm B, công trình cấp II) trên đất tự nhận chuyển nhượng của người dân, đúng mục đích đất sản xuất — <b>không thuộc diện chấp thuận chủ trương</b>. Thời hạn tính theo ngày làm việc, kể từ khi nhận đủ hồ sơ hợp lệ.</div>
+    <h3>${T.title}</h3>
+    <div class="timeline-sub">${T.sub} Thời hạn tính theo ngày làm việc, kể từ khi nhận đủ hồ sơ hợp lệ.</div>
     <table class="timeline-table">
       <thead><tr><th>Bước</th><th>Thủ tục</th><th>Cơ quan đầu mối</th><th>Thời hạn</th></tr></thead>
       <tbody>${rows}
-        <tr class="total"><td></td><td colspan="2">Tổng thời gian giải quyết thủ tục (cộng tuần tự)</td><td class="num">${core}–${core + opt} ngày</td></tr>
+        <tr class="total"><td></td><td colspan="2">Tổng thời gian giải quyết thủ tục (cộng tuần tự)</td><td class="num">${opt ? core + '–' + (core + opt) : core} ngày</td></tr>
       </tbody>
     </table>
-    <div class="note">Khoảng <b>${core} ngày làm việc</b> nếu khu đất đã có quy hoạch chi tiết (ví dụ trong cụm công nghiệp) và không đấu nối đường tỉnh; tối đa khoảng <b>${core + opt} ngày làm việc</b> nếu phải lập quy hoạch tổng mặt bằng và xin đấu nối. Chưa gồm thời gian nhà đầu tư chuẩn bị hồ sơ, đàm phán đất, nộp thuế chậm và thời gian thi công. Ngành có điều kiện cộng thêm thời hạn cấp giấy phép ngành (bước 6.1 — ví dụ xuất khẩu gạo: 15 ngày làm việc tại Bộ Công Thương). Dự án thuộc diện chấp thuận chủ trương cộng thêm bước 2.2 (26 ngày — thẩm quyền UBND tỉnh).</div>
+    <div class="note">${T.noteExtra.replace('{core}', `<b>${core}</b>`).replace('{max}', `<b>${core + opt}</b>`)} Chưa gồm thời gian chuẩn bị hồ sơ, đàm phán đất, nộp thuế chậm và thời gian thi công. Ngành có điều kiện cộng thêm thời hạn cấp giấy phép ngành (bước 6.1). Muốn tính cho một dự án cụ thể, dùng tab "Sơ đồ tra cứu nhanh dự án".</div>
   `;
   el.querySelectorAll('[data-goto-g]').forEach(btn => btn.addEventListener('click', () => {
     openStep(Number(btn.dataset.gotoG), Number(btn.dataset.gotoS), 'start');
   }));
 }
 
+renderProcessMode();
 renderFlowchart();
 renderFlowDetail();
 renderTimeline();
@@ -3380,18 +3525,18 @@ function computeRoadmap() {
   else add('2.4', 'Giấy chứng nhận đăng ký đầu tư (IRC) — không bắt buộc, làm nếu có nhu cầu (song song)', 'Sở Tài chính', 10, 'parallel');
   const lm = wizardState.landMethod;
   if (lm === 'dat_dan_dung_muc_dich') { add('3.2', 'UBND tỉnh chấp thuận thỏa thuận nhận quyền sử dụng đất', 'Sở Nông nghiệp và Môi trường → UBND tỉnh', 15, 'must'); add('3.2', 'Công chứng hợp đồng, đăng ký biến động đất đai', 'Văn phòng Đăng ký đất đai', 15, 'must'); }
-  else if (lm === 'thue_lai_kcn') add('3', 'Ký hợp đồng thuê lại đất với doanh nghiệp hạ tầng KCN', 'Doanh nghiệp hạ tầng KCN', null, 'info');
+  else if (lm === 'thue_lai_kcn') add('3.3', 'Ký hợp đồng thuê lại đất với doanh nghiệp hạ tầng KCN', 'Doanh nghiệp hạ tầng KCN', null, 'info');
   else if (lm === 'dau_gia') add('3.1', 'Tham gia đấu giá quyền sử dụng đất, nhận quyết định giao/cho thuê đất', 'Sở Nông nghiệp và Môi trường / tổ chức đấu giá', null, 'info', 'theo kế hoạch đấu giá');
   else if (lm === 'dau_thau_ndt') add('3.1', 'Đấu thầu lựa chọn nhà đầu tư, ký hợp đồng dự án, giao/cho thuê đất', 'Sở Tài chính / Sở Nông nghiệp và Môi trường', null, 'info', 'theo kế hoạch đấu thầu (NĐ 274/2026)');
   else if (lm === 'giao_thue_khong_dg' || lm === 'chuyen_muc_dich') add('3.1', lm === 'chuyen_muc_dich' ? 'Chuyển mục đích sử dụng đất, thuê đất' : 'Giao đất, cho thuê đất (bồi thường, giải phóng mặt bằng nếu có)', 'Sở Nông nghiệp và Môi trường → UBND tỉnh', null, 'info', 'phụ thuộc bồi thường, giải phóng mặt bằng');
   if (wizardState.moiTruong === 'co') add('4.1–4.4', 'Thủ tục môi trường: đăng ký môi trường, giấy phép môi trường hoặc ĐTM tùy nhóm dự án', 'UBND cấp xã / Sở Nông nghiệp và Môi trường', null, 'info', 'đăng ký môi trường: nộp trước thi công');
   if (!wizardState.inKCN && lm !== 'thue_lai_kcn') add('5.1', 'Quy hoạch tổng mặt bằng (nếu khu đất chưa có quy hoạch chi tiết)', 'UBND cấp xã/phường', 15, 'maybe');
   if (!wizardState.inKCN && lm !== 'thue_lai_kcn') add('5.1', 'Đấu nối đường tỉnh (nếu có)', 'Sở Xây dựng', 5, 'maybe');
-  add('5.2', 'Thẩm định Báo cáo nghiên cứu khả thi (nếu quy mô lớn hoặc có công trình ảnh hưởng lớn đến an toàn cộng đồng) — được miễn giấy phép xây dựng', 'Sở Xây dựng', 16, 'maybe');
+  add('5.2', 'Thẩm định Báo cáo nghiên cứu khả thi (nếu quy mô lớn hoặc có công trình ảnh hưởng lớn đến an toàn cộng đồng) — được miễn giấy phép xây dựng', wizardState.inKCN ? 'Ban Quản lý các KCN' : 'Sở Xây dựng', 16, 'maybe');
   add('5.3', 'Thẩm định thiết kế về PCCC (nếu thuộc diện)', 'Công an tỉnh', 6, 'maybe');
-  add('5.4', 'Kiểm tra công tác nghiệm thu hoàn thành (công trình cấp II)', 'Sở Xây dựng', 12, 'maybe');
+  add('5.4', 'Kiểm tra công tác nghiệm thu hoàn thành (công trình cấp II)', wizardState.inKCN ? 'Ban Quản lý các KCN' : 'Sở Xây dựng', 12, 'maybe');
   if (wizardState.conditional || wizardState.preset === 'che_bien') add('6.1', 'Giấy phép, giấy chứng nhận đủ điều kiện kinh doanh của ngành', 'Bộ, ngành / sở chuyên ngành', wizardState.preset === 'che_bien' ? 15 : null, 'maybe', wizardState.preset === 'che_bien' ? 'nếu xuất khẩu gạo' : 'tùy ngành');
-  if (fdi) add('6.3', 'Giấy phép lao động cho chuyên gia nước ngoài (nếu có)', 'Sở Nội vụ', null, 'info');
+  if (fdi) add('6.3', 'Giấy phép lao động cho chuyên gia nước ngoài (nếu có)', wizardState.inKCN ? 'Ban Quản lý các KCN' : 'Sở Nội vụ', null, 'info');
   const min = items.filter(i => i.kind === 'must' && i.days).reduce((a, i) => a + i.days, 0);
   const max = min + items.filter(i => i.kind === 'maybe' && i.days).reduce((a, i) => a + i.days, 0);
   return { items, min, max };
@@ -3400,6 +3545,8 @@ function computeRoadmap() {
 function gotoProcess(code) {
   const m = String(code).match(/^(\d+)(?:\.(\d+))?/);
   if (!m) return;
+  processMode = wizardState.inKCN || wizardState.landMethod === 'thue_lai_kcn' ? 'kcn' : 'ngoai';
+  renderProcessMode(); renderTimeline();
   const tab = document.querySelector('.tab[data-view="process"]');
   if (tab) tab.click();
   openStep(Number(m[1]) - 1, m[2] ? Number(m[2]) - 1 : 0, 'start');
