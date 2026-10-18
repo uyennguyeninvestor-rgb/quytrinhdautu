@@ -667,6 +667,38 @@
   .timeline-table td.num { font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; white-space: nowrap; font-variant-numeric: tabular-nums; }
   .timeline-table tr.parallel td { color: var(--text-muted); }
   .timeline-table tr.total td { font-weight: 700; border-top: 2px solid var(--text); border-bottom: none; }
+
+  /* ---- Tổng quan ---- */
+  .dash-tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 12px; margin: 14px 0 18px; }
+  .dash-tile { text-align: left; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; cursor: pointer; display: flex; flex-direction: column; gap: 2px; box-shadow: var(--shadow); font: inherit; color: var(--text); }
+  .dash-tile:hover, .dash-tile:focus-visible { border-color: var(--accent); outline: none; }
+  .dash-num { font-size: 30px; font-weight: 700; color: var(--accent); line-height: 1.1; font-variant-numeric: tabular-nums; }
+  .dash-lbl { font-weight: 600; font-size: 14px; }
+  .dash-sub { font-size: 12.5px; color: var(--text-muted); line-height: 1.4; }
+  .dash-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+  .dash-chart { margin: 0; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; box-shadow: var(--shadow); min-width: 0; }
+  .dash-chart-title { font-weight: 600; font-size: 14.5px; margin-bottom: 10px; color: var(--text); }
+  .hbar-list { display: flex; flex-direction: column; gap: 9px; }
+  .hbar-row { display: grid; grid-template-columns: minmax(110px, 38%) 1fr auto; align-items: center; gap: 10px; padding: 3px 4px; border-radius: 6px; cursor: default; }
+  .hbar-row:hover, .hbar-row:focus-visible { background: var(--surface-alt); outline: none; }
+  .hbar-label { font-size: 13px; color: var(--text); line-height: 1.3; }
+  .hbar-track { position: relative; height: 14px; background: transparent; border-bottom: 1px solid var(--border); }
+  .hbar-fill { position: absolute; left: 0; top: 0; bottom: 0; background: var(--accent); border-radius: 0 4px 4px 0; }
+  .hbar-min { position: absolute; left: 0; top: 5px; height: 4px; background: var(--accent-soft); border-radius: 2px; }
+  .hbar-range { position: absolute; top: 0; bottom: 0; background: var(--accent); border-radius: 4px; }
+  .hbar-value { font-size: 12.5px; color: var(--text-muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .dash-note { font-size: 12px; color: var(--text-muted); margin-top: 10px; line-height: 1.45; }
+  .dash-list { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 8px; font-size: 13.5px; line-height: 1.5; }
+  .dash-updates { margin-top: 14px; }
+  .dash-updates .dash-list { list-style: none; padding-left: 0; }
+  .dash-date { display: inline-block; min-width: 160px; font-size: 12px; color: var(--text-muted); font-variant-numeric: tabular-nums; }
+  .dash-tooltip { position: fixed; display: none; z-index: 50; max-width: 290px; background: var(--text); color: var(--surface); font-size: 12.5px; line-height: 1.45; padding: 8px 10px; border-radius: 8px; pointer-events: none; box-shadow: var(--shadow); }
+  @media (max-width: 760px) {
+    .dash-grid { grid-template-columns: 1fr; }
+    .hbar-row { grid-template-columns: 1fr auto; }
+    .hbar-label { grid-column: 1 / -1; }
+    .dash-date { display: block; min-width: 0; }
+  }
   .timeline-step-link { color: var(--accent); cursor: pointer; text-decoration: underline; text-underline-offset: 2px; background: none; border: 0; padding: 0; font: inherit; text-align: left; }
   @media (max-width: 600px) {
     .timeline-table th:nth-child(3), .timeline-table td:nth-child(3) { display: none; }
@@ -679,6 +711,7 @@
   .mode-switch { display: inline-flex; border: 1.5px solid var(--accent); border-radius: 10px; overflow: hidden; }
   .mode-switch button { font: inherit; font-size: 14px; font-weight: 600; padding: 8px 14px; border: 0; background: var(--surface); color: var(--accent); cursor: pointer; }
   .mode-switch button + button { border-left: 1.5px solid var(--accent); }
+  @media (max-width: 760px) { .mode-switch { flex-direction: column; width: 100%; } .mode-switch button + button { border-left: 0; border-top: 1.5px solid var(--accent); } }
   .mode-switch button[data-active="true"] { background: var(--accent); color: #fff; }
   .mode-hint { flex-basis: 100%; font-size: 13px; color: var(--text-muted); }
   .mode-badge { font-size: 11.5px; font-weight: 700; padding: 3px 8px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); }
@@ -1005,13 +1038,16 @@
   </header>
 
   <nav class="tabs" id="tabs">
-    <button class="tab" data-view="lookup" data-active="true">Tra cứu văn bản</button>
+    <button class="tab" data-view="overview" data-active="true">Tổng quan</button>
+    <button class="tab" data-view="lookup" data-active="false">Tra cứu văn bản</button>
     <button class="tab" data-view="process" data-active="false">Quy trình thực hiện dự án</button>
     <button class="tab" data-view="incentive" data-active="false">Ưu đãi theo địa bàn (Đồng Tháp)</button>
     <button class="tab" data-view="wizard" data-active="false">Sơ đồ tra cứu nhanh dự án</button>
   </nav>
 
-  <div id="lookupView">
+  <div id="dashView"></div>
+
+  <div id="lookupView" style="display:none">
     <div class="controls">
       <div class="search-row">
         <div class="search-box">
@@ -1044,7 +1080,7 @@
   </div>
 
   <div id="processView" style="display:none">
-    <p class="process-intro">Quy trình chung thực hiện dự án đầu tư tại <b>tỉnh Đồng Tháp</b> gồm <b>7 bước chính</b>. Chọn trước dự án đặt <b>trong</b> hay <b>ngoài khu công nghiệp</b> — sơ đồ sẽ tự đổi cơ quan đầu mối, thời hạn và làm mờ những bước không phải làm. <b>Bấm vào bước chính</b> để xem các bước con, trường hợp cụ thể và căn cứ pháp lý. Bảng <b>lộ trình mẫu</b> bên dưới cộng sẵn tổng số ngày cho từng trường hợp.</p>
+    <p class="process-intro">Quy trình chung thực hiện dự án đầu tư tại <b>tỉnh Đồng Tháp</b> gồm <b>7 bước chính</b>. Chọn trước trường hợp: <b>ngoài KCN</b>, <b>trong KCN (nhà đầu tư thứ cấp)</b> hay <b>đầu tư hạ tầng KCN</b> — sơ đồ sẽ tự đổi cơ quan đầu mối, thời hạn và làm mờ những bước không phải làm. <b>Bấm vào bước chính</b> để xem các bước con, trường hợp cụ thể và căn cứ pháp lý. Bảng <b>lộ trình mẫu</b> bên dưới cộng sẵn tổng số ngày cho từng trường hợp.</p>
     <div class="process-mode" id="processMode"></div>
     <div class="flowchart" id="flowchart"></div>
     <div class="flow-detail" id="flowDetail"></div>
@@ -1086,8 +1122,8 @@
   </div>
 
   <footer>
-    <div><b style="color:var(--text)">Lưu ý:</b> Nội dung tóm tắt phục vụ tra cứu nhanh nội bộ, biên soạn tháng 7/2026 dựa trên Luật Đầu tư số 143/2025/QH15 (hiệu lực 01/3/2026) và Nghị định 96/2026/NĐ-CP. Các mã văn bản/điều luật có biểu tượng liên kết dẫn thẳng đến trang văn bản gốc (thuvienphapluat.vn, hethongphapluat.com, vanban.chinhphu.vn…) — một số dẫn đúng tới điều cụ thể, số khác dẫn tới toàn văn của luật/nghị định do chưa có bản deep-link theo điều. Trước khi áp dụng vào hồ sơ, quyết định hoặc tư vấn nhà đầu tư, vẫn cần đối chiếu văn bản gốc vì các nghị định, thông tư hướng dẫn chi tiết có thể tiếp tục được sửa đổi.</div>
-    <div>Cập nhật lần cuối: 11/10/2026</div>
+    <div><b style="color:var(--text)">Lưu ý:</b> Nội dung tóm tắt phục vụ tra cứu nhanh nội bộ, dựa trên Luật Đầu tư số 143/2025/QH15 (hiệu lực 01/3/2026), Nghị định 96/2026/NĐ-CP và các văn bản liên quan. Bấm vào mã điều luật để xem trích dẫn ngay trên trang; toàn văn văn bản là bản PDF lưu kèm trang web (bản chính thức tải từ vanban.chinhphu.vn, Công báo hoặc bản do Sở cung cấp). Trước khi áp dụng vào hồ sơ, quyết định hoặc tư vấn nhà đầu tư, vẫn cần đối chiếu văn bản gốc vì các nghị định, thông tư hướng dẫn chi tiết có thể tiếp tục được sửa đổi.</div>
+    <div>Cập nhật lần cuối: 18/10/2026</div>
   </footer>
 </div>
 
@@ -1121,9 +1157,9 @@ const DATA = [
     parentLaw: "luat-2025",
     parentLabel: "Luật sửa đổi, bổ sung",
     code: "Luật số 24/2026/QH16",
-    url: "https://xaydungchinhsach.chinhphu.vn/noi-dung-co-ban-cua-luat-so-24-2026-qh16-sua-doi-bo-sung-mot-so-dieu-cua-luat-dau-tu-119260928153454059.htm",
+    url: "docs/luat-24-2026-qh16.pdf",
     title: "Luật sửa đổi, bổ sung một số điều của Luật Đầu tư (2026)",
-    date: "Hiệu lực từ 01/3/2027 — riêng quy định cấm kinh doanh khí N2O hiệu lực từ 01/01/2027",
+    date: "Ban hành 24/8/2026, hiệu lực từ 01/3/2027 — riêng quy định cấm kinh doanh khí N2O hiệu lực từ 01/01/2027",
     summary: "Thay thế toàn bộ Phụ lục IV (Danh mục ngành, nghề đầu tư kinh doanh có điều kiện) của Luật Đầu tư 2025: cắt giảm 62 ngành, nghề, sửa đổi 14 ngành, nghề; bổ sung cấm kinh doanh khí N2O dùng cho con người qua đường hô hấp.",
     body: `
       <ul>
@@ -1139,7 +1175,7 @@ const DATA = [
     id: "tham-quyen",
     cat: "luat",
     code: "Điều 24–25, Luật 143/2025/QH15",
-    url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx",
+    url: "docs/luat-dau-tu-2025-so-143-2025-qh15.pdf",
     title: "Thẩm quyền chấp thuận chủ trương đầu tư",
     date: "Áp dụng từ 01/03/2026",
     summary: "Điều 24 liệt kê 20 khoản dự án thuộc diện phải chấp thuận chủ trương đầu tư; Điều 25 phân định thẩm quyền quyết định theo từng khoản của Điều 24.",
@@ -1153,15 +1189,15 @@ const DATA = [
       <div class="note">Nếu dự án không rơi vào khoản nào của Điều 24 → không phải chấp thuận chủ trương đầu tư, chuyển thẳng sang xác định có phải cấp Giấy chứng nhận đăng ký đầu tư (Điều 26) hay không.</div>
     `,
     legal: [
-      { ref: "Điều 24, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Liệt kê 20 khoản dự án thuộc diện phải chấp thuận chủ trương đầu tư.", quote: "1. Dự án đầu tư có yêu cầu chuyển mục đích sử dụng đất rừng đặc dụng, rừng phòng hộ đầu nguồn, rừng phòng hộ biên giới từ 50 ha trở lên... 2. Dự án đầu tư có yêu cầu chuyển mục đích sử dụng đất trồng hai vụ lúa nước trở lên trong năm với quy mô từ 500 ha trở lên. 3. Dự án đầu tư có yêu cầu di dân tái định cư từ 10.000 người trở lên ở miền núi, từ 20.000 người trở lên ở vùng khác. 4. Dự án đầu tư có kinh doanh đặt cược, ca-si-nô (casino)... 6. Dự án đầu tư nhà máy điện hạt nhân. 7. Dự án đầu tư của nhà đầu tư nước ngoài trong lĩnh vực kinh doanh dịch vụ viễn thông có hạ tầng mạng, trồng rừng, xuất bản, báo chí. 8. Dự án đầu tư mà nhà đầu tư có đề nghị Nhà nước giao đất, cho thuê đất không đấu giá quyền sử dụng đất, đấu thầu lựa chọn nhà đầu tư thực hiện dự án có sử dụng đất; dự án có đề nghị chuyển mục đích sử dụng đất... (đến khoản 18: hạ tầng KCN/KCX, cảng biển, cảng hàng không, chế biến dầu khí…) 19. Dự án đầu tư khác thuộc diện chấp thuận chủ trương đầu tư của Thủ tướng Chính phủ theo quy định của pháp luật. 20. Dự án đầu tư có yêu cầu áp dụng cơ chế, chính sách đặc biệt, khác với quy định của luật, nghị quyết của Quốc hội." },
-      { ref: "Điều 25, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Phân định thẩm quyền: Quốc hội / Thủ tướng Chính phủ / Chủ tịch UBND cấp tỉnh / Ban quản lý KCN-KCX-KCNC-KKT.", quote: "1. Quốc hội chấp thuận chủ trương đầu tư đối với dự án đầu tư quy định tại khoản 20 Điều 24 của Luật này. 2. Trừ trường hợp quy định tại khoản 1 Điều này, Thủ tướng Chính phủ chấp thuận chủ trương đầu tư đối với: a) Dự án đầu tư quy định tại các khoản 1, 2, 4, 6, 7 và 19 Điều 24; b) Dự án tái định cư từ 20.000 người trở lên ở miền núi, từ 50.000 người trở lên ở vùng khác... 3. Trừ các dự án quy định tại khoản 1 và khoản 2 Điều này, Chủ tịch Ủy ban nhân dân cấp tỉnh chấp thuận chủ trương đầu tư đối với: a) Dự án đầu tư quy định tại các khoản 8, 9, 10, 11, 12, 13, 14, 15, 16, 17 và 18 Điều 24... 4. Đối với dự án đầu tư quy định tại khoản 3 Điều này thực hiện tại khu công nghiệp, khu chế xuất, khu công nghệ cao, khu công nghệ số tập trung, khu kinh tế phù hợp với quy hoạch đã được cấp có thẩm quyền phê duyệt thì Ban quản lý khu công nghiệp, khu chế xuất, khu công nghệ cao, khu kinh tế chấp thuận chủ trương đầu tư." }
+      { ref: "Điều 24, Luật 143/2025/QH15", url: "docs/luat-dau-tu-2025-so-143-2025-qh15.pdf", detail: "Liệt kê 20 khoản dự án thuộc diện phải chấp thuận chủ trương đầu tư.", quote: "1. Dự án đầu tư có yêu cầu chuyển mục đích sử dụng đất rừng đặc dụng, rừng phòng hộ đầu nguồn, rừng phòng hộ biên giới từ 50 ha trở lên... 2. Dự án đầu tư có yêu cầu chuyển mục đích sử dụng đất trồng hai vụ lúa nước trở lên trong năm với quy mô từ 500 ha trở lên. 3. Dự án đầu tư có yêu cầu di dân tái định cư từ 10.000 người trở lên ở miền núi, từ 20.000 người trở lên ở vùng khác. 4. Dự án đầu tư có kinh doanh đặt cược, ca-si-nô (casino)... 6. Dự án đầu tư nhà máy điện hạt nhân. 7. Dự án đầu tư của nhà đầu tư nước ngoài trong lĩnh vực kinh doanh dịch vụ viễn thông có hạ tầng mạng, trồng rừng, xuất bản, báo chí. 8. Dự án đầu tư mà nhà đầu tư có đề nghị Nhà nước giao đất, cho thuê đất không đấu giá quyền sử dụng đất, đấu thầu lựa chọn nhà đầu tư thực hiện dự án có sử dụng đất; dự án có đề nghị chuyển mục đích sử dụng đất... (đến khoản 18: hạ tầng KCN/KCX, cảng biển, cảng hàng không, chế biến dầu khí…) 19. Dự án đầu tư khác thuộc diện chấp thuận chủ trương đầu tư của Thủ tướng Chính phủ theo quy định của pháp luật. 20. Dự án đầu tư có yêu cầu áp dụng cơ chế, chính sách đặc biệt, khác với quy định của luật, nghị quyết của Quốc hội." },
+      { ref: "Điều 25, Luật 143/2025/QH15", url: "docs/luat-dau-tu-2025-so-143-2025-qh15.pdf", detail: "Phân định thẩm quyền: Quốc hội / Thủ tướng Chính phủ / Chủ tịch UBND cấp tỉnh / Ban quản lý KCN-KCX-KCNC-KKT.", quote: "1. Quốc hội chấp thuận chủ trương đầu tư đối với dự án đầu tư quy định tại khoản 20 Điều 24 của Luật này. 2. Trừ trường hợp quy định tại khoản 1 Điều này, Thủ tướng Chính phủ chấp thuận chủ trương đầu tư đối với: a) Dự án đầu tư quy định tại các khoản 1, 2, 4, 6, 7 và 19 Điều 24; b) Dự án tái định cư từ 20.000 người trở lên ở miền núi, từ 50.000 người trở lên ở vùng khác... 3. Trừ các dự án quy định tại khoản 1 và khoản 2 Điều này, Chủ tịch Ủy ban nhân dân cấp tỉnh chấp thuận chủ trương đầu tư đối với: a) Dự án đầu tư quy định tại các khoản 8, 9, 10, 11, 12, 13, 14, 15, 16, 17 và 18 Điều 24... 4. Đối với dự án đầu tư quy định tại khoản 3 Điều này thực hiện tại khu công nghiệp, khu chế xuất, khu công nghệ cao, khu công nghệ số tập trung, khu kinh tế phù hợp với quy hoạch đã được cấp có thẩm quyền phê duyệt thì Ban quản lý khu công nghiệp, khu chế xuất, khu công nghệ cao, khu kinh tế chấp thuận chủ trương đầu tư." }
     ]
   },
   {
     id: "irc-erc",
     cat: "luat",
     code: "Thủ tục IRC / ERC",
-    url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx",
+    url: "docs/luat-dau-tu-2025-so-143-2025-qh15.pdf",
     title: "Trình tự cấp phép cho nhà đầu tư nước ngoài: ERC trước, IRC sau",
     date: "Điểm mới từ 01/03/2026",
     summary: "Nhà đầu tư nước ngoài lập pháp nhân bằng Giấy chứng nhận đăng ký doanh nghiệp (ERC) trước, sau đó thực hiện thủ tục xin Giấy chứng nhận đăng ký đầu tư (IRC) — đảo ngược trình tự so với Luật 2020 (IRC trước, ERC sau).",
@@ -1178,7 +1214,7 @@ const DATA = [
     cat: "nd",
     parentLaw: "luat-2025",
     code: "Nghị định 96/2026/NĐ-CP",
-    url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Nghi-dinh-96-2026-ND-CP-huong-dan-Luat-Dau-tu-690303.aspx",
+    url: "docs/nd-96-2026-nd-cp.pdf",
     title: "Nghị định hướng dẫn thi hành Luật Đầu tư 2025",
     date: "Ban hành 31/03/2026",
     summary: "Quy định chi tiết điều kiện đầu tư kinh doanh, tiếp cận thị trường với NĐT nước ngoài, bảo đảm đầu tư, ưu đãi/hỗ trợ đầu tư, thủ tục đầu tư, xúc tiến đầu tư và quản lý nhà nước.",
@@ -1199,7 +1235,7 @@ const DATA = [
     id: "nganh-uu-dai",
     cat: "luat",
     code: "Điều 15, Luật 143/2025/QH15",
-    url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx",
+    url: "docs/luat-dau-tu-2025-so-143-2025-qh15.pdf",
     title: "Ngành, nghề ưu đãi đầu tư và địa bàn ưu đãi đầu tư",
     date: "Áp dụng từ 01/03/2026",
     summary: "Điều 15 Luật Đầu tư 2025 gộp chung trong 1 điều: khoản 1 liệt kê 9 nhóm ngành nghề ưu đãi (a–i), khoản 2 xác định 2 nhóm địa bàn ưu đãi. Chính phủ ban hành danh mục chi tiết kèm theo tại Nghị định 96/2026/NĐ-CP.",
@@ -1224,15 +1260,15 @@ const DATA = [
       <div class="note">Danh mục ngành, nghề và danh mục địa bàn ưu đãi đầu tư cụ thể do Chính phủ ban hành kèm Nghị định 96/2026/NĐ-CP — khi tư vấn theo ngành cụ thể cần đối chiếu đúng mã ngành trong Phụ lục, bản tóm tắt này không thay thế văn bản gốc.</div>
     `,
     legal: [
-      { ref: "Điều 15, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Ngành, nghề ưu đãi đầu tư và địa bàn ưu đãi đầu tư.", quote: "1. Ngành, nghề ưu đãi đầu tư là các ngành, nghề được ưu tiên thu hút đầu tư để thực hiện các mục tiêu sau đây: a) Phát triển khoa học, công nghệ, đổi mới sáng tạo, chuyển đổi số, công nghiệp công nghệ số và công nghiệp bán dẫn; b) Phát triển kinh tế xanh, kinh tế tuần hoàn, kinh tế chia sẻ, kinh tế số, phát triển các mô hình kinh tế mới... 2. Địa bàn ưu đãi đầu tư bao gồm: a) Địa bàn có điều kiện kinh tế - xã hội khó khăn, địa bàn có điều kiện kinh tế - xã hội đặc biệt khó khăn; b) Khu công nghiệp, cụm công nghiệp, khu chế xuất, khu công nghệ cao, khu nông nghiệp ứng dụng công nghệ cao, khu công nghệ số tập trung, khu thương mại tự do, trung tâm tài chính quốc tế, khu kinh tế. 3. Căn cứ ngành, nghề, địa bàn ưu đãi đầu tư quy định tại khoản 1 và khoản 2 Điều này, Chính phủ ban hành, sửa đổi, bổ sung Danh mục ngành, nghề ưu đãi đầu tư và Danh mục địa bàn ưu đãi đầu tư; xác định ngành, nghề đặc biệt ưu đãi đầu tư trong Danh mục ngành, nghề ưu đãi đầu tư." },
-      { ref: "Điều 14, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Đối tượng và hình thức ưu đãi, hỗ trợ đầu tư (mức phổ thông, chưa phải ưu đãi đặc biệt).", quote: "1. Đối tượng được hưởng ưu đãi đầu tư bao gồm: a) Dự án đầu tư thuộc ngành, nghề ưu đãi đầu tư quy định tại Điều 15 của Luật này; b) Dự án đầu tư tại địa bàn ưu đãi đầu tư quy định tại Điều 15 của Luật này; c) Dự án đầu tư có quy mô vốn lớn, dự án đầu tư sử dụng nhiều lao động hoặc dự án đầu tư trọng điểm, quan trọng quốc gia... 2. Hình thức ưu đãi đầu tư bao gồm: a) Ưu đãi thuế thu nhập doanh nghiệp...; b) Miễn thuế nhập khẩu đối với hàng hóa nhập khẩu để tạo tài sản cố định; nguyên liệu, vật tư, linh kiện nhập khẩu để sản xuất...; c) Miễn, giảm tiền sử dụng đất, tiền thuê đất, thuế sử dụng đất; d) Khấu hao nhanh, tăng mức chi phí được trừ khi tính thu nhập chịu thuế; đ) Hình thức ưu đãi đầu tư khác theo quy định của Chính phủ." }
+      { ref: "Điều 15, Luật 143/2025/QH15", url: "docs/luat-dau-tu-2025-so-143-2025-qh15.pdf", detail: "Ngành, nghề ưu đãi đầu tư và địa bàn ưu đãi đầu tư.", quote: "1. Ngành, nghề ưu đãi đầu tư là các ngành, nghề được ưu tiên thu hút đầu tư để thực hiện các mục tiêu sau đây: a) Phát triển khoa học, công nghệ, đổi mới sáng tạo, chuyển đổi số, công nghiệp công nghệ số và công nghiệp bán dẫn; b) Phát triển kinh tế xanh, kinh tế tuần hoàn, kinh tế chia sẻ, kinh tế số, phát triển các mô hình kinh tế mới... 2. Địa bàn ưu đãi đầu tư bao gồm: a) Địa bàn có điều kiện kinh tế - xã hội khó khăn, địa bàn có điều kiện kinh tế - xã hội đặc biệt khó khăn; b) Khu công nghiệp, cụm công nghiệp, khu chế xuất, khu công nghệ cao, khu nông nghiệp ứng dụng công nghệ cao, khu công nghệ số tập trung, khu thương mại tự do, trung tâm tài chính quốc tế, khu kinh tế. 3. Căn cứ ngành, nghề, địa bàn ưu đãi đầu tư quy định tại khoản 1 và khoản 2 Điều này, Chính phủ ban hành, sửa đổi, bổ sung Danh mục ngành, nghề ưu đãi đầu tư và Danh mục địa bàn ưu đãi đầu tư; xác định ngành, nghề đặc biệt ưu đãi đầu tư trong Danh mục ngành, nghề ưu đãi đầu tư." },
+      { ref: "Điều 14, Luật 143/2025/QH15", url: "docs/luat-dau-tu-2025-so-143-2025-qh15.pdf", detail: "Đối tượng và hình thức ưu đãi, hỗ trợ đầu tư (mức phổ thông, chưa phải ưu đãi đặc biệt).", quote: "1. Đối tượng được hưởng ưu đãi đầu tư bao gồm: a) Dự án đầu tư thuộc ngành, nghề ưu đãi đầu tư quy định tại Điều 15 của Luật này; b) Dự án đầu tư tại địa bàn ưu đãi đầu tư quy định tại Điều 15 của Luật này; c) Dự án đầu tư có quy mô vốn lớn, dự án đầu tư sử dụng nhiều lao động hoặc dự án đầu tư trọng điểm, quan trọng quốc gia... 2. Hình thức ưu đãi đầu tư bao gồm: a) Ưu đãi thuế thu nhập doanh nghiệp...; b) Miễn thuế nhập khẩu đối với hàng hóa nhập khẩu để tạo tài sản cố định; nguyên liệu, vật tư, linh kiện nhập khẩu để sản xuất...; c) Miễn, giảm tiền sử dụng đất, tiền thuê đất, thuế sử dụng đất; d) Khấu hao nhanh, tăng mức chi phí được trừ khi tính thu nhập chịu thuế; đ) Hình thức ưu đãi đầu tư khác theo quy định của Chính phủ." }
     ]
   },
   {
     id: "uu-dai-dac-biet",
     cat: "luat",
     code: "Điều 17, Luật 143/2025/QH15",
-    url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx",
+    url: "docs/luat-dau-tu-2025-so-143-2025-qh15.pdf",
     title: "Ưu đãi và hỗ trợ đầu tư đặc biệt",
     date: "Áp dụng từ 01/03/2026",
     summary: "Dành riêng cho dự án tác động lớn đến kinh tế – xã hội: trung tâm đổi mới sáng tạo/R&D, hạ tầng số/data center/5G, chip bán dẫn, AI, và dự án khác thuộc ngành đặc biệt ưu đãi — quy mô vốn, thời hạn giải ngân do Chính phủ quy định cụ thể.",
@@ -1252,15 +1288,15 @@ const DATA = [
       <div class="note">Mức ưu đãi cụ thể (% thuế suất, số năm miễn/giảm, ngưỡng vốn) cần tra theo Luật Thuế thu nhập doanh nghiệp 2025, pháp luật đất đai và Nghị định 96/2026/NĐ-CP — không tự tính khi tư vấn nhà đầu tư nếu chưa đối chiếu văn bản gốc.</div>
     `,
     legal: [
-      { ref: "Điều 17, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Ưu đãi và hỗ trợ đầu tư đặc biệt — đối tượng, mức ưu đãi, trường hợp loại trừ.", quote: "1. Chính phủ quy định việc áp dụng ưu đãi, hỗ trợ đầu tư đặc biệt nhằm khuyến khích phát triển một số dự án đầu tư có tác động lớn đến phát triển kinh tế - xã hội... 3. Mức ưu đãi và thời hạn áp dụng ưu đãi đặc biệt thực hiện theo quy định của Luật Thuế thu nhập doanh nghiệp và pháp luật về đất đai... 5. Ưu đãi, hỗ trợ đầu tư đặc biệt quy định tại Điều này không áp dụng đối với các trường hợp sau đây: a) Dự án đầu tư đã được cấp Giấy chứng nhận đầu tư, Giấy chứng nhận đăng ký đầu tư hoặc quyết định chủ trương đầu tư trước ngày Luật này có hiệu lực thi hành..." },
-      { ref: "Điều 21, Nghị định 96/2026/NĐ-CP", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Nghi-dinh-96-2026-ND-CP-huong-dan-Luat-Dau-tu-690303.aspx", detail: "Hướng dẫn chi tiết thi hành Điều 17 Luật Đầu tư 2025 về ưu đãi, hỗ trợ đầu tư đặc biệt." }
+      { ref: "Điều 17, Luật 143/2025/QH15", url: "docs/luat-dau-tu-2025-so-143-2025-qh15.pdf", detail: "Ưu đãi và hỗ trợ đầu tư đặc biệt — đối tượng, mức ưu đãi, trường hợp loại trừ.", quote: "1. Chính phủ quy định việc áp dụng ưu đãi, hỗ trợ đầu tư đặc biệt nhằm khuyến khích phát triển một số dự án đầu tư có tác động lớn đến phát triển kinh tế - xã hội... 3. Mức ưu đãi và thời hạn áp dụng ưu đãi đặc biệt thực hiện theo quy định của Luật Thuế thu nhập doanh nghiệp và pháp luật về đất đai... 5. Ưu đãi, hỗ trợ đầu tư đặc biệt quy định tại Điều này không áp dụng đối với các trường hợp sau đây: a) Dự án đầu tư đã được cấp Giấy chứng nhận đầu tư, Giấy chứng nhận đăng ký đầu tư hoặc quyết định chủ trương đầu tư trước ngày Luật này có hiệu lực thi hành..." },
+      { ref: "Điều 21, Nghị định 96/2026/NĐ-CP", url: "docs/nd-96-2026-nd-cp.pdf", detail: "Hướng dẫn chi tiết thi hành Điều 17 Luật Đầu tư 2025 về ưu đãi, hỗ trợ đầu tư đặc biệt." }
     ]
   },
   {
     id: "dieu-kien-kinh-doanh",
     cat: "luat",
     code: "Điều 7, Phụ lục IV — Luật 143/2025/QH15",
-    url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx",
+    url: "docs/luat-dau-tu-2025-so-143-2025-qh15.pdf",
     title: "Ngành, nghề đầu tư kinh doanh có điều kiện",
     date: "Áp dụng từ 01/03/2026 (danh mục sửa đổi từ 01/07/2026)",
     summary: "Danh mục rút gọn còn 198 ngành, nghề — cần kiểm tra dự án có thuộc danh mục để xác định điều kiện tiếp cận thị trường, đặc biệt với nhà đầu tư nước ngoài.",
@@ -1274,15 +1310,15 @@ const DATA = [
       <div class="note"><b>⚠️ Sắp thay đổi:</b> Luật 24/2026/QH16 thay toàn bộ Phụ lục IV từ <b>01/3/2027</b> (cắt giảm 62, sửa đổi 14 ngành nghề) và bổ sung cấm kinh doanh khí N2O từ 01/01/2027.</div>
     `,
     legal: [
-      { ref: "Điều 7, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Ngành, nghề đầu tư kinh doanh có điều kiện — danh mục tại Phụ lục IV.", quote: "1. Ngành, nghề đầu tư kinh doanh có điều kiện là ngành, nghề kinh doanh trên lãnh thổ Việt Nam mà việc thực hiện hoạt động đầu tư kinh doanh trong ngành, nghề đó phải đáp ứng điều kiện cần thiết vì lý do quốc phòng, an ninh quốc gia, trật tự, an toàn xã hội, đạo đức xã hội, sức khỏe của cộng đồng. Danh mục ngành, nghề đầu tư kinh doanh có điều kiện được quy định tại Phụ lục IV ban hành kèm theo Luật này." },
-      { ref: "Điều 6, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Ngành, nghề cấm đầu tư kinh doanh — Phụ lục I, II, III.", quote: "1. Cấm các hoạt động đầu tư kinh doanh sau đây: a) Kinh doanh các chất ma túy quy định tại Phụ lục I ban hành kèm theo Luật này; b) Kinh doanh các loại hóa chất, khoáng vật quy định tại Phụ lục II ban hành kèm theo Luật này; c) Kinh doanh mẫu vật các loài thực vật, động vật hoang dã có nguồn gốc khai thác từ tự nhiên quy định tại Phụ lục III..." }
+      { ref: "Điều 7, Luật 143/2025/QH15", url: "docs/luat-dau-tu-2025-so-143-2025-qh15.pdf", detail: "Ngành, nghề đầu tư kinh doanh có điều kiện — danh mục tại Phụ lục IV.", quote: "1. Ngành, nghề đầu tư kinh doanh có điều kiện là ngành, nghề kinh doanh trên lãnh thổ Việt Nam mà việc thực hiện hoạt động đầu tư kinh doanh trong ngành, nghề đó phải đáp ứng điều kiện cần thiết vì lý do quốc phòng, an ninh quốc gia, trật tự, an toàn xã hội, đạo đức xã hội, sức khỏe của cộng đồng. Danh mục ngành, nghề đầu tư kinh doanh có điều kiện được quy định tại Phụ lục IV ban hành kèm theo Luật này." },
+      { ref: "Điều 6, Luật 143/2025/QH15", url: "docs/luat-dau-tu-2025-so-143-2025-qh15.pdf", detail: "Ngành, nghề cấm đầu tư kinh doanh — Phụ lục I, II, III.", quote: "1. Cấm các hoạt động đầu tư kinh doanh sau đây: a) Kinh doanh các chất ma túy quy định tại Phụ lục I ban hành kèm theo Luật này; b) Kinh doanh các loại hóa chất, khoáng vật quy định tại Phụ lục II ban hành kèm theo Luật này; c) Kinh doanh mẫu vật các loài thực vật, động vật hoang dã có nguồn gốc khai thác từ tự nhiên quy định tại Phụ lục III..." }
     ]
   },
   {
     id: "luat-doanh-nghiep",
+    files: [{ ref: "Văn bản hợp nhất Luật Doanh nghiệp (Công báo ngày 31/8/2025)", url: "docs/luat-doanh-nghiep-vbhn-2025.pdf" }],
     cat: "lienquan",
     code: "Luật số 59/2020/QH14 (sđ Luật 03/2022/QH15, Luật 76/2025/QH15)",
-    url: "https://thuvienphapluat.vn/van-ban/Doanh-nghiep/Luat-Doanh-nghiep-so-59-2020-QH14-427301.aspx",
     title: "Luật Doanh nghiệp 2020",
     date: "Hiệu lực 01/01/2021 — sửa đổi bởi Luật 03/2022/QH15 (hiệu lực 01/3/2022) và Luật 76/2025/QH15 (hiệu lực 01/7/2025); văn bản hợp nhất đăng Công báo số 1105–1108 ngày 31/8/2025",
     summary: "Quy định thành lập, tổ chức quản lý, tổ chức lại, giải thể doanh nghiệp — nền tảng cho bước xin Giấy chứng nhận đăng ký doanh nghiệp trước khi xin IRC theo Luật Đầu tư 2025. Luật gốc 2020 vẫn còn hiệu lực (chưa có luật thay thế hoàn toàn), chỉ được sửa đổi bổ sung.",
@@ -1316,9 +1352,9 @@ const DATA = [
     id: "luat-dau-tu-cong",
     cat: "lienquan",
     code: "Luật số 58/2024/QH15",
-    url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-cong-2024-so-58-2024-QH15-621645.aspx",
+    url: "docs/luat-dau-tu-cong-58-2024-qh15.pdf",
     title: "Luật Đầu tư công 2024 — căn cứ phân loại dự án nhóm A, B, C",
-    date: "Thông qua 29/11/2024, hiệu lực từ 01/01/2025 — thay Luật Đầu tư công 2019",
+    date: "Thông qua 29/11/2024, hiệu lực từ 01/01/2025 — thay Luật Đầu tư công 2019; sửa đổi, bổ sung bởi Luật 90/2025/QH15 (hiệu lực 01/7/2025)",
     summary: "Về bản chất chỉ điều chỉnh vốn đầu tư công, nhưng tiêu chí phân loại dự án quan trọng quốc gia / nhóm A / nhóm B / nhóm C tại Điều 8–11 được pháp luật môi trường và xây dựng dẫn chiếu làm căn cứ áp dụng chung, không phân biệt nguồn vốn công hay tư — nên nhà đầu tư tư nhân vẫn cần biết dự án của mình rơi vào nhóm nào.",
     body: `
       <h4>Ngưỡng phân loại chính (Điều 8–11)</h4>
@@ -1353,15 +1389,15 @@ const DATA = [
     legal: [
       { ref: "Điều 30, Luật Bảo vệ môi trường (VBHN 98/VBHN-VPQH)", url: "docs/luat-bvmt-vbhn-98-2026.pdf", detail: "Đối tượng phải đánh giá tác động môi trường: dự án nhóm I và dự án nhóm II thuộc điểm c, d, đ, e khoản 4 Điều 28 — không chỉ riêng nhóm I.", quote: "1. Đối tượng phải thực hiện đánh giá tác động môi trường bao gồm: a) Dự án đầu tư nhóm I quy định tại khoản 3 Điều 28 của Luật này; b) Dự án đầu tư nhóm II quy định tại các điểm c, d, đ và e khoản 4 Điều 28 của Luật này. 2. Đối tượng quy định tại khoản 1 Điều này không phải thực hiện đánh giá tác động môi trường khi thuộc một trong các trường hợp sau đây: a) Dự án đầu tư công khẩn cấp theo quy định của pháp luật về đầu tư công; b) Dự án đầu tư không phải thực hiện đánh giá tác động môi trường theo quy định của luật, nghị quyết của Quốc hội." },
       { ref: "Điều 31, Luật Bảo vệ môi trường (sđ Luật 146/2025/QH15)", url: "docs/luat-bvmt-vbhn-98-2026.pdf", detail: "Từ 01/01/2026: ĐTM do chủ dự án đầu tư tự tổ chức thực hiện, đồng thời với lập báo cáo nghiên cứu khả thi.", quote: "1. Đánh giá tác động môi trường do chủ dự án đầu tư tổ chức thực hiện. Đánh giá tác động môi trường được thực hiện đồng thời với quá trình lập báo cáo nghiên cứu khả thi hoặc tài liệu tương đương với báo cáo nghiên cứu khả thi của dự án đầu tư, dự án thành phần hoặc phân kỳ đầu tư của dự án. Kết quả đánh giá tác động môi trường được thể hiện bằng báo cáo đánh giá tác động môi trường." },
-      { ref: "Điều 32, Luật Bảo vệ môi trường 2020", url: "https://www.luatmoitruong.vn/luat-bao-ve-moi-truong/chuong-iv.-danh-gia-moi-truong-chien-luoc-danh-gia-tac-dong-moi-truong-giay-phep-moi-truong/muc-3.-danh-gia-tac-dong-moi-truong/dieu-32.-noi-dung-cua-bao-cao-danh-gia-tac-dong-moi-truong", detail: "Nội dung báo cáo đánh giá tác động môi trường." }
+      { ref: "Điều 32, Luật Bảo vệ môi trường 2020", url: "docs/luat-bvmt-vbhn-98-2026.pdf", detail: "Nội dung báo cáo đánh giá tác động môi trường." }
     ]
   },
   {
     id: "nd-08-2022",
+    files: [{ ref: "Nghị định 08/2022/NĐ-CP (phần nội dung)", url: "docs/nd-08-2022-nd-cp.pdf" }, { ref: "Phụ lục Nghị định 08/2022/NĐ-CP", url: "docs/nd-08-2022-phu-luc.pdf" }, { ref: "Nghị định 48/2026/NĐ-CP (sửa đổi NĐ 08)", url: "docs/nd-48-2026-nd-cp.pdf" }],
     cat: "nd",
     parentLaw: "luat-bvmt",
     code: "Nghị định 08/2022/NĐ-CP (sđ NĐ 05/2025, NĐ 48/2026)",
-    url: "https://thuvienphapluat.vn/van-ban/Tai-nguyen-Moi-truong/Nghi-dinh-08-2022-ND-CP-huong-dan-Luat-Bao-ve-moi-truong-479457.aspx",
     title: "Hướng dẫn Luật Bảo vệ môi trường — danh mục dự án nhóm I, II, III",
     date: "Ban hành 10/01/2022 — sửa đổi bởi NĐ 05/2025/NĐ-CP (06/01/2025) và NĐ 48/2026/NĐ-CP (29/01/2026)",
     summary: "Phụ lục III, IV, V liệt kê chi tiết danh mục dự án thuộc nhóm I, II, III theo từng ngành, lĩnh vực cụ thể — đây là văn bản cần tra trực tiếp để xác định dự án của nhà đầu tư thuộc nhóm nào, không nên tự suy đoán từ Điều 28 Luật.",
@@ -1379,7 +1415,7 @@ const DATA = [
     id: "luat-xay-dung-2025",
     cat: "lienquan",
     code: "Luật số 135/2025/QH15",
-    url: "https://thuvienphapluat.vn/van-ban/Xay-dung-Do-thi/Luat-Xay-dung-2025-so-135-2025-QH15-675213.aspx",
+    url: "docs/luat-xay-dung-135-2025-qh15.pdf",
     title: "Luật Xây dựng 2025 — thay thế Luật Xây dựng 2014",
     date: "Thông qua 10/12/2025, hiệu lực từ 01/7/2026 (riêng khoản 2–3 Điều 43, Điều 71, khoản 3–5 Điều 95 hiệu lực từ 01/01/2026)",
     summary: "⚠️ Luật Xây dựng 2014 (sửa đổi 2020) đã hết hiệu lực từ 01/7/2026. Số điều đã thay đổi hoàn toàn — giấy phép xây dựng nay ở Điều 43 (trước đây là Điều 89/95 của luật cũ). Mọi tài liệu hướng dẫn nhà đầu tư cần cập nhật lại.",
@@ -1399,10 +1435,11 @@ const DATA = [
   },
   {
     id: "nd-217-2026",
+    files: [{ ref: "Phụ lục Nghị định 217/2026/NĐ-CP", url: "docs/nd-217-2026-phu-luc.pdf" }],
     cat: "nd",
     parentLaw: "luat-xay-dung-2025",
     code: "Nghị định 217/2026/NĐ-CP",
-    url: "https://thuvienphapluat.vn/van-ban/Xay-dung-Do-thi/Nghi-dinh-217-2026-ND-CP-huong-dan-Luat-Xay-dung-quan-ly-hoat-dong-xay-dung-696494.aspx",
+    url: "docs/nd-217-2026-nd-cp.pdf",
     title: "Hướng dẫn Luật Xây dựng 2025 về quản lý hoạt động xây dựng",
     date: "Ban hành 19/06/2026, hiệu lực từ 01/7/2026 — thay thế Nghị định 175/2024/NĐ-CP",
     summary: "5 chương, 76 điều — lập, thẩm định, phê duyệt dự án đầu tư xây dựng; thiết kế xây dựng; khảo sát xây dựng; cấp giấy phép xây dựng; quản lý năng lực hoạt động xây dựng.",
@@ -1413,12 +1450,13 @@ const DATA = [
   },
   {
     id: "nd-320-2025",
+    files: [{ ref: "Nghị định 141/2026/NĐ-CP (sửa đổi NĐ 320)", url: "docs/nd-141-2026-nd-cp.pdf" }],
     cat: "nd",
     parentLaw: "luat-thue-tndn",
     code: "Nghị định 320/2025/NĐ-CP",
-    url: "https://thuvienphapluat.vn/van-ban/Doanh-nghiep/Nghi-dinh-320-2025-ND-CP-huong-dan-Luat-Thue-thu-nhap-doanh-nghiep-665051.aspx",
+    url: "docs/nd-320-2025-nd-cp.pdf",
     title: "Nghị định 320/2025/NĐ-CP — hướng dẫn Luật Thuế TNDN, mức thuế suất ưu đãi",
-    date: "Hiệu lực từ 15/12/2025",
+    date: "Ban hành và hiệu lực từ 15/12/2025 — sửa đổi, bổ sung bởi NĐ 141/2026/NĐ-CP (bổ sung khoản 15 Điều 4: miễn thuế TNDN cho doanh nghiệp có tổng doanh thu năm từ 01 tỷ đồng trở xuống, áp dụng từ 01/01/2026)",
     summary: "Điều 19, Điều 20 quy định cụ thể mức thuế suất ưu đãi và thời gian miễn/giảm thuế TNDN theo địa bàn, ngành nghề ưu đãi đầu tư — đây là căn cứ trực tiếp, không phải Luật Đầu tư hay Nghị định 96/2026/NĐ-CP.",
     body: `
       <ul>
@@ -1434,7 +1472,7 @@ const DATA = [
     cat: "nd",
     parentLaw: "luat-dat-dai",
     code: "Điều 39, Nghị định 103/2024/NĐ-CP",
-    url: "https://thuvienphapluat.vn/van-ban/Bat-dong-san/Nghi-dinh-103-2024-ND-CP-tien-su-dung-dat-tien-thue-dat-550020.aspx",
+    url: "docs/nd-103-2024-nd-cp.pdf",
     title: "Nghị định 103/2024/NĐ-CP — miễn, giảm tiền thuê đất, tiền sử dụng đất",
     date: "Ban hành 30/07/2024 — sửa đổi, bổ sung bởi NĐ 261/2025/NĐ-CP, NĐ 291/2025/NĐ-CP, NĐ 50/2026/NĐ-CP",
     summary: "Căn cứ trực tiếp xác định số năm miễn tiền thuê đất theo địa bàn và lĩnh vực ưu đãi đầu tư của dự án.",
@@ -1449,6 +1487,7 @@ const DATA = [
   },
   {
     id: "nd-102-2024",
+    files: [{ ref: "Nghị định 102/2024/NĐ-CP", url: "docs/nd-102-2024-nd-cp.pdf" }],
     cat: "nd",
     parentLaw: "luat-dat-dai",
     code: "Nghị định 102/2024/NĐ-CP",
@@ -1526,9 +1565,10 @@ const DATA = [
   },
   {
     id: "uu-dai-thue-nk-khauhao",
+    files: [{ ref: "Nghị định 18/2021/NĐ-CP (sửa đổi NĐ 134)", url: "docs/nd-18-2021-nd-cp.pdf" }, { ref: "Nghị định 182/2025/NĐ-CP (sửa đổi NĐ 134)", url: "docs/nd-182-2025-nd-cp.pdf" }],
     cat: "nd",
     code: "Khoản 11 Điều 16, Luật 107/2016/QH13",
-    url: "https://thuvienphapluat.vn/van-ban/Xuat-nhap-khau/Luat-thue-xuat-khau-thue-nhap-khau-2016-280693.aspx",
+    url: "docs/luat-thue-xnk-107-2016-qh13.pdf",
     title: "Miễn thuế nhập khẩu hàng hóa tạo tài sản cố định cho dự án ưu đãi đầu tư",
     date: "Luật 107/2016/QH13, sửa đổi bởi Luật 90/2025/QH15 (hiệu lực 01/7/2025)",
     summary: "Miễn thuế nhập khẩu máy móc, thiết bị, phương tiện vận tải chuyên dùng, vật tư xây dựng trong nước chưa sản xuất được, dùng để tạo tài sản cố định của dự án thuộc diện ưu đãi đầu tư.",
@@ -1539,15 +1579,15 @@ const DATA = [
       </ul>
     `,
     legal: [
-      { ref: "Khoản 11 Điều 16, Luật 107/2016/QH13", url: "https://thuvienphapluat.vn/van-ban/Xuat-nhap-khau/Luat-thue-xuat-khau-thue-nhap-khau-2016-280693.aspx", detail: "Miễn thuế nhập khẩu hàng hóa tạo tài sản cố định (sửa đổi bởi Luật 90/2025/QH15)." },
-      { ref: "Điều 14, Nghị định 134/2016/NĐ-CP", url: "https://thuvienphapluat.vn/van-ban/Xuat-nhap-khau/Nghi-dinh-134-2016-ND-CP-huong-dan-Luat-thue-xuat-khau-thue-nhap-khau-323602.aspx", detail: "Hướng dẫn chi tiết miễn thuế nhập khẩu hàng hóa tạo tài sản cố định (sửa đổi bởi Nghị định 18/2021/NĐ-CP và Nghị định 182/2025/NĐ-CP)." }
+      { ref: "Khoản 11 Điều 16, Luật 107/2016/QH13", url: "docs/luat-thue-xnk-107-2016-qh13.pdf", detail: "Miễn thuế nhập khẩu hàng hóa tạo tài sản cố định (sửa đổi bởi Luật 90/2025/QH15)." },
+      { ref: "Điều 14, Nghị định 134/2016/NĐ-CP", url: "docs/nd-134-2016-nd-cp.pdf", detail: "Hướng dẫn chi tiết miễn thuế nhập khẩu hàng hóa tạo tài sản cố định (sửa đổi bởi Nghị định 18/2021/NĐ-CP và Nghị định 182/2025/NĐ-CP)." }
     ]
   },
   {
     id: "khau-hao-nhanh",
     cat: "nd",
     code: "Điều 13, Thông tư 45/2013/TT-BTC",
-    url: "https://thuvienphapluat.vn/van-ban/Doanh-nghiep/Thong-tu-45-2013-TT-BTC-Che-do-quan-ly-su-dung-va-trich-khau-hao-tai-san-co-dinh-183508.aspx",
+    url: "docs/tt-45-2013-vbhn-12-2025.pdf",
     title: "Khấu hao nhanh tài sản cố định cho doanh nghiệp thuộc diện ưu đãi đầu tư",
     date: "Sửa đổi, bổ sung bởi Thông tư 147/2016/TT-BTC, 28/2017/TT-BTC, 30/2025/TT-BTC",
     summary: "Doanh nghiệp hoạt động hiệu quả kinh tế cao thuộc lĩnh vực khuyến khích đầu tư được trích khấu hao nhanh, tối đa gấp 2 lần mức khấu hao theo phương pháp đường thẳng.",
@@ -1560,7 +1600,7 @@ const DATA = [
     cat: "nd",
     parentLaw: "luat-2025",
     code: "Nghị định 182/2024/NĐ-CP",
-    url: "https://thuvienphapluat.vn/van-ban/Doanh-nghiep/Nghi-dinh-182-2024-ND-CP-quan-ly-su-dung-Quy-Ho-tro-dau-tu-638056.aspx",
+    url: "docs/nd-182-2024-nd-cp.pdf",
     title: "Quỹ Hỗ trợ đầu tư — thành lập, quản lý, sử dụng",
     date: "Ban hành 31/12/2024",
     summary: "Quỹ do Thủ tướng Chính phủ quyết định thành lập, hỗ trợ chi phí đào tạo nhân lực, nghiên cứu phát triển, đầu tư hệ thống công trình hạ tầng xã hội… cho dự án lớn/công nghệ cao đủ điều kiện.",
@@ -1575,9 +1615,9 @@ const DATA = [
     id: "luat-thue-tndn",
     cat: "lienquan",
     code: "Luật số 67/2025/QH15",
-    url: "https://thuvienphapluat.vn/van-ban/Doanh-nghiep/Luat-Thue-thu-nhap-doanh-nghiep-2025-so-67-2025-QH15-580594.aspx",
+    url: "docs/luat-thue-tndn-67-2025-qh15.pdf",
     title: "Luật Thuế TNDN 2025 (số 67/2025/QH15) — căn cứ áp dụng ưu đãi thuế",
-    date: "Căn cứ tính ưu đãi thuế TNDN",
+    date: "Ban hành 14/6/2025, hiệu lực từ 01/10/2025 — sửa đổi, bổ sung bởi các Luật 116/2025, 127/2025, 133/2025, 141/2025, 143/2025/QH15 và Luật 09/2026/QH16",
     summary: "Mức thuế suất ưu đãi, thời gian miễn/giảm thuế cho dự án đầu tư (kể cả dự án hưởng ưu đãi đặc biệt) được quy định tại luật chuyên ngành này, không nằm trong Luật Đầu tư hay Nghị định 96/2026/NĐ-CP.",
     body: `
       <p>Khi trao đổi với nhà đầu tư về lợi ích thuế cụ thể, cần dẫn chiếu đúng điều khoản của Luật Thuế TNDN 2025 thay vì suy diễn từ Luật Đầu tư — tránh cam kết sai mức ưu đãi.</p>
@@ -1587,7 +1627,7 @@ const DATA = [
     id: "luat-dau-thau",
     cat: "luat",
     code: "Luật số 22/2023/QH15",
-    url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-thau-2023-22-2023-QH15-518805.aspx",
+    url: "docs/luat-dau-thau-22-2023-qh15.pdf",
     title: "Luật Đấu thầu 2023",
     date: "Hiệu lực từ 01/01/2024 — sửa đổi, bổ sung bởi Luật 57/2024/QH15, 90/2025/QH15, 116/2025/QH15, 133/2025/QH15, 142/2025/QH15",
     summary: "Áp dụng khi dự án cần lựa chọn nhà thầu (mua sắm công) hoặc lựa chọn nhà đầu tư thực hiện dự án đầu tư kinh doanh có sử dụng đất (đấu thầu dự án, không phải đấu giá quyền sử dụng đất).",
@@ -1605,7 +1645,7 @@ const DATA = [
     cat: "nd",
     parentLaw: "luat-dau-thau",
     code: "Nghị định 214/2025/NĐ-CP (sđ NĐ 165/2026, 170/2026, 349/2026)",
-    url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Nghi-dinh-214-2025-ND-CP-huong-dan-Luat-Dau-thau-ve-lua-chon-nha-thau-668157.aspx",
+    url: "docs/nd-214-2025-nd-cp.pdf",
     title: "Hướng dẫn Luật Đấu thầu về lựa chọn nhà thầu",
     date: "Ban hành và hiệu lực từ 04/08/2025 (thay Nghị định 24/2024/NĐ-CP) — VẪN CÒN HIỆU LỰC, đã sửa đổi bởi NĐ 165/2026 và 170/2026 (hiệu lực 01/7/2026), NĐ 349/2026 (hiệu lực 09/9/2026)",
     summary: "14 chương, 146 điều — quy trình, hồ sơ, tiêu chí lựa chọn nhà thầu cho gói thầu sử dụng vốn nhà nước và các nguồn vốn khác theo quy định phải đấu thầu.",
@@ -1691,7 +1731,7 @@ const DATA = [
     id: "luat-kd-bds",
     cat: "luat",
     code: "Luật số 29/2023/QH15",
-    url: "https://thuvienphapluat.vn/van-ban/Bat-dong-san/Luat-Kinh-doanh-bat-dong-san-29-2023-QH15-530116.aspx",
+    url: "docs/luat-kdbds-29-2023-qh15.pdf",
     title: "Luật Kinh doanh bất động sản 2023",
     date: "Thông qua 28/11/2023 — sửa đổi, bổ sung bởi Luật 43/2024/QH15 (hiệu lực sớm từ 01/8/2024)",
     summary: "Áp dụng cho dự án nhà ở, khu đô thị, bất động sản du lịch — quy định điều kiện kinh doanh, đặt cọc mua bán, chuyển nhượng dự án bất động sản.",
@@ -1707,7 +1747,7 @@ const DATA = [
     cat: "nd",
     parentLaw: "luat-kd-bds",
     code: "Nghị định 96/2024/NĐ-CP",
-    url: "https://thuvienphapluat.vn/van-ban/Thuong-mai/Nghi-dinh-96-2024-ND-CP-huong-dan-Luat-Kinh-doanh-bat-dong-san-600395.aspx",
+    url: "docs/nd-96-2024-nd-cp.pdf",
     title: "Hướng dẫn Luật Kinh doanh bất động sản 2023",
     date: "Ban hành 24/07/2024 — sửa đổi, bổ sung bởi Nghị định 54/2026/NĐ-CP (09/02/2026)",
     summary: "Quy định chi tiết công trình xây dựng đưa vào kinh doanh, công khai thông tin dự án, tỷ lệ dư nợ tín dụng/trái phiếu trên vốn chủ sở hữu của doanh nghiệp kinh doanh bất động sản.",
@@ -1721,6 +1761,7 @@ const DATA = [
   },
   {
     id: "luat-nha-o",
+    files: [{ ref: "Luật Nhà ở số 27/2023/QH15 (Công báo số 37–40, ngày 08/01/2024)", url: "docs/luat-nha-o-27-2023-qh15.pdf" }],
     cat: "luat",
     code: "Luật số 27/2023/QH15 (sđ Luật 43/2024/QH15)",
     title: "Luật Nhà ở 2023",
@@ -1735,6 +1776,7 @@ const DATA = [
   },
   {
     id: "nd-95-100-2024",
+    files: [{ ref: "Nghị định 95/2024/NĐ-CP", url: "docs/nd-95-2024-nd-cp.pdf" }],
     cat: "nd",
     parentLaw: "luat-nha-o",
     code: "Nghị định 95/2024/NĐ-CP; Nghị định 100/2024/NĐ-CP",
@@ -1751,6 +1793,7 @@ const DATA = [
   },
   {
     id: "nq-201-2025",
+    files: [{ ref: "Nghị quyết 201/2025/QH15", url: "docs/nq-201-2025-qh15.pdf" }, { ref: "Nghị định 192/2025/NĐ-CP", url: "docs/nd-192-2025-nd-cp.pdf" }],
     cat: "luat",
     parentLaw: "luat-nha-o",
     parentLabel: "Cơ chế thí điểm",
@@ -1785,19 +1828,20 @@ const DATA = [
       </ul>
       <h4>Quyết định 2860/QĐ-UBND (10/9/2026)</h4>
       <p>Phê duyệt điều chỉnh Chương trình phát triển nhà ở tỉnh Đồng Tháp giai đoạn 2021–2030; thay QĐ 1409/QĐ-UBND.HC (Đồng Tháp cũ) và QĐ 3873/QĐ-UBND, QĐ 2288/QĐ-UBND (Tiền Giang cũ). Dự án khu đô thị phải phù hợp chương trình này (tiêu chí tại NQ 40/2026/NQ-HĐND).</p>
-      <div class="note">File PDF NQ 43/2026 đã lưu kèm trang web.</div>
+      <div class="note">File PDF NQ 43/2026 và QĐ 2860/QĐ-UBND đã lưu kèm trang web (bản QĐ 2860 gồm 3 trang quyết định; Chương trình chi tiết đính kèm chưa có bản PDF).</div>
     `,
     legal: [
-      { ref: "Điều 2, Nghị quyết 43/2026/NQ-HĐND", url: "docs/dong-thap-nq-43-2026-ho-tro-noxh.pdf", detail: "Cơ chế hỗ trợ chủ đầu tư dự án nhà ở xã hội.", quote: "1. Nhà nước hỗ trợ chủ đầu tư a) Hỗ trợ 50% kinh phí đầu tư xây dựng hệ thống hạ tầng kỹ thuật trong phạm vi của dự án bao gồm: Hệ thống giao thông, chiếu sáng công cộng, thoát nước ngoài nhà, thu gom và xử lý nước thải nhưng không quá 05 tỷ đồng/dự án; b) Hỗ trợ 100% các khoản phí, lệ phí thực hiện thủ tục hành chính liên quan đến dự án đầu tư xây dựng nhà ở xã hội. 2. Nguyên tắc hỗ trợ Dự án đã được nghiệm thu hoàn thành theo quy định của pháp luật về xây dựng. Giá trị hỗ trợ do cơ quan nhà nước có thẩm quyền xác định." }
+      { ref: "Điều 2, Nghị quyết 43/2026/NQ-HĐND", url: "docs/dong-thap-nq-43-2026-ho-tro-noxh.pdf", detail: "Cơ chế hỗ trợ chủ đầu tư dự án nhà ở xã hội.", quote: "1. Nhà nước hỗ trợ chủ đầu tư a) Hỗ trợ 50% kinh phí đầu tư xây dựng hệ thống hạ tầng kỹ thuật trong phạm vi của dự án bao gồm: Hệ thống giao thông, chiếu sáng công cộng, thoát nước ngoài nhà, thu gom và xử lý nước thải nhưng không quá 05 tỷ đồng/dự án; b) Hỗ trợ 100% các khoản phí, lệ phí thực hiện thủ tục hành chính liên quan đến dự án đầu tư xây dựng nhà ở xã hội. 2. Nguyên tắc hỗ trợ Dự án đã được nghiệm thu hoàn thành theo quy định của pháp luật về xây dựng. Giá trị hỗ trợ do cơ quan nhà nước có thẩm quyền xác định." },
+      { ref: "Điều 1, 2, Quyết định 2860/QĐ-UBND", url: "docs/dong-thap-qd-2860-2026-chuong-trinh-nha-o.pdf", detail: "Phê duyệt điều chỉnh Chương trình phát triển nhà ở tỉnh Đồng Tháp giai đoạn 2021–2030; hiệu lực từ ngày ký (10/9/2026).", quote: "Điều 1. Phê duyệt điều chỉnh Chương trình phát triển nhà ở tỉnh Đồng Tháp giai đoạn 2021-2030 (đính kèm). Điều 2. Quyết định này có hiệu lực kể từ ngày ký." }
     ]
   },
   {
     id: "luat-dau-gia",
     cat: "luat",
     code: "Luật số 01/2016/QH14 (sửa đổi bởi Luật 37/2024/QH15)",
-    url: "https://thuvienphapluat.vn/van-ban/Thuong-mai/Luat-Dau-gia-tai-san-sua-doi-2024-588810.aspx",
+    url: "docs/luat-dau-gia-vbhn-104-2026.pdf",
     title: "Luật Đấu giá tài sản",
-    date: "Luật sửa đổi 2024 hiệu lực từ 01/01/2025",
+    date: "Luật sửa đổi 2024 hiệu lực từ 01/01/2025 — bản PDF là Văn bản hợp nhất số 104/VBHN-VPQH ngày 22/4/2026",
     summary: "Áp dụng khi dự án tiếp cận đất đai qua đấu giá quyền sử dụng đất, hoặc đấu giá quyền khai thác khoáng sản — khác với đấu thầu chọn nhà đầu tư (Luật Đấu thầu).",
     body: `
       <ul>
@@ -1811,9 +1855,9 @@ const DATA = [
     cat: "nd",
     parentLaw: "luat-dau-gia",
     code: "Nghị định 172/2024/NĐ-CP",
-    url: "https://thuvienphapluat.vn/van-ban/Thuong-mai/Nghi-dinh-172-2024-ND-CP-huong-dan-Luat-Dau-gia-tai-san-2016-sua-doi-boi-Luat-Dau-gia-tai-san-2024-638044.aspx",
+    url: "docs/nd-172-2024-nd-cp.pdf",
     title: "Hướng dẫn Luật Đấu giá tài sản (bản 2016, sửa đổi 2024)",
-    date: "Ban hành 2024",
+    date: "Ban hành 27/12/2024, hiệu lực từ 01/01/2025",
     summary: "Quy định chi tiết thi hành Luật Đấu giá tài sản sau khi được sửa đổi bởi Luật 37/2024/QH15 — thay thế các nghị định hướng dẫn trước đó (Nghị định 62/2017/NĐ-CP, sửa đổi bởi Nghị định 47/2023/NĐ-CP).",
     body: `
       <p>Áp dụng khi tỉnh tổ chức đấu giá quyền sử dụng đất để lựa chọn nhà đầu tư (khác với đấu thầu chọn nhà đầu tư theo Luật Đấu thầu, và khác với giao đất/cho thuê đất không qua đấu giá theo khoản 8 Điều 24 Luật Đầu tư 2025).</p>
@@ -1824,7 +1868,7 @@ const DATA = [
     cat: "nd",
     parentLaw: "luat-xay-dung-2025",
     code: "Nghị định 206/2026/NĐ-CP",
-    url: "https://thuvienphapluat.vn/van-ban/Xay-dung-Do-thi/Nghi-dinh-206-2026-ND-CP-huong-dan-quan-ly-chi-phi-dau-tu-xay-dung-457659.aspx",
+    url: "docs/nd-206-2026-nd-cp.pdf",
     title: "Quản lý chi phí đầu tư xây dựng",
     date: "Ban hành 15/06/2026, hiệu lực 01/07/2026 — thay thế Nghị định 10/2021/NĐ-CP",
     summary: "Khung pháp lý để lập, thẩm định tổng mức đầu tư sơ bộ, tổng mức đầu tư, dự toán xây dựng — căn cứ để đánh giá vốn đầu tư nhà đầu tư đề xuất có hợp lý so với quy mô hay không.",
@@ -1837,10 +1881,10 @@ const DATA = [
   },
   {
     id: "qd-425-bxd",
+    files: [{ ref: "Quyết định 425/QĐ-BXD", url: "docs/qd-425-qd-bxd-2026.pdf" }, { ref: "Phụ lục — suất vốn đầu tư xây dựng năm 2025", url: "docs/qd-425-qd-bxd-2026-phu-luc.pdf" }],
     cat: "nd",
     parentLaw: "luat-xay-dung-2025",
     code: "Quyết định 425/QĐ-BXD",
-    url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Quyet-dinh-425-QD-BXD-2026-cong-bo-suat-von-dau-tu-xay-dung-cong-trinh-2025-699543.aspx",
     title: "Công bố suất vốn đầu tư xây dựng và giá xây dựng tổng hợp năm 2025",
     date: "Ban hành 30/03/2026",
     summary: "Bảng suất vốn đầu tư (triệu đồng/m²) theo từng loại công trình — dùng để ước tính hoặc kiểm tra nhanh tổng mức đầu tư nhà đầu tư đề xuất có phù hợp với quy mô xây dựng hay không.",
@@ -1867,6 +1911,7 @@ const DATA = [
   },
   {
     id: "nd-269-2025",
+    files: [{ ref: "Nghị định 269/2025/NĐ-CP", url: "docs/nd-269-2025-nd-cp.pdf" }],
     cat: "nd",
     parentLaw: "luat-xay-dung-2025",
     parentLabel: "Văn bản liên quan",
@@ -1894,9 +1939,9 @@ const DATA = [
   },
   {
     id: "nd-32-2024-ccn",
+    files: [{ ref: "Nghị định 32/2024/NĐ-CP (bản gốc)", url: "docs/nd-32-2024-nd-cp.pdf" }, { ref: "Nghị định 303/2026/NĐ-CP (sửa đổi)", url: "docs/nd-303-2026-nd-cp.pdf" }],
     cat: "lienquan",
     code: "Nghị định 32/2024/NĐ-CP (sđ NĐ 303/2026/NĐ-CP)",
-    url: "docs/nd-303-2026-nd-cp.pdf",
     title: "Quản lý, phát triển cụm công nghiệp",
     date: "Ban hành 15/3/2024 — sửa đổi bởi Nghị định 303/2026/NĐ-CP (ban hành 01/8/2026, hiệu lực 15/9/2026)",
     summary: "Thành lập, mở rộng cụm công nghiệp; đầu tư hạ tầng CCN; di dời cơ sở sản xuất vào CCN. Xây dựng, phát triển hạ tầng CCN là ngành, nghề ưu đãi đầu tư (Phụ lục NĐ 96/2026/NĐ-CP).",
@@ -1980,7 +2025,7 @@ const DATA = [
     `,
     legal: [
       { ref: "Quyết định 1410/QĐ-UBND ngày 13/5/2026", url: "docs/dong-thap-qd-1410-2026-quy-hoach-tinh.pdf", detail: "UBND tỉnh Đồng Tháp phê duyệt điều chỉnh Quy hoạch tỉnh thời kỳ 2021–2030, tầm nhìn 2050 — Phụ lục II, III, IV: danh mục khu kinh tế, KCN, CCN." },
-      { ref: "Khoản 6, 7 Điều 22, Nghị định 96/2026/NĐ-CP", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Nghi-dinh-96-2026-ND-CP-huong-dan-Luat-Dau-tu-690303.aspx", detail: "KCN, CCN, KCX hưởng ưu đãi như địa bàn khó khăn; khu kinh tế, khu công nghệ cao hưởng như địa bàn đặc biệt khó khăn. Dự án trên nhiều xã: xác định theo xã có phần lớn diện tích.", quote: "6. Trường hợp dự án đầu tư được thực hiện trên địa bàn có từ hai đơn vị hành chính cấp xã trở lên thuộc các địa bàn có điều kiện kinh tế - xã hội khác nhau thì địa bàn ưu đãi đầu tư của dự án được xác định theo đơn vị hành chính cấp xã nơi thực hiện phần lớn diện tích sử dụng đất của dự án. Trường hợp diện tích sử dụng đất của dự án giữa các xã bằng nhau thì xác định theo đơn vị hành chính cấp xã có mức ưu đãi cao hơn. 7. Xác định địa bàn ưu đãi đầu tư đối với khu công nghiệp, cụm công nghiệp, khu chế xuất, khu công nghệ cao, khu nông nghiệp ứng dụng công nghệ cao, khu công nghệ số tập trung, khu thương mại tự do, trung tâm tài chính quốc tế, khu kinh tế như sau: a) Khu kinh tế, khu công nghệ cao, khu nông nghiệp ứng dụng công nghệ cao, khu công nghệ số tập trung, khu thương mại tự do và trung tâm tài chính quốc tế là địa bàn ưu đãi đầu tư, được hưởng ưu đãi đầu tư áp dụng đối với địa bàn có điều kiện kinh tế - xã hội đặc biệt khó khăn theo quy định tại khoản 2 Điều này; b) Khu công nghiệp, cụm công nghiệp và khu chế xuất là địa bàn ưu đãi đầu tư, được hưởng ưu đãi đầu tư áp dụng đối với địa bàn có điều kiện kinh tế - xã hội khó khăn theo quy định tại khoản 3 Điều này." }
+      { ref: "Khoản 6, 7 Điều 22, Nghị định 96/2026/NĐ-CP", url: "docs/nd-96-2026-nd-cp.pdf", detail: "KCN, CCN, KCX hưởng ưu đãi như địa bàn khó khăn; khu kinh tế, khu công nghệ cao hưởng như địa bàn đặc biệt khó khăn. Dự án trên nhiều xã: xác định theo xã có phần lớn diện tích.", quote: "6. Trường hợp dự án đầu tư được thực hiện trên địa bàn có từ hai đơn vị hành chính cấp xã trở lên thuộc các địa bàn có điều kiện kinh tế - xã hội khác nhau thì địa bàn ưu đãi đầu tư của dự án được xác định theo đơn vị hành chính cấp xã nơi thực hiện phần lớn diện tích sử dụng đất của dự án. Trường hợp diện tích sử dụng đất của dự án giữa các xã bằng nhau thì xác định theo đơn vị hành chính cấp xã có mức ưu đãi cao hơn. 7. Xác định địa bàn ưu đãi đầu tư đối với khu công nghiệp, cụm công nghiệp, khu chế xuất, khu công nghệ cao, khu nông nghiệp ứng dụng công nghệ cao, khu công nghệ số tập trung, khu thương mại tự do, trung tâm tài chính quốc tế, khu kinh tế như sau: a) Khu kinh tế, khu công nghệ cao, khu nông nghiệp ứng dụng công nghệ cao, khu công nghệ số tập trung, khu thương mại tự do và trung tâm tài chính quốc tế là địa bàn ưu đãi đầu tư, được hưởng ưu đãi đầu tư áp dụng đối với địa bàn có điều kiện kinh tế - xã hội đặc biệt khó khăn theo quy định tại khoản 2 Điều này; b) Khu công nghiệp, cụm công nghiệp và khu chế xuất là địa bàn ưu đãi đầu tư, được hưởng ưu đãi đầu tư áp dụng đối với địa bàn có điều kiện kinh tế - xã hội khó khăn theo quy định tại khoản 3 Điều này." }
     ]
   },
   {
@@ -2187,6 +2232,7 @@ function render() {
     }
     const card = document.createElement('div');
     card.className = 'card';
+    card.dataset.id = item.id;
     card.dataset.open = openIds.has(item.id) ? 'true' : 'false';
     if (item.parentLaw) card.dataset.child = 'true';
     if (ancestorChain(item).length > 2) card.dataset.depth = '2';
@@ -2223,7 +2269,9 @@ function render() {
 
     const body = document.createElement('div');
     body.className = 'card-body';
-    const legalArr = item.legal || (item.url ? [{ ref: item.code, url: item.url, detail: "Toàn văn văn bản." }] : null);
+    const legalBase = item.legal || (item.url ? [{ ref: item.code, url: item.url, detail: "Toàn văn văn bản." }] : []);
+    const legalAll = legalBase.concat((item.files || []).map(f => ({ ref: f.ref, url: f.url, detail: f.detail || "Toàn văn văn bản (bản PDF lưu kèm trang web)." })));
+    const legalArr = legalAll.length ? legalAll : null;
     body.innerHTML = `<div class="card-body-inner"><div class="card-summary-open">${item.summary}</div>${item.body}${legalArr ? `<h4>Căn cứ pháp lý cụ thể</h4>${renderLegalList(legalArr)}` : ''}</div>`;
 
     card.appendChild(head);
@@ -2263,10 +2311,10 @@ const PROCESS_DATA = [
         "Sơ bộ xác định dự án có đủ điều kiện hưởng ưu đãi đặc biệt hay không (vốn, tiến độ giải ngân…)."
       ],
       legal: [
-        { ref: "Điều 7, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Danh mục 198 ngành, nghề đầu tư kinh doanh có điều kiện tại Phụ lục IV — rút gọn so với Luật 2020.", quote: "1. Ngành, nghề đầu tư kinh doanh có điều kiện là ngành, nghề kinh doanh trên lãnh thổ Việt Nam mà việc thực hiện hoạt động đầu tư kinh doanh trong ngành, nghề đó phải đáp ứng điều kiện cần thiết vì lý do quốc phòng, an ninh quốc gia, trật tự, an toàn xã hội, đạo đức xã hội, sức khỏe của cộng đồng. Danh mục ngành, nghề đầu tư kinh doanh có điều kiện được quy định tại Phụ lục IV ban hành kèm theo Luật này." },
-        { ref: "Nghị định 96/2026/NĐ-CP", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Nghi-dinh-96-2026-ND-CP-huong-dan-Luat-Dau-tu-690303.aspx", detail: "Quy định chi tiết ngành, nghề và điều kiện tiếp cận thị trường đối với nhà đầu tư nước ngoài." },
-        { ref: "Danh mục địa bàn ưu đãi, Nghị định 96/2026/NĐ-CP", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Nghi-dinh-96-2026-ND-CP-huong-dan-Luat-Dau-tu-690303.aspx", detail: "Nguyên tắc xác định và danh mục địa bàn ưu đãi, cập nhật theo mô hình chính quyền 2 cấp từ 01/7/2025." },
-        { ref: "Điều 21, Nghị định 96/2026/NĐ-CP", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Nghi-dinh-96-2026-ND-CP-huong-dan-Luat-Dau-tu-690303.aspx", detail: "Ưu đãi, hỗ trợ đầu tư đặc biệt — mức ưu đãi thuế TNDN, tiền thuê đất dẫn chiếu theo luật chuyên ngành." }
+        { ref: "Điều 7, Luật 143/2025/QH15", url: "docs/luat-dau-tu-2025-so-143-2025-qh15.pdf", detail: "Danh mục 198 ngành, nghề đầu tư kinh doanh có điều kiện tại Phụ lục IV — rút gọn so với Luật 2020.", quote: "1. Ngành, nghề đầu tư kinh doanh có điều kiện là ngành, nghề kinh doanh trên lãnh thổ Việt Nam mà việc thực hiện hoạt động đầu tư kinh doanh trong ngành, nghề đó phải đáp ứng điều kiện cần thiết vì lý do quốc phòng, an ninh quốc gia, trật tự, an toàn xã hội, đạo đức xã hội, sức khỏe của cộng đồng. Danh mục ngành, nghề đầu tư kinh doanh có điều kiện được quy định tại Phụ lục IV ban hành kèm theo Luật này." },
+        { ref: "Nghị định 96/2026/NĐ-CP", url: "docs/nd-96-2026-nd-cp.pdf", detail: "Quy định chi tiết ngành, nghề và điều kiện tiếp cận thị trường đối với nhà đầu tư nước ngoài." },
+        { ref: "Danh mục địa bàn ưu đãi, Nghị định 96/2026/NĐ-CP", url: "docs/nd-96-2026-nd-cp.pdf", detail: "Nguyên tắc xác định và danh mục địa bàn ưu đãi, cập nhật theo mô hình chính quyền 2 cấp từ 01/7/2025." },
+        { ref: "Điều 21, Nghị định 96/2026/NĐ-CP", url: "docs/nd-96-2026-nd-cp.pdf", detail: "Ưu đãi, hỗ trợ đầu tư đặc biệt — mức ưu đãi thuế TNDN, tiền thuê đất dẫn chiếu theo luật chuyên ngành." }
       ]
       }
     ]
@@ -2292,8 +2340,8 @@ const PROCESS_DATA = [
         "Dự án nhà đầu tư tự thỏa thuận nhận quyền sử dụng đất đã đúng mục đích (ví dụ đất cơ sở sản xuất phi nông nghiệp) và không thuộc Điều 24: không phải chấp thuận chủ trương — bỏ qua bước con 2.2, sang trường hợp 3.2."
       ],
       legal: [
-        { ref: "Điều 24, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Liệt kê 20 khoản dự án thuộc diện phải chấp thuận chủ trương đầu tư — nền tảng để tra Điều 25 xác định đúng cấp thẩm quyền.", quote: "8. Dự án đầu tư mà nhà đầu tư có đề nghị Nhà nước giao đất, cho thuê đất không đấu giá quyền sử dụng đất, đấu thầu lựa chọn nhà đầu tư thực hiện dự án có sử dụng đất; dự án có đề nghị chuyển mục đích sử dụng đất... 19. Dự án đầu tư khác thuộc diện chấp thuận chủ trương đầu tư của Thủ tướng Chính phủ theo quy định của pháp luật. 20. Dự án đầu tư có yêu cầu áp dụng cơ chế, chính sách đặc biệt, khác với quy định của luật, nghị quyết của Quốc hội." },
-        { ref: "Điều 25, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Quốc hội: dự án theo khoản 20 Điều 24. Thủ tướng: khoản 1, 2, 4, 6, 7, 19 — dự án lớn, tái định cư ≥20.000 người (miền núi)/50.000 người (vùng khác). Chủ tịch UBND cấp tỉnh: khoản 8–18, gồm dự án Nhà nước giao/cho thuê đất không qua đấu giá.", quote: "1. Quốc hội chấp thuận chủ trương đầu tư đối với dự án đầu tư quy định tại khoản 20 Điều 24 của Luật này. 2. Thủ tướng Chính phủ chấp thuận chủ trương đầu tư đối với: a) Dự án đầu tư quy định tại các khoản 1, 2, 4, 6, 7 và 19 Điều 24... 3. Chủ tịch Ủy ban nhân dân cấp tỉnh chấp thuận chủ trương đầu tư đối với: a) Dự án đầu tư quy định tại các khoản 8, 9, 10, 11, 12, 13, 14, 15, 16, 17 và 18 Điều 24..." }
+        { ref: "Điều 24, Luật 143/2025/QH15", url: "docs/luat-dau-tu-2025-so-143-2025-qh15.pdf", detail: "Liệt kê 20 khoản dự án thuộc diện phải chấp thuận chủ trương đầu tư — nền tảng để tra Điều 25 xác định đúng cấp thẩm quyền.", quote: "8. Dự án đầu tư mà nhà đầu tư có đề nghị Nhà nước giao đất, cho thuê đất không đấu giá quyền sử dụng đất, đấu thầu lựa chọn nhà đầu tư thực hiện dự án có sử dụng đất; dự án có đề nghị chuyển mục đích sử dụng đất... 19. Dự án đầu tư khác thuộc diện chấp thuận chủ trương đầu tư của Thủ tướng Chính phủ theo quy định của pháp luật. 20. Dự án đầu tư có yêu cầu áp dụng cơ chế, chính sách đặc biệt, khác với quy định của luật, nghị quyết của Quốc hội." },
+        { ref: "Điều 25, Luật 143/2025/QH15", url: "docs/luat-dau-tu-2025-so-143-2025-qh15.pdf", detail: "Quốc hội: dự án theo khoản 20 Điều 24. Thủ tướng: khoản 1, 2, 4, 6, 7, 19 — dự án lớn, tái định cư ≥20.000 người (miền núi)/50.000 người (vùng khác). Chủ tịch UBND cấp tỉnh: khoản 8–18, gồm dự án Nhà nước giao/cho thuê đất không qua đấu giá.", quote: "1. Quốc hội chấp thuận chủ trương đầu tư đối với dự án đầu tư quy định tại khoản 20 Điều 24 của Luật này. 2. Thủ tướng Chính phủ chấp thuận chủ trương đầu tư đối với: a) Dự án đầu tư quy định tại các khoản 1, 2, 4, 6, 7 và 19 Điều 24... 3. Chủ tịch Ủy ban nhân dân cấp tỉnh chấp thuận chủ trương đầu tư đối với: a) Dự án đầu tư quy định tại các khoản 8, 9, 10, 11, 12, 13, 14, 15, 16, 17 và 18 Điều 24..." }
       ]
       },
       {
@@ -2311,7 +2359,7 @@ const PROCESS_DATA = [
         "Nộp hồ sơ và theo dõi các mốc lấy ý kiến thẩm định liên ngành."
       ],
       legal: [
-        { ref: "Điều 32, Nghị định 96/2026/NĐ-CP", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Nghi-dinh-96-2026-ND-CP-huong-dan-Luat-Dau-tu-690303.aspx", detail: "Hồ sơ đề nghị chấp thuận chủ trương đầu tư dự án do nhà đầu tư đề xuất." }
+        { ref: "Điều 32, Nghị định 96/2026/NĐ-CP", url: "docs/nd-96-2026-nd-cp.pdf", detail: "Hồ sơ đề nghị chấp thuận chủ trương đầu tư dự án do nhà đầu tư đề xuất." }
       ],
       note: "Quy trình thẩm định (thẩm quyền Thủ tướng): 3 ngày gửi lấy ý kiến bộ ngành → 10 ngày các cơ quan có ý kiến → 20 ngày cơ quan chủ trì thẩm định, lập báo cáo → 5 ngày Thủ tướng chấp thuận."
       },
@@ -2328,8 +2376,8 @@ const PROCESS_DATA = [
         "Chuẩn bị và nộp hồ sơ đăng ký doanh nghiệp."
       ],
       legal: [
-        { ref: "Luật Doanh nghiệp 2020 (số 59/2020/QH14)", url: "https://thuvienphapluat.vn/van-ban/Doanh-nghiep/Luat-Doanh-nghiep-so-59-2020-QH14-427301.aspx", detail: "Quy định thành lập, tổ chức quản lý doanh nghiệp — nền tảng của bước ERC." },
-        { ref: "Điều 19, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Nhà đầu tư nước ngoài lập pháp nhân qua ERC trước, sau đó mới xin IRC.", quote: "2. Nhà đầu tư nước ngoài được thành lập tổ chức kinh tế thực hiện dự án đầu tư trước khi thực hiện thủ tục cấp, điều chỉnh Giấy chứng nhận đăng ký đầu tư và phải đáp ứng điều kiện tiếp cận thị trường đối với nhà đầu tư nước ngoài quy định tại Điều 8 của Luật này khi thực hiện thủ tục thành lập tổ chức kinh tế." },
+        { ref: "Luật Doanh nghiệp 2020 (số 59/2020/QH14)", url: "docs/luat-doanh-nghiep-vbhn-2025.pdf", detail: "Quy định thành lập, tổ chức quản lý doanh nghiệp — nền tảng của bước ERC." },
+        { ref: "Điều 19, Luật 143/2025/QH15", url: "docs/luat-dau-tu-2025-so-143-2025-qh15.pdf", detail: "Nhà đầu tư nước ngoài lập pháp nhân qua ERC trước, sau đó mới xin IRC.", quote: "2. Nhà đầu tư nước ngoài được thành lập tổ chức kinh tế thực hiện dự án đầu tư trước khi thực hiện thủ tục cấp, điều chỉnh Giấy chứng nhận đăng ký đầu tư và phải đáp ứng điều kiện tiếp cận thị trường đối với nhà đầu tư nước ngoài quy định tại Điều 8 của Luật này khi thực hiện thủ tục thành lập tổ chức kinh tế." },
         { ref: "Khoản 5 Điều 26, Luật Doanh nghiệp (VBHN 2025)", detail: "Thời hạn cấp đăng ký doanh nghiệp: 03 ngày làm việc.", quote: "5. Trong thời hạn 03 ngày làm việc kể từ ngày nhận hồ sơ, Cơ quan đăng ký kinh doanh có trách nhiệm xem xét tính hợp lệ của hồ sơ đăng ký doanh nghiệp và cấp đăng ký doanh nghiệp; trường hợp hồ sơ chưa hợp lệ, Cơ quan đăng ký kinh doanh phải thông báo bằng văn bản nội dung cần sửa đổi, bổ sung cho người thành lập doanh nghiệp. Trường hợp từ chối đăng ký doanh nghiệp thì phải thông báo bằng văn bản cho người thành lập doanh nghiệp và nêu rõ lý do." }
       ]
       },
@@ -2348,9 +2396,9 @@ const PROCESS_DATA = [
         "Thủ tục khác yêu cầu IRC/chủ trương mà dự án không thuộc diện phải có: nhà đầu tư không phải nộp (khoản 11 Điều 52 Luật Đầu tư 2025)."
       ],
       legal: [
-        { ref: "Điều 26, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Dự án thuộc diện phải cấp IRC: dự án của nhà đầu tư nước ngoài; dự án của tổ chức kinh tế bị nước ngoài chi phối theo khoản 1 Điều 20.", quote: "1. Các dự án phải thực hiện thủ tục cấp Giấy chứng nhận đăng ký đầu tư bao gồm: a) Dự án đầu tư của nhà đầu tư nước ngoài; b) Dự án đầu tư của tổ chức kinh tế quy định tại khoản 1 Điều 20 của Luật này. 2. Các dự án không phải thực hiện thủ tục cấp Giấy chứng nhận đăng ký đầu tư bao gồm: a) Dự án đầu tư của nhà đầu tư trong nước; b) Dự án đầu tư của tổ chức kinh tế quy định tại khoản 2 Điều 20 của Luật này; c) Đầu tư theo hình thức góp vốn, mua cổ phần, mua phần vốn góp của tổ chức kinh tế." },
-        { ref: "Điều 27, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Thẩm quyền cấp IRC: Ban quản lý KCN/KCX/KCNC/KKT (dự án trong khu); Sở Tài chính (dự án ngoài khu); cơ quan nơi đặt văn phòng điều hành (dự án liên tỉnh hoặc vừa trong vừa ngoài khu).", quote: "1. Ban quản lý khu công nghiệp, khu chế xuất, khu công nghệ cao, khu kinh tế cấp, điều chỉnh, thu hồi Giấy chứng nhận đăng ký đầu tư đối với dự án đầu tư trong khu công nghiệp... 2. Sở Tài chính cấp, điều chỉnh, thu hồi Giấy chứng nhận đăng ký đầu tư đối với dự án đầu tư ngoài khu công nghiệp, khu chế xuất, khu công nghệ cao, khu kinh tế... 3. Cơ quan đăng ký đầu tư nơi nhà đầu tư thực hiện dự án đầu tư đặt hoặc dự kiến đặt văn phòng điều hành... cấp, điều chỉnh, thu hồi Giấy chứng nhận đăng ký đầu tư đối với: a) Dự án đầu tư thực hiện tại 02 đơn vị hành chính cấp tỉnh trở lên; b) Dự án đầu tư thực hiện ở trong và ngoài khu công nghiệp..." },
-        { ref: "Điều 19, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Nhà đầu tư nước ngoài được thành lập tổ chức kinh tế (ERC) trước khi làm thủ tục cấp IRC.", quote: "2. Nhà đầu tư nước ngoài được thành lập tổ chức kinh tế thực hiện dự án đầu tư trước khi thực hiện thủ tục cấp, điều chỉnh Giấy chứng nhận đăng ký đầu tư và phải đáp ứng điều kiện tiếp cận thị trường đối với nhà đầu tư nước ngoài quy định tại Điều 8 của Luật này khi thực hiện thủ tục thành lập tổ chức kinh tế." },
+        { ref: "Điều 26, Luật 143/2025/QH15", url: "docs/luat-dau-tu-2025-so-143-2025-qh15.pdf", detail: "Dự án thuộc diện phải cấp IRC: dự án của nhà đầu tư nước ngoài; dự án của tổ chức kinh tế bị nước ngoài chi phối theo khoản 1 Điều 20.", quote: "1. Các dự án phải thực hiện thủ tục cấp Giấy chứng nhận đăng ký đầu tư bao gồm: a) Dự án đầu tư của nhà đầu tư nước ngoài; b) Dự án đầu tư của tổ chức kinh tế quy định tại khoản 1 Điều 20 của Luật này. 2. Các dự án không phải thực hiện thủ tục cấp Giấy chứng nhận đăng ký đầu tư bao gồm: a) Dự án đầu tư của nhà đầu tư trong nước; b) Dự án đầu tư của tổ chức kinh tế quy định tại khoản 2 Điều 20 của Luật này; c) Đầu tư theo hình thức góp vốn, mua cổ phần, mua phần vốn góp của tổ chức kinh tế." },
+        { ref: "Điều 27, Luật 143/2025/QH15", url: "docs/luat-dau-tu-2025-so-143-2025-qh15.pdf", detail: "Thẩm quyền cấp IRC: Ban quản lý KCN/KCX/KCNC/KKT (dự án trong khu); Sở Tài chính (dự án ngoài khu); cơ quan nơi đặt văn phòng điều hành (dự án liên tỉnh hoặc vừa trong vừa ngoài khu).", quote: "1. Ban quản lý khu công nghiệp, khu chế xuất, khu công nghệ cao, khu kinh tế cấp, điều chỉnh, thu hồi Giấy chứng nhận đăng ký đầu tư đối với dự án đầu tư trong khu công nghiệp... 2. Sở Tài chính cấp, điều chỉnh, thu hồi Giấy chứng nhận đăng ký đầu tư đối với dự án đầu tư ngoài khu công nghiệp, khu chế xuất, khu công nghệ cao, khu kinh tế... 3. Cơ quan đăng ký đầu tư nơi nhà đầu tư thực hiện dự án đầu tư đặt hoặc dự kiến đặt văn phòng điều hành... cấp, điều chỉnh, thu hồi Giấy chứng nhận đăng ký đầu tư đối với: a) Dự án đầu tư thực hiện tại 02 đơn vị hành chính cấp tỉnh trở lên; b) Dự án đầu tư thực hiện ở trong và ngoài khu công nghiệp..." },
+        { ref: "Điều 19, Luật 143/2025/QH15", url: "docs/luat-dau-tu-2025-so-143-2025-qh15.pdf", detail: "Nhà đầu tư nước ngoài được thành lập tổ chức kinh tế (ERC) trước khi làm thủ tục cấp IRC.", quote: "2. Nhà đầu tư nước ngoài được thành lập tổ chức kinh tế thực hiện dự án đầu tư trước khi thực hiện thủ tục cấp, điều chỉnh Giấy chứng nhận đăng ký đầu tư và phải đáp ứng điều kiện tiếp cận thị trường đối với nhà đầu tư nước ngoài quy định tại Điều 8 của Luật này khi thực hiện thủ tục thành lập tổ chức kinh tế." },
         { ref: "Khoản 4 Điều 26, Luật 143/2025/QH15", url: "docs/luat-dau-tu-2025-so-143-2025-qh15.pdf", detail: "Nhà đầu tư trong nước được xin IRC nếu có nhu cầu.", quote: "4. Trường hợp nhà đầu tư có nhu cầu cấp Giấy chứng nhận đăng ký đầu tư đối với dự án đầu tư quy định tại điểm a và điểm b khoản 2 Điều này, nhà đầu tư thực hiện thủ tục cấp Giấy chứng nhận đăng ký đầu tư." },
         { ref: "Khoản 1 Điều 38, Nghị định 96/2026/NĐ-CP", detail: "Cấp IRC trong 05 ngày làm việc sau khi nhận quyết định chấp thuận chủ trương.", quote: "1. Thủ tục cấp, điều chỉnh Giấy chứng nhận đăng ký đầu tư đối với dự án đầu tư được chấp thuận chủ trương đầu tư đồng thời với chấp thuận nhà đầu tư và thuộc diện cấp Giấy chứng nhận đăng ký đầu tư được thực hiện như sau: a) Căn cứ Quyết định chấp thuận chủ trương đầu tư, Quyết định chấp thuận điều chỉnh chủ trương đầu tư, cơ quan đăng ký đầu tư cấp, điều chỉnh Giấy chứng nhận đăng ký đầu tư trong thời hạn 05 ngày làm việc kể từ ngày nhận được Quyết định chấp thuận chủ trương đầu tư, Quyết định chấp thuận điều chỉnh chủ trương đầu tư; ..." },
         { ref: "Khoản 3 Điều 39, Nghị định 96/2026/NĐ-CP", detail: "Dự án không thuộc diện chấp thuận chủ trương: cấp IRC trong 10 ngày làm việc; lưu ý điều kiện suất đầu tư trên diện tích đất do UBND tỉnh quy định (điểm d).", quote: "3. Cơ quan đăng ký đầu tư lấy ý kiến các cơ quan quản lý nhà nước tại địa phương trong trường hợp cần thiết và cấp Giấy chứng nhận đăng ký đầu tư cho nhà đầu tư trong thời hạn 10 ngày làm việc kể từ ngày nhận được hồ sơ hợp lệ khi dự án đáp ứng các điều kiện sau: a) Không thuộc ngành, nghề cấm đầu tư kinh doanh theo quy định tại Điều 6 của Luật Đầu tư và điều ước quốc tế về đầu tư; b) Có địa điểm thực hiện dự án đầu tư được xác định trên cơ sở thông tin về tài liệu chứng minh quyền sử dụng đất ...; c) Dự án đầu tư phù hợp với quy hoạch quy định tại khoản 7 Điều 32 của Nghị định này; d) Đáp ứng điều kiện về suất đầu tư trên một diện tích đất do Ủy ban nhân dân cấp tỉnh quy định căn cứ vào điều kiện thực tế của địa phương và được Thường trực Hội đồng nhân dân tỉnh thông qua (nếu có), số lượng lao động sử dụng (nếu có); đ) Đáp ứng điều kiện tiếp cận thị trường đối với nhà đầu tư nước ngoài; ..." },
@@ -2381,7 +2429,7 @@ const PROCESS_DATA = [
         "Nếu nhà đầu tư tự thỏa thuận với người dân (chuyển nhượng, góp vốn, thuê quyền sử dụng đất): không làm trường hợp này mà làm trường hợp 3.2."
       ],
       legal: [
-        { ref: "Chương IX (Điều 116–127), Luật Đất đai 2024 (số 31/2024/QH15)", url: "https://hethongphapluat.vn/luat-dat-dai-2024/dieu-116", detail: "Quy định về giao đất, cho thuê đất, chuyển mục đích sử dụng đất để thực hiện dự án đầu tư." }
+        { ref: "Chương IX (Điều 116–127), Luật Đất đai 2024 (số 31/2024/QH15)", url: "docs/luat-dat-dai-2024-so-31-2024-qh15.pdf", detail: "Quy định về giao đất, cho thuê đất, chuyển mục đích sử dụng đất để thực hiện dự án đầu tư." }
       ]
       },
       {
@@ -2428,7 +2476,7 @@ const PROCESS_DATA = [
       ],
       legal: [
         { ref: "Khoản 1 Điều 28, Luật Bảo vệ môi trường (VBHN 98/VBHN-VPQH)", url: "docs/luat-bvmt-vbhn-98-2026.pdf", detail: "Tiêu chí về môi trường để phân loại dự án đầu tư.", quote: "1. Tiêu chí về môi trường để phân loại dự án đầu tư bao gồm: a) Quy mô, công suất, loại hình sản xuất, kinh doanh, dịch vụ; b) Diện tích sử dụng đất, đất có mặt nước, khu vực biển; quy mô khai thác tài nguyên thiên nhiên; c) Yếu tố nhạy cảm về môi trường ..." },
-        { ref: "Nghị định 08/2022/NĐ-CP (sđ bởi NĐ 05/2025/NĐ-CP, NĐ 48/2026/NĐ-CP)", url: "https://thuvienphapluat.vn/van-ban/Tai-nguyen-Moi-truong/Nghi-dinh-08-2022-ND-CP-huong-dan-Luat-Bao-ve-moi-truong-479457.aspx", detail: "Tiêu chí và danh mục chi tiết dự án nhóm I (Phụ lục III), nhóm II (Phụ lục IV), nhóm III (Phụ lục V) — kết hợp tiêu chí quy mô (nhóm A/B/C), nguy cơ ô nhiễm và yếu tố nhạy cảm môi trường." }
+        { ref: "Nghị định 08/2022/NĐ-CP (sđ bởi NĐ 05/2025/NĐ-CP, NĐ 48/2026/NĐ-CP)", url: "docs/nd-08-2022-phu-luc.pdf", detail: "Tiêu chí và danh mục chi tiết dự án nhóm I (Phụ lục III), nhóm II (Phụ lục IV), nhóm III (Phụ lục V) — kết hợp tiêu chí quy mô (nhóm A/B/C), nguy cơ ô nhiễm và yếu tố nhạy cảm môi trường." }
       ]
       },
       {
@@ -2446,7 +2494,7 @@ const PROCESS_DATA = [
       legal: [
         { ref: "Điều 30, Luật Bảo vệ môi trường (VBHN 98/VBHN-VPQH)", url: "docs/luat-bvmt-vbhn-98-2026.pdf", detail: "Đối tượng phải đánh giá tác động môi trường: dự án nhóm I và dự án nhóm II thuộc điểm c, d, đ, e khoản 4 Điều 28 — không chỉ riêng nhóm I.", quote: "1. Đối tượng phải thực hiện đánh giá tác động môi trường bao gồm: a) Dự án đầu tư nhóm I quy định tại khoản 3 Điều 28 của Luật này; b) Dự án đầu tư nhóm II quy định tại các điểm c, d, đ và e khoản 4 Điều 28 của Luật này. 2. Đối tượng quy định tại khoản 1 Điều này không phải thực hiện đánh giá tác động môi trường khi thuộc một trong các trường hợp sau đây: a) Dự án đầu tư công khẩn cấp theo quy định của pháp luật về đầu tư công; b) Dự án đầu tư không phải thực hiện đánh giá tác động môi trường theo quy định của luật, nghị quyết của Quốc hội." },
         { ref: "Điều 31, Luật Bảo vệ môi trường (sđ Luật 146/2025/QH15)", url: "docs/luat-bvmt-vbhn-98-2026.pdf", detail: "Từ 01/01/2026: ĐTM do chủ dự án đầu tư tự tổ chức thực hiện, đồng thời với lập báo cáo nghiên cứu khả thi.", quote: "1. Đánh giá tác động môi trường do chủ dự án đầu tư tổ chức thực hiện. Đánh giá tác động môi trường được thực hiện đồng thời với quá trình lập báo cáo nghiên cứu khả thi hoặc tài liệu tương đương với báo cáo nghiên cứu khả thi của dự án đầu tư, dự án thành phần hoặc phân kỳ đầu tư của dự án. Kết quả đánh giá tác động môi trường được thể hiện bằng báo cáo đánh giá tác động môi trường." },
-        { ref: "Điều 32, Luật Bảo vệ môi trường 2020", url: "https://www.luatmoitruong.vn/luat-bao-ve-moi-truong/chuong-iv.-danh-gia-moi-truong-chien-luoc-danh-gia-tac-dong-moi-truong-giay-phep-moi-truong/muc-3.-danh-gia-tac-dong-moi-truong/dieu-32.-noi-dung-cua-bao-cao-danh-gia-tac-dong-moi-truong", detail: "Nội dung báo cáo đánh giá tác động môi trường: xuất xứ dự án, căn cứ pháp lý/kỹ thuật, các tác động môi trường chính." }
+        { ref: "Điều 32, Luật Bảo vệ môi trường 2020", url: "docs/luat-bvmt-vbhn-98-2026.pdf", detail: "Nội dung báo cáo đánh giá tác động môi trường: xuất xứ dự án, căn cứ pháp lý/kỹ thuật, các tác động môi trường chính." }
       ]
       },
       {
@@ -2531,7 +2579,7 @@ const PROCESS_DATA = [
         { ref: "Khoản 1 Điều 27, Luật Xây dựng 2025 (135/2025/QH15)", detail: "Dự án phải được cơ quan chuyên môn về xây dựng thẩm định.", quote: "1. Các dự án sau đây phải được cơ quan chuyên môn về xây dựng thẩm định: a) Dự án đầu tư công; b) Dự án PPP; c) Dự án đầu tư kinh doanh có quy mô lớn hoặc có công trình ảnh hưởng lớn đến an toàn, lợi ích cộng đồng theo quy định của Chính phủ." },
         { ref: "Điểm e khoản 2 Điều 43, Luật Xây dựng 2025", detail: "Miễn giấy phép xây dựng khi Báo cáo nghiên cứu khả thi đã được thẩm định.", quote: "2. Trước khi khởi công xây dựng công trình, chủ đầu tư phải có giấy phép xây dựng trừ các trường hợp sau đây: ... e) Công trình xây dựng thuộc dự án đầu tư xây dựng đã được cơ quan chuyên môn về xây dựng thẩm định Báo cáo nghiên cứu khả thi, Báo cáo nghiên cứu khả thi điều chỉnh và đã được phê duyệt theo quy định; ..." },
         { ref: "Điểm c khoản 1 Điều 37, Nghị định 217/2026/NĐ-CP", detail: "Thời hạn thẩm định 16 ngày — theo hướng dẫn thủ tục của Sở Tài chính tỉnh Đồng Tháp (2026) — chưa có trích dẫn nguyên văn được xác minh." },
-        { ref: "Nghị định 217/2026/NĐ-CP", url: "https://thuvienphapluat.vn/van-ban/Xay-dung-Do-thi/Nghi-dinh-217-2026-ND-CP-huong-dan-Luat-Xay-dung-quan-ly-hoat-dong-xay-dung-696494.aspx", detail: "Hướng dẫn Luật Xây dựng 2025 về quản lý hoạt động xây dựng (lập/thẩm định/phê duyệt dự án, thiết kế, khảo sát, cấp phép xây dựng) — thay thế Nghị định 175/2024/NĐ-CP từ 01/7/2026." }
+        { ref: "Nghị định 217/2026/NĐ-CP", url: "docs/nd-217-2026-nd-cp.pdf", detail: "Hướng dẫn Luật Xây dựng 2025 về quản lý hoạt động xây dựng (lập/thẩm định/phê duyệt dự án, thiết kế, khảo sát, cấp phép xây dựng) — thay thế Nghị định 175/2024/NĐ-CP từ 01/7/2026." }
       ],
       note: "Luật Xây dựng 2014 hết hiệu lực từ 01/7/2026 — số điều đã thay đổi (giấy phép xây dựng nay ở Điều 43)."
       },
@@ -2612,8 +2660,8 @@ const PROCESS_DATA = [
         "Kê khai để áp dụng ưu đãi thuế TNDN nếu dự án thuộc diện ưu đãi — xem tab \"Ưu đãi theo địa bàn (Đồng Tháp)\"."
       ],
       legal: [
-        { ref: "Luật Thuế TNDN 2025 (số 67/2025/QH15)", url: "https://thuvienphapluat.vn/van-ban/Doanh-nghiep/Luat-Thue-thu-nhap-doanh-nghiep-2025-so-67-2025-QH15-580594.aspx", detail: "Căn cứ áp dụng mức thuế suất ưu đãi, thời gian miễn/giảm thuế cho dự án đầu tư." },
-        { ref: "Điều 19–20, Nghị định 320/2025/NĐ-CP", url: "https://thuvienphapluat.vn/van-ban/Doanh-nghiep/Nghi-dinh-320-2025-ND-CP-huong-dan-Luat-Thue-thu-nhap-doanh-nghiep-665051.aspx", detail: "Mức thuế suất ưu đãi và thời gian miễn, giảm thuế TNDN theo địa bàn, ngành nghề." }
+        { ref: "Luật Thuế TNDN 2025 (số 67/2025/QH15)", url: "docs/luat-thue-tndn-67-2025-qh15.pdf", detail: "Căn cứ áp dụng mức thuế suất ưu đãi, thời gian miễn/giảm thuế cho dự án đầu tư." },
+        { ref: "Điều 19–20, Nghị định 320/2025/NĐ-CP", url: "docs/nd-320-2025-nd-cp.pdf", detail: "Mức thuế suất ưu đãi và thời gian miễn, giảm thuế TNDN theo địa bàn, ngành nghề." }
       ]
       },
       {
@@ -2628,8 +2676,8 @@ const PROCESS_DATA = [
         "Chuẩn bị hồ sơ và xin giấy phép lao động cho người lao động nước ngoài (trừ trường hợp được miễn)."
       ],
       legal: [
-        { ref: "Điều 151, Bộ luật Lao động 2019", url: "https://hethongphapluat.com/bo-luat-lao-dong-2019/dieu-151", detail: "Người lao động nước ngoài làm việc tại Việt Nam phải có giấy phép lao động, trừ trường hợp được miễn." },
-        { ref: "Nghị định 152/2020/NĐ-CP", url: "https://thuvienphapluat.vn/van-ban/Lao-dong-Tien-luong/Nghi-dinh-152-2020-ND-CP-quan-ly-nguoi-lao-dong-nuoc-ngoai-lam-viec-tai-Viet-Nam-280261.aspx", detail: "Hồ sơ, trình tự cấp giấy phép lao động cho người nước ngoài." }
+        { ref: "Điều 151, Bộ luật Lao động 2019", url: "docs/bo-luat-lao-dong-45-2019.pdf", detail: "Người lao động nước ngoài làm việc tại Việt Nam phải có giấy phép lao động, trừ trường hợp được miễn." },
+        { ref: "Nghị định 219/2025/NĐ-CP", url: "docs/nd-219-2025-nd-cp.pdf", detail: "Hồ sơ, trình tự cấp giấy phép lao động cho người nước ngoài; trường hợp miễn giấy phép lao động. Hiệu lực từ 07/8/2025, thay thế Nghị định 152/2020/NĐ-CP và Nghị định 70/2023/NĐ-CP." }
       ]
       }
     ]
@@ -2655,10 +2703,10 @@ const PROCESS_DATA = [
         "Báo cáo giám sát, đánh giá đầu tư định kỳ theo quy định."
       ],
       legal: [
-        { ref: "Điều 33, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "5 trường hợp phải làm thủ tục chấp thuận điều chỉnh chủ trương đầu tư (khoản 3) — đã bỏ 2 trường hợp so với Luật 2020 (tăng vốn ≥20%; thay đổi công nghệ đã thẩm định).", quote: "3. Nhà đầu tư có dự án đầu tư đã được chấp thuận chủ trương đầu tư phải thực hiện thủ tục chấp thuận điều chỉnh chủ trương đầu tư nếu thuộc một trong các trường hợp sau đây: a) Thay đổi, bổ sung nội dung, mục tiêu thuộc diện chấp thuận chủ trương đầu tư đã được quy định tại văn bản chấp thuận chủ trương đầu tư; b) Thay đổi quy mô diện tích đất sử dụng theo quy định của Chính phủ, thay đổi địa điểm đầu tư; c) Kéo dài tiến độ thực hiện dự án đầu tư trong trường hợp điều chỉnh tiến độ quá 24 tháng; d) Điều chỉnh thời hạn hoạt động của dự án đầu tư; đ) Thay đổi nhà đầu tư của dự án đầu tư được chấp thuận chủ trương đầu tư đồng thời với chấp thuận nhà đầu tư trước khi dự án khai thác, vận hành hoặc thay đổi điều kiện đối với nhà đầu tư (nếu có)." },
-        { ref: "Điều 34, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Chuyển nhượng toàn bộ hoặc một phần dự án đầu tư — kèm điều kiện về đất đai, nhà ở, kinh doanh bất động sản.", quote: "1. Nhà đầu tư có quyền chuyển nhượng toàn bộ hoặc một phần dự án đầu tư cho nhà đầu tư khác khi đáp ứng các điều kiện sau đây: a) Dự án đầu tư hoặc phần dự án đầu tư chuyển nhượng không bị chấm dứt hoạt động theo quy định tại khoản 1 và khoản 2 Điều 36 của Luật này; b) Nhà đầu tư nước ngoài nhận chuyển nhượng dự án đầu tư phải đáp ứng điều kiện quy định tại khoản 2 Điều 21 của Luật này; c) Điều kiện theo quy định của pháp luật về đất đai, nhà ở, kinh doanh bất động sản..." },
-        { ref: "Điều 35, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Ngừng hoạt động của dự án đầu tư (tạm thời) — khác với chấm dứt hoạt động ở Điều 36.", quote: "1. Nhà đầu tư ngừng hoạt động của dự án đầu tư phải thông báo bằng văn bản cho cơ quan đăng ký đầu tư. Trường hợp ngừng hoạt động của dự án đầu tư vì lý do bất khả kháng thì nhà đầu tư được Nhà nước miễn tiền thuê đất, giảm tiền sử dụng đất trong thời gian ngừng hoạt động để khắc phục hậu quả do bất khả kháng gây ra. 2. Cơ quan quản lý nhà nước về đầu tư quyết định ngừng hoặc ngừng một phần hoạt động của dự án đầu tư trong các trường hợp: bảo vệ di tích; khắc phục vi phạm về môi trường; bảo đảm an toàn lao động; theo bản án, quyết định của Tòa án, phán quyết trọng tài..." },
-        { ref: "Điều 36, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Chấm dứt hoạt động của dự án đầu tư (vĩnh viễn) — nhà đầu tư tự quyết định, hết hạn hoạt động, hoặc do cơ quan đăng ký đầu tư quyết định.", quote: "1. Nhà đầu tư chấm dứt hoạt động đầu tư, dự án đầu tư trong các trường hợp sau đây: a) Nhà đầu tư quyết định chấm dứt hoạt động của dự án đầu tư; b) Theo các điều kiện chấm dứt hoạt động được quy định trong hợp đồng, điều lệ doanh nghiệp; c) Hết thời hạn hoạt động của dự án đầu tư. 2. Cơ quan đăng ký đầu tư chấm dứt hoặc chấm dứt một phần hoạt động của dự án đầu tư trong các trường hợp: a) Dự án thuộc trường hợp ngừng hoạt động (khoản 2, 3 Điều 35) mà nhà đầu tư không có khả năng khắc phục; b) Sau 24 tháng kể từ thời điểm kết thúc tiến độ thực hiện các mục tiêu hoạt động của dự án mà không triển khai theo cam kết..." }
+        { ref: "Điều 33, Luật 143/2025/QH15", url: "docs/luat-dau-tu-2025-so-143-2025-qh15.pdf", detail: "5 trường hợp phải làm thủ tục chấp thuận điều chỉnh chủ trương đầu tư (khoản 3) — đã bỏ 2 trường hợp so với Luật 2020 (tăng vốn ≥20%; thay đổi công nghệ đã thẩm định).", quote: "3. Nhà đầu tư có dự án đầu tư đã được chấp thuận chủ trương đầu tư phải thực hiện thủ tục chấp thuận điều chỉnh chủ trương đầu tư nếu thuộc một trong các trường hợp sau đây: a) Thay đổi, bổ sung nội dung, mục tiêu thuộc diện chấp thuận chủ trương đầu tư đã được quy định tại văn bản chấp thuận chủ trương đầu tư; b) Thay đổi quy mô diện tích đất sử dụng theo quy định của Chính phủ, thay đổi địa điểm đầu tư; c) Kéo dài tiến độ thực hiện dự án đầu tư trong trường hợp điều chỉnh tiến độ quá 24 tháng; d) Điều chỉnh thời hạn hoạt động của dự án đầu tư; đ) Thay đổi nhà đầu tư của dự án đầu tư được chấp thuận chủ trương đầu tư đồng thời với chấp thuận nhà đầu tư trước khi dự án khai thác, vận hành hoặc thay đổi điều kiện đối với nhà đầu tư (nếu có)." },
+        { ref: "Điều 34, Luật 143/2025/QH15", url: "docs/luat-dau-tu-2025-so-143-2025-qh15.pdf", detail: "Chuyển nhượng toàn bộ hoặc một phần dự án đầu tư — kèm điều kiện về đất đai, nhà ở, kinh doanh bất động sản.", quote: "1. Nhà đầu tư có quyền chuyển nhượng toàn bộ hoặc một phần dự án đầu tư cho nhà đầu tư khác khi đáp ứng các điều kiện sau đây: a) Dự án đầu tư hoặc phần dự án đầu tư chuyển nhượng không bị chấm dứt hoạt động theo quy định tại khoản 1 và khoản 2 Điều 36 của Luật này; b) Nhà đầu tư nước ngoài nhận chuyển nhượng dự án đầu tư phải đáp ứng điều kiện quy định tại khoản 2 Điều 21 của Luật này; c) Điều kiện theo quy định của pháp luật về đất đai, nhà ở, kinh doanh bất động sản..." },
+        { ref: "Điều 35, Luật 143/2025/QH15", url: "docs/luat-dau-tu-2025-so-143-2025-qh15.pdf", detail: "Ngừng hoạt động của dự án đầu tư (tạm thời) — khác với chấm dứt hoạt động ở Điều 36.", quote: "1. Nhà đầu tư ngừng hoạt động của dự án đầu tư phải thông báo bằng văn bản cho cơ quan đăng ký đầu tư. Trường hợp ngừng hoạt động của dự án đầu tư vì lý do bất khả kháng thì nhà đầu tư được Nhà nước miễn tiền thuê đất, giảm tiền sử dụng đất trong thời gian ngừng hoạt động để khắc phục hậu quả do bất khả kháng gây ra. 2. Cơ quan quản lý nhà nước về đầu tư quyết định ngừng hoặc ngừng một phần hoạt động của dự án đầu tư trong các trường hợp: bảo vệ di tích; khắc phục vi phạm về môi trường; bảo đảm an toàn lao động; theo bản án, quyết định của Tòa án, phán quyết trọng tài..." },
+        { ref: "Điều 36, Luật 143/2025/QH15", url: "docs/luat-dau-tu-2025-so-143-2025-qh15.pdf", detail: "Chấm dứt hoạt động của dự án đầu tư (vĩnh viễn) — nhà đầu tư tự quyết định, hết hạn hoạt động, hoặc do cơ quan đăng ký đầu tư quyết định.", quote: "1. Nhà đầu tư chấm dứt hoạt động đầu tư, dự án đầu tư trong các trường hợp sau đây: a) Nhà đầu tư quyết định chấm dứt hoạt động của dự án đầu tư; b) Theo các điều kiện chấm dứt hoạt động được quy định trong hợp đồng, điều lệ doanh nghiệp; c) Hết thời hạn hoạt động của dự án đầu tư. 2. Cơ quan đăng ký đầu tư chấm dứt hoặc chấm dứt một phần hoạt động của dự án đầu tư trong các trường hợp: a) Dự án thuộc trường hợp ngừng hoạt động (khoản 2, 3 Điều 35) mà nhà đầu tư không có khả năng khắc phục; b) Sau 24 tháng kể từ thời điểm kết thúc tiến độ thực hiện các mục tiêu hoạt động của dự án mà không triển khai theo cam kết..." }
       ]
       }
     ]
@@ -2721,12 +2769,52 @@ PROCESS_DATA[2].subs.push({
   legal: [L68('g', "Ban Quản lý KCN tiếp nhận đăng ký khung giá và phí sử dụng hạ tầng của doanh nghiệp hạ tầng KCN.")]
 });
 
+const Q35 = {
+  d8k2: "2. Trình tự, thủ tục đầu tư dự án đầu tư xây dựng và kinh doanh kết cấu hạ tầng khu công nghiệp bao gồm cả khu công nghiệp trong khu kinh tế không thuộc trường hợp quy định tại khoản 1 Điều này thực hiện theo quy định của pháp luật về đầu tư và các quy định sau đây: a) Đề xuất dự án đầu tư hoặc báo cáo nghiên cứu tiền khả thi trong hồ sơ đề nghị chấp thuận chủ trương đầu tư phải có nội dung giải trình việc đáp ứng các điều kiện quy định tại Điều 9 của Nghị định này; giải trình việc đáp ứng các điều kiện quy định tại khoản 1 Điều 10 của Nghị định này (đối với trường hợp chấp thuận chủ trương đầu tư đồng thời chấp thuận nhà đầu tư); ...",
+  d8k4: "4. Khu công nghiệp thuộc trường hợp phân kỳ đầu tư ... thực hiện trình tự, thủ tục quyết định chủ trương đầu tư, chấp thuận chủ trương đầu tư, cấp Giấy chứng nhận đăng ký đầu tư đối với từng giai đoạn. Trường hợp ... giai đoạn tiếp theo có cùng nhà đầu tư với giai đoạn trước thì được ... chấp thuận chủ trương đầu tư, cấp Giấy chứng nhận đăng ký đầu tư sau khi giai đoạn trước đạt tỷ lệ lấp đầy tối thiểu 60% hoặc đã hoàn thành việc đầu tư xây dựng hệ thống kết cấu hạ tầng theo quy hoạch xây dựng khu công nghiệp được cấp có thẩm quyền phê duyệt. ...",
+  d9: "1. Phù hợp với quy hoạch, nội dung quy hoạch sau đây: a) Quy hoạch vùng, quy hoạch tỉnh; b) Có trong Danh mục các khu công nghiệp trên địa bàn tỉnh ... c) Phù hợp với quy hoạch xây dựng khu công nghiệp đã được cấp có thẩm quyền phê duyệt. 2. ... a) Khu công nghiệp có quy mô diện tích trên 500 ha phải được phân kỳ đầu tư theo các giai đoạn, mỗi giai đoạn không quá 500 ha; b) Khu công nghiệp có yêu cầu chuyển mục đích sử dụng đất trồng lúa 02 vụ trở lên với quy mô diện tích đất trồng lúa trên 200 ha ở vùng đồng bằng sông Hồng và đồng bằng sông Cửu Long phải được phân kỳ đầu tư ... 4. Dành tối thiểu 5 ha đất công nghiệp hoặc tối thiểu 3% tổng diện tích đất công nghiệp của khu công nghiệp (bao gồm cả nhà xưởng, văn phòng, kho bãi) để cho các doanh nghiệp nhỏ và vừa, doanh nghiệp công nghiệp hỗ trợ, doanh nghiệp đổi mới sáng tạo ... thuê đất, thuê lại đất. ...",
+  d10: "1. Nhà đầu tư thực hiện dự án đầu tư xây dựng và kinh doanh kết cấu hạ tầng khu công nghiệp phải đáp ứng các điều kiện sau đây: a) Điều kiện kinh doanh bất động sản theo quy định của pháp luật về kinh doanh bất động sản; b) Điều kiện để được Nhà nước giao đất, cho thuê đất, chuyển mục đích sử dụng đất để thực hiện dự án đầu tư xây dựng và kinh doanh kết cấu hạ tầng khu công nghiệp theo quy định của pháp luật về đất đai, pháp luật về lâm nghiệp và quy định khác của pháp luật có liên quan. ... 2. Trường hợp chọn áp dụng đấu thầu lựa chọn nhà đầu tư thì các tiêu chuẩn đánh giá để lựa chọn nhà đầu tư thực hiện dự án đầu tư xây dựng và kinh doanh kết cấu hạ tầng khu công nghiệp bao gồm: a) Tiêu chuẩn đánh giá về năng lực ...; b) Tiêu chuẩn đánh giá về kinh nghiệm ...; c) Tiêu chuẩn đánh giá về kỹ thuật ...; d) Tiêu chuẩn đánh giá về tài chính - thương mại ...",
+  d7: "1. Quy hoạch xây dựng khu công nghiệp gồm: quy hoạch chung xây dựng khu công nghiệp, quy hoạch phân khu xây dựng khu công nghiệp và quy hoạch chi tiết xây dựng khu công nghiệp (nếu cần). ... 2. Quy hoạch chung xây dựng khu công nghiệp, quy hoạch phân khu xây dựng khu công nghiệp được phê duyệt là cơ sở để: ... b) ... tổ chức lập hồ sơ dự án đầu tư xây dựng và kinh doanh kết cấu hạ tầng khu công nghiệp theo quy định của pháp luật về đầu tư; c) ... chấp thuận chủ trương đầu tư dự án đầu tư xây dựng và kinh doanh kết cấu hạ tầng khu công nghiệp theo quy định của pháp luật về đầu tư. 3. Căn cứ phương án phát triển hệ thống khu công nghiệp trong quy hoạch tỉnh, Ủy ban nhân dân cấp tỉnh tổ chức lập và phê duyệt nhiệm vụ, đồ án quy hoạch chung xây dựng, quy hoạch phân khu xây dựng khu công nghiệp theo quy định của pháp luật về xây dựng."
+};
+const L35 = (ref, key, detail) => ({ ref: ref + ", Nghị định 35/2022/NĐ-CP", url: ND35_URL, detail, quote: Q35[key] });
+const L24K14 = { ref: "Khoản 14 Điều 24; khoản 3 Điều 25, Luật 143/2025/QH15", url: "docs/luat-dau-tu-2025-so-143-2025-qh15.pdf", detail: "Dự án xây dựng và kinh doanh hạ tầng KCN thuộc diện chấp thuận chủ trương; thẩm quyền Chủ tịch UBND cấp tỉnh.", quote: "14. Dự án đầu tư xây dựng và kinh doanh kết cấu hạ tầng khu công nghiệp, khu chế xuất, khu công nghệ số tập trung. ... [Điều 25] 3. Trừ các dự án đầu tư quy định tại khoản 1 và khoản 2 Điều này, Chủ tịch Ủy ban nhân dân cấp tỉnh chấp thuận chủ trương đầu tư đối với các dự án đầu tư sau đây: a) Dự án đầu tư quy định tại các khoản 8, 9, 10, 11, 12, 13, 14, 15, 16, 17 và 18 Điều 24 của Luật này; ..." };
+
+const PROCESS_HT = {
+  groups: {
+    1: { authority: "Sở Tài chính · " + BQL, summary: "Xác định KCN dự kiến có trong Danh mục KCN của Quy hoạch tỉnh và đáp ứng điều kiện đầu tư hạ tầng KCN (Điều 9 NĐ 35/2022)." },
+    2: { days: "26–34 ngày", authority: "Sở Tài chính → Chủ tịch UBND tỉnh (chấp thuận chủ trương) · " + BQL + " (IRC)", summary: "Dự án hạ tầng KCN luôn phải chấp thuận chủ trương đầu tư (khoản 14 Điều 24 Luật Đầu tư), kèm giải trình điều kiện tại Điều 9, 10 NĐ 35/2022; chọn nhà đầu tư bằng chấp thuận đồng thời hoặc đấu thầu." },
+    3: { days: "Theo tiến độ GPMB", authority: "Sở Nông nghiệp và Môi trường → UBND tỉnh; UBND cấp xã (bồi thường)", summary: "Nhà nước thu hồi đất, bồi thường, giải phóng mặt bằng rồi giao đất, cho thuê đất cho chủ đầu tư hạ tầng; chuyển mục đích sử dụng đất (kể cả đất lúa)." },
+    4: { days: "Theo thẩm định ĐTM", authority: "Sở Nông nghiệp và Môi trường / Bộ Nông nghiệp và Môi trường (tùy quy mô)", summary: "Hạ tầng KCN thường thuộc diện lập báo cáo ĐTM; phải đầu tư hệ thống thu gom, xử lý nước thải tập trung và xin giấy phép môi trường trước khi vận hành." },
+    5: { days: "34–49 ngày", authority: "UBND tỉnh (quy hoạch xây dựng KCN) · Sở Xây dựng / " + BQL + " (thẩm định) · Công an tỉnh (PCCC)", summary: "Quy hoạch phân khu (chi tiết nếu cần) xây dựng KCN được duyệt là cơ sở lập dự án; thẩm định báo cáo nghiên cứu khả thi hạ tầng, PCCC hạ tầng, thi công và nghiệm thu." },
+    6: { authority: BQL + " (khung giá thuê, phí hạ tầng) · Thuế tỉnh", summary: "Đăng ký khung giá cho thuê lại đất, phí sử dụng hạ tầng với Ban Quản lý KCN; bắt đầu cho thuê lại đất cho nhà đầu tư thứ cấp." },
+    7: { authority: BQL, summary: "Theo dõi tiến độ, tỷ lệ lấp đầy; giai đoạn sau (nếu phân kỳ) chỉ được chấp thuận khi giai đoạn trước lấp đầy tối thiểu 60% hoặc hoàn thành hạ tầng." }
+  },
+  subs: {
+    "1.1": { authority: "Sở Tài chính · " + BQL, when: "Nhà đầu tư hạ tầng KCN", tasksAdd: ["Kiểm tra KCN có trong Danh mục KCN của Quy hoạch tỉnh (Phụ lục III Quyết định 1410/QĐ-UBND) — tra bảng KCN ở tab \"Ưu đãi theo địa bàn (Đồng Tháp)\".", "Kiểm tra yêu cầu phân kỳ: trên 500 ha, hoặc lấy trên 200 ha đất lúa 2 vụ ở ĐBSCL thì phải chia giai đoạn.", "Dự kiến dành tối thiểu 5 ha hoặc 3% đất công nghiệp cho doanh nghiệp nhỏ và vừa, công nghiệp hỗ trợ, đổi mới sáng tạo."], legalAdd: [L35("Điều 9", "d9", "Điều kiện đầu tư hạ tầng KCN: phù hợp quy hoạch, có trong Danh mục KCN; phân kỳ; dành đất cho DNNVV.")] },
+    "2.1": { authority: "Sở Tài chính", when: "Luôn thuộc diện chấp thuận chủ trương", tasksAdd: ["Dự án hạ tầng KCN thuộc khoản 14 Điều 24 → thẩm quyền Chủ tịch UBND tỉnh (khoản 3 Điều 25)."], legalAdd: [L24K14] },
+    "2.2": { authority: "Sở Tài chính thẩm định → Chủ tịch UBND tỉnh chấp thuận chủ trương", when: "Bắt buộc với dự án hạ tầng KCN", tasksAdd: ["Hồ sơ phải giải trình đáp ứng điều kiện Điều 9 và điều kiện nhà đầu tư tại khoản 1 Điều 10 NĐ 35/2022 (kinh doanh bất động sản, được giao đất/cho thuê đất).", "Chọn nhà đầu tư: chấp thuận chủ trương đồng thời chấp thuận nhà đầu tư, hoặc đấu thầu lựa chọn nhà đầu tư theo tiêu chuẩn tại khoản 2 Điều 10.", "Phân kỳ đầu tư: mỗi giai đoạn làm thủ tục chủ trương, IRC riêng."], legalAdd: [L24K14, L35("Khoản 2 Điều 8", "d8k2", "Trình tự đầu tư hạ tầng KCN — hồ sơ chủ trương phải giải trình điều kiện Điều 9, Điều 10."), L35("Điều 10", "d10", "Điều kiện đối với nhà đầu tư hạ tầng KCN; tiêu chuẩn khi đấu thầu.")] },
+    "2.3": { when: "Khi thành lập doanh nghiệp mới làm chủ đầu tư hạ tầng" },
+    "2.4": { authority: BQL + " (nếu nhà đầu tư nước ngoài, hoặc trong nước có nhu cầu)", legalAdd: [L68('b', "Ban Quản lý KCN là cơ quan đăng ký đầu tư đối với dự án trong KCN.")] },
+    "3.1": { authority: "Sở Nông nghiệp và Môi trường → UBND tỉnh (thu hồi, giao đất, cho thuê đất); UBND cấp xã (bồi thường, hỗ trợ, tái định cư)", when: "Hạ tầng KCN — Nhà nước thu hồi đất rồi giao, cho thuê cho chủ đầu tư", tasksAdd: ["Lập, phê duyệt phương án bồi thường, hỗ trợ, tái định cư; nhà đầu tư ứng vốn GPMB theo thỏa thuận.", "Chuyển mục đích sử dụng đất trồng lúa (nếu có) theo quy định; nộp tiền thuê đất theo quyết định cho thuê."] },
+    "3.2": { skip: "Thường không áp dụng — đất xây dựng hạ tầng KCN thuộc trường hợp Nhà nước thu hồi đất (xem 3.1)." },
+    "4.1": { tasksAdd: ["Hạ tầng KCN thường thuộc nhóm dự án phải lập ĐTM — tra Phụ lục III, IV NĐ 08/2022/NĐ-CP theo quy mô diện tích.", "Phải đầu tư hệ thống thu gom, xử lý nước thải tập trung của KCN; xin giấy phép môi trường trước khi vận hành."] },
+    "5.1": { authority: "UBND tỉnh lập, phê duyệt quy hoạch chung/phân khu xây dựng KCN (lấy ý kiến bộ, ngành nếu KCN từ 200 ha)", when: "Bắt buộc với hạ tầng KCN (thay cho quy hoạch tổng mặt bằng)", tasksAdd: ["Quy hoạch phân khu xây dựng KCN được duyệt là cơ sở lập hồ sơ dự án và chấp thuận chủ trương; KCN từ 500 ha hoặc nhiều chủ đầu tư phải có quy hoạch cho toàn khu."], legalAdd: [L35("Điều 7", "d7", "Quy hoạch xây dựng KCN: quy hoạch chung, phân khu, chi tiết; là cơ sở lập dự án và chấp thuận chủ trương.")] },
+    "5.2": { authority: "Sở Xây dựng hoặc " + BQL + " (theo phân cấp — điểm c khoản 2 Điều 68 NĐ 35/2022)" },
+    "5.4": { authority: "Sở Xây dựng / " + BQL + " (kiểm tra nghiệm thu) · Công an tỉnh (nghiệm thu PCCC)" },
+    "6.1": { authority: BQL, when: "Trước khi cho thuê lại đất", tasksAdd: ["Đăng ký khung giá cho thuê lại đất và các loại phí sử dụng hạ tầng với Ban Quản lý KCN.", "Kinh doanh hạ tầng KCN là kinh doanh bất động sản — đáp ứng điều kiện của pháp luật kinh doanh bất động sản."], legalAdd: [L68('g', "Ban Quản lý KCN tiếp nhận đăng ký khung giá và phí sử dụng hạ tầng.")] },
+    "6.3": { authority: BQL },
+    "7.1": { authority: BQL, tasksAdd: ["Báo cáo tiến độ đầu tư hạ tầng, tỷ lệ lấp đầy; giai đoạn sau chỉ được chấp thuận khi giai đoạn trước lấp đầy tối thiểu 60% hoặc hoàn thành hạ tầng (khoản 4 Điều 8 NĐ 35/2022)."], legalAdd: [L35("Khoản 4 Điều 8", "d8k4", "Điều kiện chuyển giai đoạn đầu tư hạ tầng KCN: lấp đầy tối thiểu 60% hoặc hoàn thành hạ tầng.")] }
+  }
+};
+const PROCESS_OVR = { kcn: PROCESS_KCN, kcn_ht: PROCESS_HT };
+
 let processMode = 'ngoai';
 function subKey(g, s) { return `${g + 1}.${s + 1}`; }
 function effSub(g, s) {
   const base = PROCESS_DATA[g].subs[s];
-  if (processMode !== 'kcn') return base;
-  const ov = PROCESS_KCN.subs[subKey(g, s)];
+  const OV = PROCESS_OVR[processMode];
+  if (!OV) return base;
+  const ov = OV.subs[subKey(g, s)];
   if (!ov) return base;
   return {
     ...base,
@@ -2742,7 +2830,7 @@ function visibleSubIdx(g) {
 }
 function effGroup(g) {
   const base = PROCESS_DATA[g];
-  const ov = processMode === 'kcn' ? PROCESS_KCN.groups[g + 1] : null;
+  const ov = PROCESS_OVR[processMode] ? PROCESS_OVR[processMode].groups[g + 1] : null;
   return ov ? { ...base, ...ov } : base;
 }
 
@@ -2754,16 +2842,20 @@ let activeSubIdx = 0;
 
 const FLOW_ARROW_SVG = `<svg viewBox="0 0 24 24" fill="none"><path d="M4 12h14M14 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 
+const MODE_LABEL = { ngoai: 'Ngoài KCN', kcn: 'Trong KCN — thứ cấp', kcn_ht: 'Đầu tư hạ tầng KCN' };
 function renderProcessMode() {
   processModeEl.innerHTML = `
     <span class="mode-label">Dự án đặt ở đâu?</span>
     <div class="mode-switch" role="tablist">
       <button type="button" data-mode="ngoai" data-active="${processMode === 'ngoai'}">Ngoài khu công nghiệp</button>
-      <button type="button" data-mode="kcn" data-active="${processMode === 'kcn'}">Trong khu công nghiệp (KCN, KCX, KKT)</button>
+      <button type="button" data-mode="kcn" data-active="${processMode === 'kcn'}">Trong KCN — nhà đầu tư thứ cấp</button>
+      <button type="button" data-mode="kcn_ht" data-active="${processMode === 'kcn_ht'}">Đầu tư hạ tầng KCN</button>
     </div>
     <span class="mode-hint">${processMode === 'kcn'
-      ? 'Đầu mối chính: <b>Ban Quản lý các khu công nghiệp tỉnh</b> — cấp IRC, thẩm định xây dựng, kiểm tra nghiệm thu, giấy phép lao động (khoản 2 Điều 68 NĐ 35/2022). Đất: thuê lại của doanh nghiệp hạ tầng.'
-      : 'Đầu mối chính: <b>Sở Tài chính</b>, Sở Nông nghiệp và Môi trường, Sở Xây dựng, Công an tỉnh, UBND cấp xã. Dự án trong cụm công nghiệp (CCN) theo trường hợp này, đất thuê lại của chủ đầu tư hạ tầng CCN.'}</span>`;
+      ? '<b>Nhà đầu tư thứ cấp</b> (sản xuất, kinh doanh trong KCN đã có hạ tầng). Đầu mối chính: <b>Ban Quản lý các khu công nghiệp tỉnh</b> — cấp IRC, thẩm định xây dựng, kiểm tra nghiệm thu, giấy phép lao động (khoản 2 Điều 68 NĐ 35/2022). Đất: thuê lại của doanh nghiệp hạ tầng.'
+      : processMode === 'kcn_ht'
+        ? '<b>Chủ đầu tư hạ tầng KCN</b> (xây dựng và kinh doanh kết cấu hạ tầng KCN). Luôn phải chấp thuận chủ trương của UBND tỉnh (khoản 14 Điều 24 Luật Đầu tư); điều kiện tại Điều 9, 10 NĐ 35/2022; Nhà nước thu hồi, giao, cho thuê đất; phải có quy hoạch xây dựng KCN và ĐTM.'
+        : 'Đầu mối chính: <b>Sở Tài chính</b>, Sở Nông nghiệp và Môi trường, Sở Xây dựng, Công an tỉnh, UBND cấp xã. Dự án trong cụm công nghiệp (CCN) theo trường hợp này, đất thuê lại của chủ đầu tư hạ tầng CCN.'}</span>`;
   processModeEl.querySelectorAll('[data-mode]').forEach(b => b.addEventListener('click', () => {
     processMode = b.dataset.mode;
     if (activeStepIdx !== null && !visibleSubIdx(activeStepIdx).includes(activeSubIdx)) activeSubIdx = visibleSubIdx(activeStepIdx)[0];
@@ -2823,7 +2915,7 @@ function renderSubDetail(sub, label) {
   if (sub.skip) return `
     <div class="sub-detail">
       <div class="flow-detail-title-row"><span class="sub-detail-title">${label}. ${sub.title}</span></div>
-      <div class="sub-when-line sub-skip-line"><b>Không áp dụng ${processMode === 'kcn' ? 'trong KCN' : ''}:</b> ${sub.skip}</div>
+      <div class="sub-when-line sub-skip-line"><b>Không áp dụng ${MODE_LABEL[processMode] ? '(' + MODE_LABEL[processMode] + ')' : ''}:</b> ${sub.skip}</div>
     </div>`;
   return `
     <div class="sub-detail">
@@ -2858,7 +2950,7 @@ function renderFlowDetail() {
   const multi = vis.length > 1;
   const sub = effSub(activeStepIdx, activeSubIdx);
   const subList = multi ? `
-    <div class="sub-list-label">Gồm ${vis.length} bước con / trường hợp ${processMode === 'kcn' ? '(dự án TRONG KCN)' : '(dự án NGOÀI KCN)'} — bấm để xem chi tiết:</div>
+    <div class="sub-list-label">Gồm ${vis.length} bước con / trường hợp (${MODE_LABEL[processMode]}) — bấm để xem chi tiết:</div>
     <div class="sub-list">
       ${vis.map(k => { const s = effSub(activeStepIdx, k); return `
         <button type="button" class="sub-item${s.skip ? ' sub-item-skip' : ''}" data-sub="${k}" ${k === activeSubIdx ? 'data-active="true"' : ''}>
@@ -2873,7 +2965,7 @@ function renderFlowDetail() {
       <div>
         <div class="flow-detail-title-row">
           <span class="flow-detail-title">Bước ${g}. ${step.title}</span>
-          <span class="mode-badge">${processMode === 'kcn' ? 'Trong KCN' : 'Ngoài KCN'}</span>
+          <span class="mode-badge">${MODE_LABEL[processMode]}</span>
         </div>
         <div class="flow-detail-summary">${step.summary}</div>
         <div class="step-tags">
@@ -2895,6 +2987,21 @@ function renderFlowDetail() {
 }
 
 const TIMELINE_SAMPLES = {
+  kcn_ht: {
+    title: "Lộ trình mẫu ĐẦU TƯ HẠ TẦNG KCN — tổng thời gian dự kiến",
+    sub: "Tình huống: doanh nghiệp trong nước đầu tư xây dựng và kinh doanh hạ tầng một KCN (dưới 500 ha) có trong Danh mục KCN của Quy hoạch tỉnh, đã có quy hoạch phân khu xây dựng; chấp thuận chủ trương đồng thời chấp thuận nhà đầu tư.",
+    rows: [
+      { g: 2, s: 2, task: "Chấp thuận chủ trương đầu tư đồng thời chấp thuận nhà đầu tư", agency: "Sở Tài chính → Chủ tịch UBND tỉnh", days: 26 },
+      { g: 2, s: 3, task: "Thành lập doanh nghiệp dự án (ERC)", agency: "Sở Tài chính", days: 3 },
+      { g: 3, s: 1, task: "Thu hồi đất, bồi thường, giải phóng mặt bằng; giao đất, cho thuê đất", agency: "UBND cấp xã, Sở Nông nghiệp và Môi trường → UBND tỉnh", days: 0, parallel: true },
+      { g: 4, s: 2, task: "Lập, thẩm định báo cáo đánh giá tác động môi trường (ĐTM)", agency: "Sở / Bộ Nông nghiệp và Môi trường", days: 0, parallel: true },
+      { g: 5, s: 2, task: "Thẩm định Báo cáo nghiên cứu khả thi hạ tầng (được miễn giấy phép xây dựng)", agency: "Sở Xây dựng / Ban Quản lý KCN", days: 16 },
+      { g: 5, s: 3, task: "Thẩm định thiết kế về PCCC", agency: "Công an tỉnh", days: 6 },
+      { g: 5, s: 4, task: "Kiểm tra công tác nghiệm thu hoàn thành hạ tầng", agency: "Sở Xây dựng / Ban Quản lý KCN", days: 12, optional: true },
+      { g: 6, s: 1, task: "Đăng ký khung giá cho thuê lại đất, phí sử dụng hạ tầng", agency: "Ban Quản lý các KCN", days: 0, parallel: true }
+    ],
+    noteExtra: "Khoảng {core} ngày làm việc cho các thủ tục có thời hạn cố định (tối đa {max} ngày kể cả kiểm tra nghiệm thu hoàn thành) — <b>chưa gồm thời gian bồi thường, giải phóng mặt bằng và thẩm định ĐTM</b>, thường là phần kéo dài nhất của dự án hạ tầng KCN. Nhà đầu tư nước ngoài cộng thêm IRC tại Ban Quản lý KCN (05 ngày sau chủ trương)."
+  },
   ngoai: {
     title: "Lộ trình mẫu NGOÀI KCN — tổng thời gian dự kiến",
     sub: "Tình huống: nhà đầu tư trong nước làm nhà máy chế biến (dự án nhóm B, công trình cấp II) trên đất tự nhận chuyển nhượng của người dân, đúng mục đích đất sản xuất — <b>không thuộc diện chấp thuận chủ trương</b>.",
@@ -2964,17 +3071,17 @@ renderTimeline();
 /* ---------------- Ưu đãi theo địa bàn (Đồng Tháp) ---------------- */
 
 const INCENTIVE_LEGAL = [
-  { ref: "Khoản 6, 7 Điều 22, Nghị định 96/2026/NĐ-CP", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Nghi-dinh-96-2026-ND-CP-huong-dan-Luat-Dau-tu-690303.aspx", detail: "KCN, CCN, KCX hưởng ưu đãi như địa bàn khó khăn; khu kinh tế, khu công nghệ cao hưởng như địa bàn đặc biệt khó khăn. Dự án trên nhiều xã: xác định theo xã có phần lớn diện tích.", quote: "6. Trường hợp dự án đầu tư được thực hiện trên địa bàn có từ hai đơn vị hành chính cấp xã trở lên thuộc các địa bàn có điều kiện kinh tế - xã hội khác nhau thì địa bàn ưu đãi đầu tư của dự án được xác định theo đơn vị hành chính cấp xã nơi thực hiện phần lớn diện tích sử dụng đất của dự án. Trường hợp diện tích sử dụng đất của dự án giữa các xã bằng nhau thì xác định theo đơn vị hành chính cấp xã có mức ưu đãi cao hơn. 7. Xác định địa bàn ưu đãi đầu tư đối với khu công nghiệp, cụm công nghiệp, khu chế xuất, khu công nghệ cao, khu nông nghiệp ứng dụng công nghệ cao, khu công nghệ số tập trung, khu thương mại tự do, trung tâm tài chính quốc tế, khu kinh tế như sau: a) Khu kinh tế, khu công nghệ cao, khu nông nghiệp ứng dụng công nghệ cao, khu công nghệ số tập trung, khu thương mại tự do và trung tâm tài chính quốc tế là địa bàn ưu đãi đầu tư, được hưởng ưu đãi đầu tư áp dụng đối với địa bàn có điều kiện kinh tế - xã hội đặc biệt khó khăn theo quy định tại khoản 2 Điều này; b) Khu công nghiệp, cụm công nghiệp và khu chế xuất là địa bàn ưu đãi đầu tư, được hưởng ưu đãi đầu tư áp dụng đối với địa bàn có điều kiện kinh tế - xã hội khó khăn theo quy định tại khoản 3 Điều này." },
-  { ref: "Điều 15, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Khung ưu đãi chung: khoản 2 xác định địa bàn ưu đãi gồm địa bàn khó khăn/đặc biệt khó khăn và KCN, CCN, KCX, KCNC, khu kinh tế…", quote: "2. Địa bàn ưu đãi đầu tư bao gồm: a) Địa bàn có điều kiện kinh tế - xã hội khó khăn, địa bàn có điều kiện kinh tế - xã hội đặc biệt khó khăn; b) Khu công nghiệp, cụm công nghiệp, khu chế xuất, khu công nghệ cao, khu nông nghiệp ứng dụng công nghệ cao, khu công nghệ số tập trung, khu thương mại tự do, trung tâm tài chính quốc tế, khu kinh tế. 3. Căn cứ ngành, nghề, địa bàn ưu đãi đầu tư quy định tại khoản 1 và khoản 2 Điều này, Chính phủ ban hành, sửa đổi, bổ sung Danh mục ngành, nghề ưu đãi đầu tư và Danh mục địa bàn ưu đãi đầu tư." },
-  { ref: "Nghị định 96/2026/NĐ-CP", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Nghi-dinh-96-2026-ND-CP-huong-dan-Luat-Dau-tu-690303.aspx", detail: "Hướng dẫn thi hành Luật Đầu tư — nguyên tắc xác định địa bàn ưu đãi." },
+  { ref: "Khoản 6, 7 Điều 22, Nghị định 96/2026/NĐ-CP", url: "docs/nd-96-2026-nd-cp.pdf", detail: "KCN, CCN, KCX hưởng ưu đãi như địa bàn khó khăn; khu kinh tế, khu công nghệ cao hưởng như địa bàn đặc biệt khó khăn. Dự án trên nhiều xã: xác định theo xã có phần lớn diện tích.", quote: "6. Trường hợp dự án đầu tư được thực hiện trên địa bàn có từ hai đơn vị hành chính cấp xã trở lên thuộc các địa bàn có điều kiện kinh tế - xã hội khác nhau thì địa bàn ưu đãi đầu tư của dự án được xác định theo đơn vị hành chính cấp xã nơi thực hiện phần lớn diện tích sử dụng đất của dự án. Trường hợp diện tích sử dụng đất của dự án giữa các xã bằng nhau thì xác định theo đơn vị hành chính cấp xã có mức ưu đãi cao hơn. 7. Xác định địa bàn ưu đãi đầu tư đối với khu công nghiệp, cụm công nghiệp, khu chế xuất, khu công nghệ cao, khu nông nghiệp ứng dụng công nghệ cao, khu công nghệ số tập trung, khu thương mại tự do, trung tâm tài chính quốc tế, khu kinh tế như sau: a) Khu kinh tế, khu công nghệ cao, khu nông nghiệp ứng dụng công nghệ cao, khu công nghệ số tập trung, khu thương mại tự do và trung tâm tài chính quốc tế là địa bàn ưu đãi đầu tư, được hưởng ưu đãi đầu tư áp dụng đối với địa bàn có điều kiện kinh tế - xã hội đặc biệt khó khăn theo quy định tại khoản 2 Điều này; b) Khu công nghiệp, cụm công nghiệp và khu chế xuất là địa bàn ưu đãi đầu tư, được hưởng ưu đãi đầu tư áp dụng đối với địa bàn có điều kiện kinh tế - xã hội khó khăn theo quy định tại khoản 3 Điều này." },
+  { ref: "Điều 15, Luật 143/2025/QH15", url: "docs/luat-dau-tu-2025-so-143-2025-qh15.pdf", detail: "Khung ưu đãi chung: khoản 2 xác định địa bàn ưu đãi gồm địa bàn khó khăn/đặc biệt khó khăn và KCN, CCN, KCX, KCNC, khu kinh tế…", quote: "2. Địa bàn ưu đãi đầu tư bao gồm: a) Địa bàn có điều kiện kinh tế - xã hội khó khăn, địa bàn có điều kiện kinh tế - xã hội đặc biệt khó khăn; b) Khu công nghiệp, cụm công nghiệp, khu chế xuất, khu công nghệ cao, khu nông nghiệp ứng dụng công nghệ cao, khu công nghệ số tập trung, khu thương mại tự do, trung tâm tài chính quốc tế, khu kinh tế. 3. Căn cứ ngành, nghề, địa bàn ưu đãi đầu tư quy định tại khoản 1 và khoản 2 Điều này, Chính phủ ban hành, sửa đổi, bổ sung Danh mục ngành, nghề ưu đãi đầu tư và Danh mục địa bàn ưu đãi đầu tư." },
+  { ref: "Nghị định 96/2026/NĐ-CP", url: "docs/nd-96-2026-nd-cp.pdf", detail: "Hướng dẫn thi hành Luật Đầu tư — nguyên tắc xác định địa bàn ưu đãi." },
   { ref: "Quyết định 1717/QĐ-UBND (12/6/2026)", url: "docs/dong-thap-qd-1717-2026-dia-ban-uu-dai.pdf", detail: "UBND tỉnh Đồng Tháp — xác định và công bố địa bàn ưu đãi đầu tư cấp xã (hiệu lực từ ngày ký). Bản sao y đã lưu kèm trang web.", quote: "Điều 1. Xác định và công bố địa bàn ưu đãi đầu tư cấp xã trên địa bàn tỉnh Đồng Tháp (Chi tiết tại Phụ lục đính kèm). ... Điều 3. Điều khoản thi hành 1. Quyết định này có hiệu lực kể từ ngày ký." },
   { ref: "Nghị quyết 56/2026/NQ-HĐND (25/9/2026)", url: "docs/dong-thap-nq-56-2026-mien-tien-thue-dat.pdf", detail: "HĐND tỉnh Đồng Tháp — mức miễn tiền thuê đất cho dự án xã hội hóa và dự án phi lợi nhuận theo địa bàn, ngành nghề (hiệu lực 05/10/2026)." },
   { ref: "Nghị quyết 1663/NQ-UBTVQH15 (16/6/2025)", detail: "Cùng với Luật Tổ chức chính quyền địa phương (16/6/2025) — là cơ sở của việc sắp xếp đơn vị hành chính 2 cấp (tỉnh, xã), làm căn cứ xác định lại địa bàn ưu đãi thay cho đơn vị cấp huyện trước đây." },
-  { ref: "Điều 19–20, Nghị định 320/2025/NĐ-CP", url: "https://thuvienphapluat.vn/van-ban/Doanh-nghiep/Nghi-dinh-320-2025-ND-CP-huong-dan-Luat-Thue-thu-nhap-doanh-nghiep-665051.aspx", detail: "Mức thuế suất ưu đãi và thời gian miễn/giảm thuế TNDN cụ thể (hiệu lực 15/12/2025)." },
-  { ref: "Điều 39, Nghị định 103/2024/NĐ-CP", url: "https://thuvienphapluat.vn/van-ban/Bat-dong-san/Nghi-dinh-103-2024-ND-CP-tien-su-dung-dat-tien-thue-dat-550020.aspx", detail: "Miễn, giảm tiền thuê đất, tiền sử dụng đất theo địa bàn/ngành nghề (sửa đổi bởi NĐ 261/2025, NĐ 291/2025, NĐ 50/2026) — căn cứ mức miễn theo địa bàn là Điều 39." },
-  { ref: "Khoản 11 Điều 16, Luật 107/2016/QH13", url: "https://thuvienphapluat.vn/van-ban/Xuat-nhap-khau/Luat-thue-xuat-khau-thue-nhap-khau-2016-280693.aspx", detail: "Miễn thuế nhập khẩu hàng hóa tạo tài sản cố định (sửa đổi bởi Luật 90/2025/QH15); chi tiết tại Điều 14 Nghị định 134/2016/NĐ-CP (sửa đổi bởi Nghị định 18/2021/NĐ-CP và Nghị định 182/2025/NĐ-CP)." },
-  { ref: "Điều 13, Thông tư 45/2013/TT-BTC", url: "https://thuvienphapluat.vn/van-ban/Doanh-nghiep/Thong-tu-45-2013-TT-BTC-Che-do-quan-ly-su-dung-va-trich-khau-hao-tai-san-co-dinh-183508.aspx", detail: "Khấu hao nhanh TSCĐ, tối đa gấp 2 lần mức khấu hao đường thẳng (sửa đổi bởi TT 147/2016, TT 28/2017, TT 30/2025/TT-BTC)." },
-  { ref: "Nghị định 182/2024/NĐ-CP", url: "https://thuvienphapluat.vn/van-ban/Doanh-nghiep/Nghi-dinh-182-2024-ND-CP-quan-ly-su-dung-Quy-Ho-tro-dau-tu-638056.aspx", detail: "Đào tạo nhân lực, chuyển giao công nghệ, tín dụng đầu tư Nhà nước, Quỹ Hỗ trợ đầu tư." }
+  { ref: "Điều 19–20, Nghị định 320/2025/NĐ-CP", url: "docs/nd-320-2025-nd-cp.pdf", detail: "Mức thuế suất ưu đãi và thời gian miễn/giảm thuế TNDN cụ thể (hiệu lực 15/12/2025)." },
+  { ref: "Điều 39, Nghị định 103/2024/NĐ-CP", url: "docs/nd-103-2024-nd-cp.pdf", detail: "Miễn, giảm tiền thuê đất, tiền sử dụng đất theo địa bàn/ngành nghề (sửa đổi bởi NĐ 261/2025, NĐ 291/2025, NĐ 50/2026) — căn cứ mức miễn theo địa bàn là Điều 39." },
+  { ref: "Khoản 11 Điều 16, Luật 107/2016/QH13", url: "docs/luat-thue-xnk-107-2016-qh13.pdf", detail: "Miễn thuế nhập khẩu hàng hóa tạo tài sản cố định (sửa đổi bởi Luật 90/2025/QH15); chi tiết tại Điều 14 Nghị định 134/2016/NĐ-CP (sửa đổi bởi Nghị định 18/2021/NĐ-CP và Nghị định 182/2025/NĐ-CP)." },
+  { ref: "Điều 13, Thông tư 45/2013/TT-BTC", url: "docs/tt-45-2013-vbhn-12-2025.pdf", detail: "Khấu hao nhanh TSCĐ, tối đa gấp 2 lần mức khấu hao đường thẳng (sửa đổi bởi TT 147/2016, TT 28/2017, TT 30/2025/TT-BTC)." },
+  { ref: "Nghị định 182/2024/NĐ-CP", url: "docs/nd-182-2024-nd-cp.pdf", detail: "Đào tạo nhân lực, chuyển giao công nghệ, tín dụng đầu tư Nhà nước, Quỹ Hỗ trợ đầu tư." }
 ];
 
 const INCENTIVE_DATA = [
@@ -3114,7 +3221,7 @@ function renderZones() {
     renderZones();
   }));
   document.getElementById('zoneSearch').addEventListener('input', renderZones);
-  document.getElementById('zoneLegal').innerHTML = '<h4 style="margin-top:14px;">Căn cứ pháp lý</h4>' + renderLegalList([{ ref: "Quyết định 1410/QĐ-UBND ngày 13/5/2026", url: "docs/dong-thap-qd-1410-2026-quy-hoach-tinh.pdf", detail: "UBND tỉnh Đồng Tháp phê duyệt điều chỉnh Quy hoạch tỉnh thời kỳ 2021–2030, tầm nhìn 2050 — Phụ lục II, III, IV: danh mục khu kinh tế, KCN, CCN." }, { ref: "Khoản 6, 7 Điều 22, Nghị định 96/2026/NĐ-CP", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Nghi-dinh-96-2026-ND-CP-huong-dan-Luat-Dau-tu-690303.aspx", detail: "KCN, CCN, KCX hưởng ưu đãi như địa bàn khó khăn; khu kinh tế, khu công nghệ cao hưởng như địa bàn đặc biệt khó khăn. Dự án trên nhiều xã: xác định theo xã có phần lớn diện tích.", quote: "6. Trường hợp dự án đầu tư được thực hiện trên địa bàn có từ hai đơn vị hành chính cấp xã trở lên thuộc các địa bàn có điều kiện kinh tế - xã hội khác nhau thì địa bàn ưu đãi đầu tư của dự án được xác định theo đơn vị hành chính cấp xã nơi thực hiện phần lớn diện tích sử dụng đất của dự án. Trường hợp diện tích sử dụng đất của dự án giữa các xã bằng nhau thì xác định theo đơn vị hành chính cấp xã có mức ưu đãi cao hơn. 7. Xác định địa bàn ưu đãi đầu tư đối với khu công nghiệp, cụm công nghiệp, khu chế xuất, khu công nghệ cao, khu nông nghiệp ứng dụng công nghệ cao, khu công nghệ số tập trung, khu thương mại tự do, trung tâm tài chính quốc tế, khu kinh tế như sau: a) Khu kinh tế, khu công nghệ cao, khu nông nghiệp ứng dụng công nghệ cao, khu công nghệ số tập trung, khu thương mại tự do và trung tâm tài chính quốc tế là địa bàn ưu đãi đầu tư, được hưởng ưu đãi đầu tư áp dụng đối với địa bàn có điều kiện kinh tế - xã hội đặc biệt khó khăn theo quy định tại khoản 2 Điều này; b) Khu công nghiệp, cụm công nghiệp và khu chế xuất là địa bàn ưu đãi đầu tư, được hưởng ưu đãi đầu tư áp dụng đối với địa bàn có điều kiện kinh tế - xã hội khó khăn theo quy định tại khoản 3 Điều này." }]);
+  document.getElementById('zoneLegal').innerHTML = '<h4 style="margin-top:14px;">Căn cứ pháp lý</h4>' + renderLegalList([{ ref: "Quyết định 1410/QĐ-UBND ngày 13/5/2026", url: "docs/dong-thap-qd-1410-2026-quy-hoach-tinh.pdf", detail: "UBND tỉnh Đồng Tháp phê duyệt điều chỉnh Quy hoạch tỉnh thời kỳ 2021–2030, tầm nhìn 2050 — Phụ lục II, III, IV: danh mục khu kinh tế, KCN, CCN." }, { ref: "Khoản 6, 7 Điều 22, Nghị định 96/2026/NĐ-CP", url: "docs/nd-96-2026-nd-cp.pdf", detail: "KCN, CCN, KCX hưởng ưu đãi như địa bàn khó khăn; khu kinh tế, khu công nghệ cao hưởng như địa bàn đặc biệt khó khăn. Dự án trên nhiều xã: xác định theo xã có phần lớn diện tích.", quote: "6. Trường hợp dự án đầu tư được thực hiện trên địa bàn có từ hai đơn vị hành chính cấp xã trở lên thuộc các địa bàn có điều kiện kinh tế - xã hội khác nhau thì địa bàn ưu đãi đầu tư của dự án được xác định theo đơn vị hành chính cấp xã nơi thực hiện phần lớn diện tích sử dụng đất của dự án. Trường hợp diện tích sử dụng đất của dự án giữa các xã bằng nhau thì xác định theo đơn vị hành chính cấp xã có mức ưu đãi cao hơn. 7. Xác định địa bàn ưu đãi đầu tư đối với khu công nghiệp, cụm công nghiệp, khu chế xuất, khu công nghệ cao, khu nông nghiệp ứng dụng công nghệ cao, khu công nghệ số tập trung, khu thương mại tự do, trung tâm tài chính quốc tế, khu kinh tế như sau: a) Khu kinh tế, khu công nghệ cao, khu nông nghiệp ứng dụng công nghệ cao, khu công nghệ số tập trung, khu thương mại tự do và trung tâm tài chính quốc tế là địa bàn ưu đãi đầu tư, được hưởng ưu đãi đầu tư áp dụng đối với địa bàn có điều kiện kinh tế - xã hội đặc biệt khó khăn theo quy định tại khoản 2 Điều này; b) Khu công nghiệp, cụm công nghiệp và khu chế xuất là địa bàn ưu đãi đầu tư, được hưởng ưu đãi đầu tư áp dụng đối với địa bàn có điều kiện kinh tế - xã hội khó khăn theo quy định tại khoản 3 Điều này." }]);
   renderZones();
 })();
 
@@ -3315,8 +3422,8 @@ const SUAT_DAU_TU_BENCHMARK = [
 ];
 
 const SUAT_DAU_TU_LEGAL = [
-  { ref: "Nghị định 206/2026/NĐ-CP", url: "https://thuvienphapluat.vn/van-ban/Xay-dung-Do-thi/Nghi-dinh-206-2026-ND-CP-huong-dan-quan-ly-chi-phi-dau-tu-xay-dung-457659.aspx", detail: "Khung quản lý chi phí đầu tư xây dựng — cơ sở lập/thẩm định tổng mức đầu tư." },
-  { ref: "Quyết định 425/QĐ-BXD (30/3/2026)", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Quyet-dinh-425-QD-BXD-2026-cong-bo-suat-von-dau-tu-xay-dung-cong-trinh-2025-699543.aspx", detail: "Bảng suất vốn đầu tư năm 2025 — mức tham khảo dùng ở trên trích qua nguồn thứ cấp, cần đối chiếu Phụ lục chính thức trước khi thẩm định/cam kết." }
+  { ref: "Nghị định 206/2026/NĐ-CP", url: "docs/nd-206-2026-nd-cp.pdf", detail: "Khung quản lý chi phí đầu tư xây dựng — cơ sở lập/thẩm định tổng mức đầu tư." },
+  { ref: "Quyết định 425/QĐ-BXD (30/3/2026)", url: "docs/qd-425-qd-bxd-2026-phu-luc.pdf", detail: "Bảng suất vốn đầu tư năm 2025 — mức tham khảo dùng ở trên trích qua nguồn thứ cấp, cần đối chiếu Phụ lục chính thức trước khi thẩm định/cam kết." }
 ];
 
 function computeSuatDauTu() {
@@ -3381,17 +3488,17 @@ const LAND_METHODS = [
 
 const LAND_METHOD_LEGAL = {
   giao_thue_khong_dg: [
-    { ref: "Khoản 8, Điều 24, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Giao đất/cho thuê đất không qua đấu giá, đấu thầu — thuộc diện phải chấp thuận chủ trương đầu tư (đã tính vào Bước 1).", quote: "8. Dự án đầu tư mà nhà đầu tư có đề nghị Nhà nước giao đất, cho thuê đất không đấu giá quyền sử dụng đất, đấu thầu lựa chọn nhà đầu tư thực hiện dự án có sử dụng đất; dự án có đề nghị chuyển mục đích sử dụng đất theo quy định của pháp luật về đất đai. Việc chấp thuận chủ trương đầu tư quy định tại khoản này không áp dụng đối với: a) Dự án đầu tư của cá nhân không thuộc diện phải có văn bản chấp thuận của UBND cấp tỉnh trước khi được quyết định cho thuê đất, cho phép chuyển mục đích sử dụng đất; b) Dự án đầu tư xây dựng hạ tầng kỹ thuật cụm công nghiệp; c) Dự án khai thác khoáng sản thuộc diện đấu giá quyền khai thác khoáng sản...; d) Dự án đầu tư khác theo quy định của Chính phủ." }
+    { ref: "Khoản 8, Điều 24, Luật 143/2025/QH15", url: "docs/luat-dau-tu-2025-so-143-2025-qh15.pdf", detail: "Giao đất/cho thuê đất không qua đấu giá, đấu thầu — thuộc diện phải chấp thuận chủ trương đầu tư (đã tính vào Bước 1).", quote: "8. Dự án đầu tư mà nhà đầu tư có đề nghị Nhà nước giao đất, cho thuê đất không đấu giá quyền sử dụng đất, đấu thầu lựa chọn nhà đầu tư thực hiện dự án có sử dụng đất; dự án có đề nghị chuyển mục đích sử dụng đất theo quy định của pháp luật về đất đai. Việc chấp thuận chủ trương đầu tư quy định tại khoản này không áp dụng đối với: a) Dự án đầu tư của cá nhân không thuộc diện phải có văn bản chấp thuận của UBND cấp tỉnh trước khi được quyết định cho thuê đất, cho phép chuyển mục đích sử dụng đất; b) Dự án đầu tư xây dựng hạ tầng kỹ thuật cụm công nghiệp; c) Dự án khai thác khoáng sản thuộc diện đấu giá quyền khai thác khoáng sản...; d) Dự án đầu tư khác theo quy định của Chính phủ." }
   ],
   dau_gia: [
     { ref: "Khoản 8, Điều 24, Luật 143/2025/QH15", url: "docs/luat-dau-tu-2025-so-143-2025-qh15.pdf", detail: "Trúng đấu giá quyền sử dụng đất KHÔNG thuộc khoản 8 — khoản 8 chỉ áp dụng khi Nhà nước giao, cho thuê đất không qua đấu giá, đấu thầu. Không phải chấp thuận chủ trương vì lý do đất đai.", quote: "8. Dự án đầu tư mà nhà đầu tư có đề nghị Nhà nước giao đất, cho thuê đất không đấu giá quyền sử dụng đất, đấu thầu lựa chọn nhà đầu tư thực hiện dự án có sử dụng đất; dự án có đề nghị chuyển mục đích sử dụng đất theo quy định của pháp luật về đất đai. ..." },
-    { ref: "Luật Đấu giá tài sản (01/2016/QH14, sđ 37/2024/QH15)", url: "https://thuvienphapluat.vn/van-ban/Thuong-mai/Luat-Dau-gia-tai-san-sua-doi-2024-588810.aspx", detail: "Trình tự, thủ tục đấu giá quyền sử dụng đất." },
-    { ref: "Nghị định 172/2024/NĐ-CP", url: "https://thuvienphapluat.vn/van-ban/Thuong-mai/Nghi-dinh-172-2024-ND-CP-huong-dan-Luat-Dau-gia-tai-san-2016-sua-doi-boi-Luat-Dau-gia-tai-san-2024-638044.aspx", detail: "Hướng dẫn thi hành Luật Đấu giá tài sản." }
+    { ref: "Luật Đấu giá tài sản (01/2016/QH14, sđ 37/2024/QH15)", url: "docs/luat-dau-gia-vbhn-104-2026.pdf", detail: "Trình tự, thủ tục đấu giá quyền sử dụng đất." },
+    { ref: "Nghị định 172/2024/NĐ-CP", url: "docs/nd-172-2024-nd-cp.pdf", detail: "Hướng dẫn thi hành Luật Đấu giá tài sản." }
   ],
   dau_thau_ndt: [
     { ref: "Khoản 8, Điều 24, Luật 143/2025/QH15", url: "docs/luat-dau-tu-2025-so-143-2025-qh15.pdf", detail: "Trúng đấu thầu lựa chọn nhà đầu tư KHÔNG thuộc khoản 8 — khoản 8 chỉ áp dụng khi giao, cho thuê đất không qua đấu giá, đấu thầu.", quote: "8. Dự án đầu tư mà nhà đầu tư có đề nghị Nhà nước giao đất, cho thuê đất không đấu giá quyền sử dụng đất, đấu thầu lựa chọn nhà đầu tư thực hiện dự án có sử dụng đất; dự án có đề nghị chuyển mục đích sử dụng đất theo quy định của pháp luật về đất đai. ..." },
     { ref: "Nghị quyết 40/2026/NQ-HĐND; NQ 46/NQ-HĐND (Đồng Tháp)", url: "docs/dong-thap-nq-40-2026-tieu-chi-dau-thau.pdf", detail: "Tiêu chí đấu thầu khu đô thị (≥ 1 đơn vị ở hoặc ≥ 20 ha), khu dân cư nông thôn (≥ 3 ha); Danh mục khu đất đấu thầu của tỉnh." },
-    { ref: "Luật Đấu thầu 2023 (22/2023/QH15)", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-thau-2023-22-2023-QH15-518805.aspx", detail: "Lựa chọn nhà đầu tư thực hiện dự án đầu tư kinh doanh có sử dụng đất." },
+    { ref: "Luật Đấu thầu 2023 (22/2023/QH15)", url: "docs/luat-dau-thau-22-2023-qh15.pdf", detail: "Lựa chọn nhà đầu tư thực hiện dự án đầu tư kinh doanh có sử dụng đất." },
     { ref: "Nghị định 274/2026/NĐ-CP", url: "docs/nd-274-2026-nd-cp.pdf", detail: "Hướng dẫn chi tiết lựa chọn nhà đầu tư — từ 21/8/2026 các NĐ 23/2024, 115/2024 (trừ Điều 69), 225/2025 hết hiệu lực." }
   ],
   dat_dan_dung_muc_dich: [
@@ -3401,45 +3508,45 @@ const LAND_METHOD_LEGAL = {
     { ref: "Thuê lại đất trong KCN, CCN", detail: "Ký hợp đồng thuê lại đất có hạ tầng với doanh nghiệp đầu tư kinh doanh hạ tầng KCN/CCN — không làm thủ tục giao đất, cho thuê đất với Nhà nước, không thuộc khoản 8 Điều 24." }
   ],
   chuyen_muc_dich: [
-    { ref: "Khoản 8, Điều 24, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Dự án có đề nghị chuyển mục đích sử dụng đất — thuộc diện phải chấp thuận chủ trương đầu tư (đã tính vào Bước 1).", quote: "8. Dự án đầu tư mà nhà đầu tư có đề nghị Nhà nước giao đất, cho thuê đất không đấu giá quyền sử dụng đất, đấu thầu lựa chọn nhà đầu tư thực hiện dự án có sử dụng đất; dự án có đề nghị chuyển mục đích sử dụng đất theo quy định của pháp luật về đất đai..." },
-    { ref: "Luật Đất đai 2024 (31/2024/QH15)", url: "https://thuvienphapluat.vn/van-ban/Bat-dong-san/Luat-Dat-dai-2024-31-2024-QH15-523642.aspx", detail: "Điều kiện, thẩm quyền cho phép chuyển mục đích sử dụng đất." }
+    { ref: "Khoản 8, Điều 24, Luật 143/2025/QH15", url: "docs/luat-dau-tu-2025-so-143-2025-qh15.pdf", detail: "Dự án có đề nghị chuyển mục đích sử dụng đất — thuộc diện phải chấp thuận chủ trương đầu tư (đã tính vào Bước 1).", quote: "8. Dự án đầu tư mà nhà đầu tư có đề nghị Nhà nước giao đất, cho thuê đất không đấu giá quyền sử dụng đất, đấu thầu lựa chọn nhà đầu tư thực hiện dự án có sử dụng đất; dự án có đề nghị chuyển mục đích sử dụng đất theo quy định của pháp luật về đất đai..." },
+    { ref: "Luật Đất đai 2024 (31/2024/QH15)", url: "docs/luat-dat-dai-2024-so-31-2024-qh15.pdf", detail: "Điều kiện, thẩm quyền cho phép chuyển mục đích sử dụng đất." }
   ]
 };
 
 const VON_LAODONG_LEGAL = [
-  { ref: "Điểm c khoản 1, Điều 14, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Dự án quy mô vốn lớn, sử dụng nhiều lao động, hoặc dự án trọng điểm/quan trọng quốc gia cũng thuộc đối tượng được hưởng ưu đãi đầu tư — không cần thuộc ngành nghề hay địa bàn ưu đãi.", quote: "c) Dự án đầu tư có quy mô vốn lớn, dự án đầu tư sử dụng nhiều lao động hoặc dự án đầu tư trọng điểm, quan trọng quốc gia phù hợp với định hướng phát triển kinh tế - xã hội trong từng thời kỳ theo quy định của Chính phủ." },
-  { ref: "Điều 17, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Nếu vốn đầu tư rất lớn và thuộc lĩnh vực công nghệ chiến lược/chip bán dẫn/AI, có thể được xét ưu đãi đầu tư đặc biệt — ví dụ dự án R&D chip bán dẫn/trung tâm dữ liệu AI cần vốn từ 6.000 tỷ đồng trở lên. Ngưỡng cụ thể theo từng loại dự án do Chính phủ quy định tại Nghị định 96/2026/NĐ-CP, không áp dụng chung một mức cho mọi ngành.", quote: "2. Đối tượng áp dụng ưu đãi, hỗ trợ đầu tư đặc biệt bao gồm: a) Dự án đầu tư thành lập mới trung tâm đổi mới sáng tạo, trung tâm nghiên cứu và phát triển, dự án đầu tư xây dựng hạ tầng trung tâm dữ liệu lớn, hạ tầng điện toán đám mây, hạ tầng di động từ 5G trở lên...; b) Dự án đầu tư sản xuất sản phẩm công nghệ số trọng điểm, dự án nghiên cứu và phát triển, thiết kế, sản xuất, đóng gói, kiểm thử chip bán dẫn, dự án xây dựng trung tâm dữ liệu trí tuệ nhân tạo... có quy mô vốn đầu tư và thời hạn giải ngân vốn đầu tư theo quy định của Chính phủ; c) Dự án đầu tư khác thuộc ngành, nghề đặc biệt ưu đãi đầu tư có quy mô vốn đầu tư và thời hạn giải ngân vốn đầu tư theo quy định của Chính phủ." }
+  { ref: "Điểm c khoản 1, Điều 14, Luật 143/2025/QH15", url: "docs/luat-dau-tu-2025-so-143-2025-qh15.pdf", detail: "Dự án quy mô vốn lớn, sử dụng nhiều lao động, hoặc dự án trọng điểm/quan trọng quốc gia cũng thuộc đối tượng được hưởng ưu đãi đầu tư — không cần thuộc ngành nghề hay địa bàn ưu đãi.", quote: "c) Dự án đầu tư có quy mô vốn lớn, dự án đầu tư sử dụng nhiều lao động hoặc dự án đầu tư trọng điểm, quan trọng quốc gia phù hợp với định hướng phát triển kinh tế - xã hội trong từng thời kỳ theo quy định của Chính phủ." },
+  { ref: "Điều 17, Luật 143/2025/QH15", url: "docs/luat-dau-tu-2025-so-143-2025-qh15.pdf", detail: "Nếu vốn đầu tư rất lớn và thuộc lĩnh vực công nghệ chiến lược/chip bán dẫn/AI, có thể được xét ưu đãi đầu tư đặc biệt — ví dụ dự án R&D chip bán dẫn/trung tâm dữ liệu AI cần vốn từ 6.000 tỷ đồng trở lên. Ngưỡng cụ thể theo từng loại dự án do Chính phủ quy định tại Nghị định 96/2026/NĐ-CP, không áp dụng chung một mức cho mọi ngành.", quote: "2. Đối tượng áp dụng ưu đãi, hỗ trợ đầu tư đặc biệt bao gồm: a) Dự án đầu tư thành lập mới trung tâm đổi mới sáng tạo, trung tâm nghiên cứu và phát triển, dự án đầu tư xây dựng hạ tầng trung tâm dữ liệu lớn, hạ tầng điện toán đám mây, hạ tầng di động từ 5G trở lên...; b) Dự án đầu tư sản xuất sản phẩm công nghệ số trọng điểm, dự án nghiên cứu và phát triển, thiết kế, sản xuất, đóng gói, kiểm thử chip bán dẫn, dự án xây dựng trung tâm dữ liệu trí tuệ nhân tạo... có quy mô vốn đầu tư và thời hạn giải ngân vốn đầu tư theo quy định của Chính phủ; c) Dự án đầu tư khác thuộc ngành, nghề đặc biệt ưu đãi đầu tư có quy mô vốn đầu tư và thời hạn giải ngân vốn đầu tư theo quy định của Chính phủ." }
 ];
 
 const PROJECT_GROUP_LEGAL = [
-  { ref: "Điều 8–11, Luật Đầu tư công 2024 (số 58/2024/QH15)", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-cong-2024-so-58-2024-QH15-621645.aspx", detail: "Tiêu chí phân loại dự án quan trọng quốc gia / nhóm A / B / C — ngưỡng khác nhau theo từng lĩnh vực cụ thể (giao thông có ngưỡng riêng cao hơn phần lớn lĩnh vực khác)." },
-  { ref: "Nghị định 08/2022/NĐ-CP", url: "https://thuvienphapluat.vn/van-ban/Tai-nguyen-Moi-truong/Nghi-dinh-08-2022-ND-CP-huong-dan-Luat-Bao-ve-moi-truong-479457.aspx", detail: "Nhóm A/B/C là một trong các tiêu chí kết hợp để xác định dự án thuộc nhóm môi trường I/II/III/IV — xem thêm mục môi trường bên dưới." },
-  { ref: "Nghị định 217/2026/NĐ-CP", url: "https://thuvienphapluat.vn/van-ban/Xay-dung-Do-thi/Nghi-dinh-217-2026-ND-CP-huong-dan-Luat-Xay-dung-quan-ly-hoat-dong-xay-dung-696494.aspx", detail: "Nhóm dự án cũng ảnh hưởng thẩm quyền thẩm định thiết kế xây dựng." }
+  { ref: "Điều 8–11, Luật Đầu tư công 2024 (số 58/2024/QH15)", url: "docs/luat-dau-tu-cong-58-2024-qh15.pdf", detail: "Tiêu chí phân loại dự án quan trọng quốc gia / nhóm A / B / C — ngưỡng khác nhau theo từng lĩnh vực cụ thể (giao thông có ngưỡng riêng cao hơn phần lớn lĩnh vực khác)." },
+  { ref: "Nghị định 08/2022/NĐ-CP", url: "docs/nd-08-2022-phu-luc.pdf", detail: "Nhóm A/B/C là một trong các tiêu chí kết hợp để xác định dự án thuộc nhóm môi trường I/II/III/IV — xem thêm mục môi trường bên dưới." },
+  { ref: "Nghị định 217/2026/NĐ-CP", url: "docs/nd-217-2026-nd-cp.pdf", detail: "Nhóm dự án cũng ảnh hưởng thẩm quyền thẩm định thiết kế xây dựng." }
 ];
 
 const MOITRUONG_LEGAL = [
   { ref: "Điều 28, Luật Bảo vệ môi trường (VBHN 98/VBHN-VPQH)", url: "docs/luat-bvmt-vbhn-98-2026.pdf", detail: "Tiêu chí về môi trường để phân loại dự án đầu tư thành nhóm I/II/III/IV: quy mô, công suất, loại hình; diện tích đất, mặt nước, khu vực biển; yếu tố nhạy cảm về môi trường." },
   { ref: "Điều 30, Luật Bảo vệ môi trường (VBHN 98/VBHN-VPQH)", url: "docs/luat-bvmt-vbhn-98-2026.pdf", detail: "Đối tượng phải đánh giá tác động môi trường: dự án nhóm I và dự án nhóm II thuộc điểm c, d, đ, e khoản 4 Điều 28 — không chỉ riêng nhóm I.", quote: "1. Đối tượng phải thực hiện đánh giá tác động môi trường bao gồm: a) Dự án đầu tư nhóm I quy định tại khoản 3 Điều 28 của Luật này; b) Dự án đầu tư nhóm II quy định tại các điểm c, d, đ và e khoản 4 Điều 28 của Luật này. 2. Đối tượng quy định tại khoản 1 Điều này không phải thực hiện đánh giá tác động môi trường khi thuộc một trong các trường hợp sau đây: a) Dự án đầu tư công khẩn cấp theo quy định của pháp luật về đầu tư công; b) Dự án đầu tư không phải thực hiện đánh giá tác động môi trường theo quy định của luật, nghị quyết của Quốc hội." },
-  { ref: "Nghị định 08/2022/NĐ-CP (sđ NĐ 05/2025, NĐ 48/2026)", url: "https://thuvienphapluat.vn/van-ban/Tai-nguyen-Moi-truong/Nghi-dinh-08-2022-ND-CP-huong-dan-Luat-Bao-ve-moi-truong-479457.aspx", detail: "Phụ lục III/IV/V — danh mục chi tiết dự án nhóm I/II/III theo từng ngành, lĩnh vực cụ thể. Cần tra đúng phụ lục để xác định chính xác, không suy đoán từ mô tả chung." }
+  { ref: "Nghị định 08/2022/NĐ-CP (sđ NĐ 05/2025, NĐ 48/2026)", url: "docs/nd-08-2022-phu-luc.pdf", detail: "Phụ lục III/IV/V — danh mục chi tiết dự án nhóm I/II/III theo từng ngành, lĩnh vực cụ thể. Cần tra đúng phụ lục để xác định chính xác, không suy đoán từ mô tả chung." }
 ];
 
 const DIEU_24_25_LEGAL = [
-  { ref: "Điều 24, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Liệt kê 20 khoản dự án thuộc diện phải chấp thuận chủ trương đầu tư.", quote: "1. Dự án đầu tư có yêu cầu chuyển mục đích sử dụng đất rừng đặc dụng... 3. Dự án đầu tư có yêu cầu di dân tái định cư từ 10.000 người trở lên ở miền núi, từ 20.000 người trở lên ở vùng khác... 8. Dự án đầu tư mà nhà đầu tư có đề nghị Nhà nước giao đất, cho thuê đất không đấu giá quyền sử dụng đất... 19. Dự án đầu tư khác thuộc diện chấp thuận chủ trương đầu tư của Thủ tướng Chính phủ theo quy định của pháp luật. 20. Dự án đầu tư có yêu cầu áp dụng cơ chế, chính sách đặc biệt, khác với quy định của luật, nghị quyết của Quốc hội." },
-  { ref: "Điều 25, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Phân định thẩm quyền theo từng khoản của Điều 24.", quote: "1. Quốc hội chấp thuận chủ trương đầu tư đối với dự án đầu tư quy định tại khoản 20 Điều 24... 2. Thủ tướng Chính phủ chấp thuận chủ trương đầu tư đối với: a) Dự án đầu tư quy định tại các khoản 1, 2, 4, 6, 7 và 19 Điều 24; b) Dự án tái định cư từ 20.000 người trở lên ở miền núi, từ 50.000 người trở lên ở vùng khác... 3. Chủ tịch Ủy ban nhân dân cấp tỉnh chấp thuận chủ trương đầu tư đối với: a) Dự án đầu tư quy định tại các khoản 8-18 Điều 24... 4. Đối với dự án đầu tư quy định tại khoản 3 Điều này thực hiện tại khu công nghiệp, khu chế xuất, khu công nghệ cao, khu công nghệ số tập trung, khu kinh tế phù hợp với quy hoạch đã được cấp có thẩm quyền phê duyệt thì Ban quản lý khu công nghiệp, khu chế xuất, khu công nghệ cao, khu kinh tế chấp thuận chủ trương đầu tư." },
-  { ref: "Điều 26, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Nếu không thuộc diện chấp thuận chủ trương ở trên: xác định có phải cấp Giấy chứng nhận đăng ký đầu tư (IRC) hay không.", quote: "1. Các dự án phải thực hiện thủ tục cấp Giấy chứng nhận đăng ký đầu tư bao gồm: a) Dự án đầu tư của nhà đầu tư nước ngoài; b) Dự án đầu tư của tổ chức kinh tế quy định tại khoản 1 Điều 20 của Luật này." }
+  { ref: "Điều 24, Luật 143/2025/QH15", url: "docs/luat-dau-tu-2025-so-143-2025-qh15.pdf", detail: "Liệt kê 20 khoản dự án thuộc diện phải chấp thuận chủ trương đầu tư.", quote: "1. Dự án đầu tư có yêu cầu chuyển mục đích sử dụng đất rừng đặc dụng... 3. Dự án đầu tư có yêu cầu di dân tái định cư từ 10.000 người trở lên ở miền núi, từ 20.000 người trở lên ở vùng khác... 8. Dự án đầu tư mà nhà đầu tư có đề nghị Nhà nước giao đất, cho thuê đất không đấu giá quyền sử dụng đất... 19. Dự án đầu tư khác thuộc diện chấp thuận chủ trương đầu tư của Thủ tướng Chính phủ theo quy định của pháp luật. 20. Dự án đầu tư có yêu cầu áp dụng cơ chế, chính sách đặc biệt, khác với quy định của luật, nghị quyết của Quốc hội." },
+  { ref: "Điều 25, Luật 143/2025/QH15", url: "docs/luat-dau-tu-2025-so-143-2025-qh15.pdf", detail: "Phân định thẩm quyền theo từng khoản của Điều 24.", quote: "1. Quốc hội chấp thuận chủ trương đầu tư đối với dự án đầu tư quy định tại khoản 20 Điều 24... 2. Thủ tướng Chính phủ chấp thuận chủ trương đầu tư đối với: a) Dự án đầu tư quy định tại các khoản 1, 2, 4, 6, 7 và 19 Điều 24; b) Dự án tái định cư từ 20.000 người trở lên ở miền núi, từ 50.000 người trở lên ở vùng khác... 3. Chủ tịch Ủy ban nhân dân cấp tỉnh chấp thuận chủ trương đầu tư đối với: a) Dự án đầu tư quy định tại các khoản 8-18 Điều 24... 4. Đối với dự án đầu tư quy định tại khoản 3 Điều này thực hiện tại khu công nghiệp, khu chế xuất, khu công nghệ cao, khu công nghệ số tập trung, khu kinh tế phù hợp với quy hoạch đã được cấp có thẩm quyền phê duyệt thì Ban quản lý khu công nghiệp, khu chế xuất, khu công nghệ cao, khu kinh tế chấp thuận chủ trương đầu tư." },
+  { ref: "Điều 26, Luật 143/2025/QH15", url: "docs/luat-dau-tu-2025-so-143-2025-qh15.pdf", detail: "Nếu không thuộc diện chấp thuận chủ trương ở trên: xác định có phải cấp Giấy chứng nhận đăng ký đầu tư (IRC) hay không.", quote: "1. Các dự án phải thực hiện thủ tục cấp Giấy chứng nhận đăng ký đầu tư bao gồm: a) Dự án đầu tư của nhà đầu tư nước ngoài; b) Dự án đầu tư của tổ chức kinh tế quy định tại khoản 1 Điều 20 của Luật này." }
 ];
 
 const DIABAN_15_LEGAL = [
-  { ref: "Khoản 6, 7 Điều 22, Nghị định 96/2026/NĐ-CP", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Nghi-dinh-96-2026-ND-CP-huong-dan-Luat-Dau-tu-690303.aspx", detail: "KCN, CCN, KCX hưởng ưu đãi như địa bàn khó khăn; khu kinh tế, khu công nghệ cao hưởng như địa bàn đặc biệt khó khăn. Dự án trên nhiều xã: xác định theo xã có phần lớn diện tích.", quote: "6. Trường hợp dự án đầu tư được thực hiện trên địa bàn có từ hai đơn vị hành chính cấp xã trở lên thuộc các địa bàn có điều kiện kinh tế - xã hội khác nhau thì địa bàn ưu đãi đầu tư của dự án được xác định theo đơn vị hành chính cấp xã nơi thực hiện phần lớn diện tích sử dụng đất của dự án. Trường hợp diện tích sử dụng đất của dự án giữa các xã bằng nhau thì xác định theo đơn vị hành chính cấp xã có mức ưu đãi cao hơn. 7. Xác định địa bàn ưu đãi đầu tư đối với khu công nghiệp, cụm công nghiệp, khu chế xuất, khu công nghệ cao, khu nông nghiệp ứng dụng công nghệ cao, khu công nghệ số tập trung, khu thương mại tự do, trung tâm tài chính quốc tế, khu kinh tế như sau: a) Khu kinh tế, khu công nghệ cao, khu nông nghiệp ứng dụng công nghệ cao, khu công nghệ số tập trung, khu thương mại tự do và trung tâm tài chính quốc tế là địa bàn ưu đãi đầu tư, được hưởng ưu đãi đầu tư áp dụng đối với địa bàn có điều kiện kinh tế - xã hội đặc biệt khó khăn theo quy định tại khoản 2 Điều này; b) Khu công nghiệp, cụm công nghiệp và khu chế xuất là địa bàn ưu đãi đầu tư, được hưởng ưu đãi đầu tư áp dụng đối với địa bàn có điều kiện kinh tế - xã hội khó khăn theo quy định tại khoản 3 Điều này." },
-  { ref: "Khoản 2, Điều 15, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "2 nhóm địa bàn ưu đãi: (a) khó khăn/đặc biệt khó khăn; (b) KCN, CCN, KCX, KCNC, khu công nghệ số tập trung, khu kinh tế…", quote: "2. Địa bàn ưu đãi đầu tư bao gồm: a) Địa bàn có điều kiện kinh tế - xã hội khó khăn, địa bàn có điều kiện kinh tế - xã hội đặc biệt khó khăn; b) Khu công nghiệp, cụm công nghiệp, khu chế xuất, khu công nghệ cao, khu nông nghiệp ứng dụng công nghệ cao, khu công nghệ số tập trung, khu thương mại tự do, trung tâm tài chính quốc tế, khu kinh tế." },
-  { ref: "Điều 19–20, Nghị định 320/2025/NĐ-CP", url: "https://thuvienphapluat.vn/van-ban/Doanh-nghiep/Nghi-dinh-320-2025-ND-CP-huong-dan-Luat-Thue-thu-nhap-doanh-nghiep-665051.aspx", detail: "Mức thuế suất ưu đãi, thời gian miễn/giảm thuế TNDN cụ thể theo địa bàn." },
-  { ref: "Điều 39, Nghị định 103/2024/NĐ-CP", url: "https://thuvienphapluat.vn/van-ban/Bat-dong-san/Nghi-dinh-103-2024-ND-CP-tien-su-dung-dat-tien-thue-dat-550020.aspx", detail: "Miễn, giảm tiền thuê đất/tiền sử dụng đất theo địa bàn — chỉ áp dụng khi thuê đất trực tiếp từ Nhà nước." }
+  { ref: "Khoản 6, 7 Điều 22, Nghị định 96/2026/NĐ-CP", url: "docs/nd-96-2026-nd-cp.pdf", detail: "KCN, CCN, KCX hưởng ưu đãi như địa bàn khó khăn; khu kinh tế, khu công nghệ cao hưởng như địa bàn đặc biệt khó khăn. Dự án trên nhiều xã: xác định theo xã có phần lớn diện tích.", quote: "6. Trường hợp dự án đầu tư được thực hiện trên địa bàn có từ hai đơn vị hành chính cấp xã trở lên thuộc các địa bàn có điều kiện kinh tế - xã hội khác nhau thì địa bàn ưu đãi đầu tư của dự án được xác định theo đơn vị hành chính cấp xã nơi thực hiện phần lớn diện tích sử dụng đất của dự án. Trường hợp diện tích sử dụng đất của dự án giữa các xã bằng nhau thì xác định theo đơn vị hành chính cấp xã có mức ưu đãi cao hơn. 7. Xác định địa bàn ưu đãi đầu tư đối với khu công nghiệp, cụm công nghiệp, khu chế xuất, khu công nghệ cao, khu nông nghiệp ứng dụng công nghệ cao, khu công nghệ số tập trung, khu thương mại tự do, trung tâm tài chính quốc tế, khu kinh tế như sau: a) Khu kinh tế, khu công nghệ cao, khu nông nghiệp ứng dụng công nghệ cao, khu công nghệ số tập trung, khu thương mại tự do và trung tâm tài chính quốc tế là địa bàn ưu đãi đầu tư, được hưởng ưu đãi đầu tư áp dụng đối với địa bàn có điều kiện kinh tế - xã hội đặc biệt khó khăn theo quy định tại khoản 2 Điều này; b) Khu công nghiệp, cụm công nghiệp và khu chế xuất là địa bàn ưu đãi đầu tư, được hưởng ưu đãi đầu tư áp dụng đối với địa bàn có điều kiện kinh tế - xã hội khó khăn theo quy định tại khoản 3 Điều này." },
+  { ref: "Khoản 2, Điều 15, Luật 143/2025/QH15", url: "docs/luat-dau-tu-2025-so-143-2025-qh15.pdf", detail: "2 nhóm địa bàn ưu đãi: (a) khó khăn/đặc biệt khó khăn; (b) KCN, CCN, KCX, KCNC, khu công nghệ số tập trung, khu kinh tế…", quote: "2. Địa bàn ưu đãi đầu tư bao gồm: a) Địa bàn có điều kiện kinh tế - xã hội khó khăn, địa bàn có điều kiện kinh tế - xã hội đặc biệt khó khăn; b) Khu công nghiệp, cụm công nghiệp, khu chế xuất, khu công nghệ cao, khu nông nghiệp ứng dụng công nghệ cao, khu công nghệ số tập trung, khu thương mại tự do, trung tâm tài chính quốc tế, khu kinh tế." },
+  { ref: "Điều 19–20, Nghị định 320/2025/NĐ-CP", url: "docs/nd-320-2025-nd-cp.pdf", detail: "Mức thuế suất ưu đãi, thời gian miễn/giảm thuế TNDN cụ thể theo địa bàn." },
+  { ref: "Điều 39, Nghị định 103/2024/NĐ-CP", url: "docs/nd-103-2024-nd-cp.pdf", detail: "Miễn, giảm tiền thuê đất/tiền sử dụng đất theo địa bàn — chỉ áp dụng khi thuê đất trực tiếp từ Nhà nước." }
 ];
 
 const NGANH_15_17_LEGAL = [
-  { ref: "Khoản 1, Điều 15, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "9 nhóm ngành, nghề ưu đãi đầu tư (a–i).", quote: "1. Ngành, nghề ưu đãi đầu tư là các ngành, nghề được ưu tiên thu hút đầu tư để thực hiện các mục tiêu sau đây: a) Phát triển khoa học, công nghệ, đổi mới sáng tạo, chuyển đổi số, công nghiệp công nghệ số và công nghiệp bán dẫn; b) Phát triển kinh tế xanh, kinh tế tuần hoàn, kinh tế chia sẻ, kinh tế số...; c) Phát triển cụm liên kết ngành, chuỗi giá trị...; d) Phát triển năng lượng tái tạo, năng lượng mới, năng lượng sạch...; đ) Phát triển nông nghiệp, lâm nghiệp; bảo vệ môi trường...; e) Xây dựng và phát triển kết cấu hạ tầng; g) Phát triển giáo dục, đào tạo, y tế...; h) Phát triển công nghiệp hóa chất trọng điểm, cơ khí trọng điểm...; i) Thực hiện các mục tiêu khác theo quy định của Chính phủ." },
-  { ref: "Điều 7, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Nếu ngành nghề dự án nằm trong Phụ lục IV (198 ngành có điều kiện) — cần thêm điều kiện tiếp cận thị trường, xem mục tra cứu văn bản.", quote: "1. Ngành, nghề đầu tư kinh doanh có điều kiện là ngành, nghề kinh doanh trên lãnh thổ Việt Nam mà việc thực hiện hoạt động đầu tư kinh doanh trong ngành, nghề đó phải đáp ứng điều kiện cần thiết vì lý do quốc phòng, an ninh quốc gia, trật tự, an toàn xã hội, đạo đức xã hội, sức khỏe của cộng đồng. Danh mục ngành, nghề đầu tư kinh doanh có điều kiện được quy định tại Phụ lục IV ban hành kèm theo Luật này." },
-  { ref: "Điều 17, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Nếu dự án thuộc công nghệ chiến lược/chip bán dẫn/AI/hạ tầng số quy mô lớn — có thể được xét ưu đãi đầu tư đặc biệt (cao hơn mức ưu đãi thường).", quote: "1. Chính phủ quy định việc áp dụng ưu đãi, hỗ trợ đầu tư đặc biệt nhằm khuyến khích phát triển một số dự án đầu tư có tác động lớn đến phát triển kinh tế - xã hội. 2. Đối tượng áp dụng bao gồm: a) Trung tâm đổi mới sáng tạo, trung tâm R&D, hạ tầng trung tâm dữ liệu lớn, điện toán đám mây, hạ tầng di động 5G trở lên trong lĩnh vực công nghệ chiến lược; b) Sản xuất sản phẩm công nghệ số trọng điểm, chip bán dẫn, trung tâm dữ liệu AI; c) Dự án khác thuộc ngành, nghề đặc biệt ưu đãi đầu tư — quy mô vốn và thời hạn giải ngân theo quy định của Chính phủ." }
+  { ref: "Khoản 1, Điều 15, Luật 143/2025/QH15", url: "docs/luat-dau-tu-2025-so-143-2025-qh15.pdf", detail: "9 nhóm ngành, nghề ưu đãi đầu tư (a–i).", quote: "1. Ngành, nghề ưu đãi đầu tư là các ngành, nghề được ưu tiên thu hút đầu tư để thực hiện các mục tiêu sau đây: a) Phát triển khoa học, công nghệ, đổi mới sáng tạo, chuyển đổi số, công nghiệp công nghệ số và công nghiệp bán dẫn; b) Phát triển kinh tế xanh, kinh tế tuần hoàn, kinh tế chia sẻ, kinh tế số...; c) Phát triển cụm liên kết ngành, chuỗi giá trị...; d) Phát triển năng lượng tái tạo, năng lượng mới, năng lượng sạch...; đ) Phát triển nông nghiệp, lâm nghiệp; bảo vệ môi trường...; e) Xây dựng và phát triển kết cấu hạ tầng; g) Phát triển giáo dục, đào tạo, y tế...; h) Phát triển công nghiệp hóa chất trọng điểm, cơ khí trọng điểm...; i) Thực hiện các mục tiêu khác theo quy định của Chính phủ." },
+  { ref: "Điều 7, Luật 143/2025/QH15", url: "docs/luat-dau-tu-2025-so-143-2025-qh15.pdf", detail: "Nếu ngành nghề dự án nằm trong Phụ lục IV (198 ngành có điều kiện) — cần thêm điều kiện tiếp cận thị trường, xem mục tra cứu văn bản.", quote: "1. Ngành, nghề đầu tư kinh doanh có điều kiện là ngành, nghề kinh doanh trên lãnh thổ Việt Nam mà việc thực hiện hoạt động đầu tư kinh doanh trong ngành, nghề đó phải đáp ứng điều kiện cần thiết vì lý do quốc phòng, an ninh quốc gia, trật tự, an toàn xã hội, đạo đức xã hội, sức khỏe của cộng đồng. Danh mục ngành, nghề đầu tư kinh doanh có điều kiện được quy định tại Phụ lục IV ban hành kèm theo Luật này." },
+  { ref: "Điều 17, Luật 143/2025/QH15", url: "docs/luat-dau-tu-2025-so-143-2025-qh15.pdf", detail: "Nếu dự án thuộc công nghệ chiến lược/chip bán dẫn/AI/hạ tầng số quy mô lớn — có thể được xét ưu đãi đầu tư đặc biệt (cao hơn mức ưu đãi thường).", quote: "1. Chính phủ quy định việc áp dụng ưu đãi, hỗ trợ đầu tư đặc biệt nhằm khuyến khích phát triển một số dự án đầu tư có tác động lớn đến phát triển kinh tế - xã hội. 2. Đối tượng áp dụng bao gồm: a) Trung tâm đổi mới sáng tạo, trung tâm R&D, hạ tầng trung tâm dữ liệu lớn, điện toán đám mây, hạ tầng di động 5G trở lên trong lĩnh vực công nghệ chiến lược; b) Sản xuất sản phẩm công nghệ số trọng điểm, chip bán dẫn, trung tâm dữ liệu AI; c) Dự án khác thuộc ngành, nghề đặc biệt ưu đãi đầu tư — quy mô vốn và thời hạn giải ngân theo quy định của Chính phủ." }
 ];
 
 function computeAuthority() {
@@ -3801,7 +3908,7 @@ function renderWizard() {
     </label>
     ${wizardState.conditional ? renderResultPanel('<span class="result-line">⚠ Ngành có điều kiện: thêm bước <b>6.1 Giấy phép, điều kiện kinh doanh chuyên ngành</b> vào lộ trình. Kiểm tra cả ngành <b>cấm</b> (Điều 6, Phụ lục I–III) — từ 01/01/2027 cấm thêm kinh doanh khí N2O dùng cho con người qua đường hô hấp.</span>', false) : ''}
     <h4>Căn cứ pháp lý</h4>
-    ${renderLegalList([...nganhHits.map(n => ({ ref: `Mục ${n.k}, Phụ lục II NĐ 96/2026/NĐ-CP`, url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Nghi-dinh-96-2026-ND-CP-huong-dan-Luat-Dau-tu-690303.aspx", detail: `${NGANH_LEVEL_LABEL[n.level]} đầu tư — ${n.label} (tóm tắt nội dung mục).` })), ...NGANH_15_17_LEGAL])}
+    ${renderLegalList([...nganhHits.map(n => ({ ref: `Mục ${n.k}, Phụ lục II NĐ 96/2026/NĐ-CP`, url: "docs/nd-96-2026-nd-cp.pdf", detail: `${NGANH_LEVEL_LABEL[n.level]} đầu tư — ${n.label} (tóm tắt nội dung mục).` })), ...NGANH_15_17_LEGAL])}
   `;
 
   const inc = computeIncentive();
@@ -4041,17 +4148,153 @@ function restoreWizardFocus() {
 }
 renderWizard();
 
+/* ---------------- Tổng quan ---------------- */
+const DASH_UPDATES = [
+  { d: "01/3/2027", k: "Sắp hiệu lực", t: "Luật sửa đổi, bổ sung Luật Đầu tư (2026) — thay Phụ lục IV, cắt giảm 62 ngành, nghề kinh doanh có điều kiện", id: "luat-24-2026" },
+  { d: "05/10/2026", k: "Hiệu lực", t: "Nghị quyết 56/2026/NQ-HĐND tỉnh Đồng Tháp — miễn tiền thuê đất cho dự án xã hội hóa, phi lợi nhuận", id: "nq-56-2026-dt" },
+  { d: "01/10/2026", k: "Hiệu lực", t: "Nghị định 377/2026/NĐ-CP sửa đổi các nghị định hướng dẫn Luật PPP", id: "nd-377-2026" },
+  { d: "15/9/2026", k: "Hiệu lực", t: "Nghị định 303/2026/NĐ-CP sửa đổi Nghị định 32/2024 về cụm công nghiệp", id: "nd-32-2024-ccn" },
+  { d: "10/9/2026", k: "Ký ban hành", t: "Quyết định 2860/QĐ-UBND — Chương trình phát triển nhà ở tỉnh Đồng Tháp", id: "dt-nha-o-xa-hoi" },
+  { d: "09/9/2026", k: "Hiệu lực", t: "Nghị định 349/2026/NĐ-CP sửa đổi NĐ 214/2025 — nâng hạn mức chỉ định thầu", id: "nd-349-2026" },
+  { d: "21/8/2026", k: "Hiệu lực", t: "Nghị định 274/2026/NĐ-CP về lựa chọn nhà đầu tư (NĐ 23/2024, 115/2024, 225/2025 hết hiệu lực)", id: "nd-274-2026" },
+  { d: "01/8/2026", k: "Hiệu lực", t: "Nghị quyết 43/2026/NQ-HĐND — hỗ trợ dự án nhà ở xã hội (50% chi phí hạ tầng, tối đa 05 tỷ đồng)", id: "dt-nha-o-xa-hoi" },
+  { d: "13/5/2026", k: "Ký ban hành", t: "Quyết định 1410/QĐ-UBND điều chỉnh Quy hoạch tỉnh Đồng Tháp 2021–2030, tầm nhìn 2050", id: "qd-1410-2026-dt" }
+];
+
+function haNum(s) { return Number(String(s || '0').replace(/\./g, '').replace(',', '.')) || 0; }
+function fmtHa(n) { return n.toLocaleString('vi-VN', { maximumFractionDigits: 2 }); }
+
+function dashGroups() {
+  const kcn = DT_ZONES.filter(z => z.t === 'KCN'), ccn = DT_ZONES.filter(z => z.t === 'CCN');
+  const sum = arr => arr.reduce((a, z) => a + haNum(z.ha), 0);
+  const kcnG = [
+    { label: 'Đang hoạt động', items: kcn.filter(z => z.g === 'A' && z.s === 'Đang hoạt động') },
+    { label: 'Đang đầu tư, bồi thường GPMB', items: kcn.filter(z => z.g === 'A' && z.s !== 'Đang hoạt động') },
+    { label: 'Ưu tiên kêu gọi đầu tư', items: kcn.filter(z => z.g === 'B') },
+    { label: 'Dự kiến mở mới khi đủ điều kiện', items: kcn.filter(z => z.g === 'C') }
+  ];
+  const ccnG = [
+    { label: 'Đã thành lập, đang hoạt động', items: ccn.filter(z => z.g === 'A') },
+    { label: 'Đang làm thủ tục, xây dựng hạ tầng', items: ccn.filter(z => z.g === 'B' && /^Đang/.test(z.s)) },
+    { label: 'Kêu gọi đầu tư (kế thừa quy hoạch)', items: ccn.filter(z => z.g === 'B' && !/^Đang/.test(z.s)) },
+    { label: 'Bổ sung mới, mở rộng (QĐ 1410)', items: ccn.filter(z => z.g === 'C') }
+  ];
+  [kcnG, ccnG].forEach(gs => gs.forEach(g => { g.n = g.items.length; g.ha = sum(g.items); }));
+  return { kcn, ccn, kcnG, ccnG, kcnHa: sum(kcn), ccnHa: sum(ccn), kktHa: sum(DT_ZONES.filter(z => z.t === 'KKT')) };
+}
+
+function barChart(id, title, rows, unit, note) {
+  const max = Math.max(...rows.map(r => r.v)) || 1;
+  return `
+    <figure class="dash-chart" id="${id}">
+      <figcaption class="dash-chart-title">${title}</figcaption>
+      <div class="hbar-list">
+        ${rows.map(r => `
+          <div class="hbar-row" tabindex="0" data-tip="${r.tip}">
+            <span class="hbar-label">${r.label}</span>
+            <span class="hbar-track"><span class="hbar-fill" style="width:${Math.max(2, r.v / max * 100)}%"></span></span>
+            <span class="hbar-value">${r.text}</span>
+          </div>`).join('')}
+      </div>
+      ${note ? `<div class="dash-note">${note}</div>` : ''}
+    </figure>`;
+}
+
+function rangeChart(id, title, rows, note) {
+  const max = Math.max(...rows.map(r => r.max)) * 1.08;
+  return `
+    <figure class="dash-chart" id="${id}">
+      <figcaption class="dash-chart-title">${title}</figcaption>
+      <div class="hbar-list">
+        ${rows.map(r => `
+          <div class="hbar-row" tabindex="0" data-tip="${r.tip}">
+            <span class="hbar-label">${r.label}</span>
+            <span class="hbar-track"><span class="hbar-range" style="left:${r.min / max * 100}%;width:${Math.max(1.5, (r.max - r.min) / max * 100)}%"></span><span class="hbar-min" style="width:${r.min / max * 100}%"></span></span>
+            <span class="hbar-value">${r.min}–${r.max} ngày</span>
+          </div>`).join('')}
+      </div>
+      ${note ? `<div class="dash-note">${note}</div>` : ''}
+    </figure>`;
+}
+
+function renderDashboard() {
+  const el = document.getElementById('dashView');
+  const g = dashGroups();
+  const nCore = NGANH_UUDAI_LIST.filter(n => n.level === 'db').length, nUd = NGANH_UUDAI_LIST.filter(n => n.level === 'ud').length;
+  const nDbkk = INCENTIVE_DATA.find(x => x.id === 'dbkk').communes.length, nKk = INCENTIVE_DATA.find(x => x.id === 'kk').communes.length;
+  const tiles = [
+    { v: DATA.length, l: 'văn bản pháp luật', s: `${LAW_FIELDS.length} nhóm luật · ${LOCAL_IDS.size} văn bản của tỉnh`, go: 'lookup' },
+    { v: nDbkk + nKk, l: 'xã, phường ưu đãi đầu tư', s: `${nDbkk} đặc biệt khó khăn · ${nKk} khó khăn (QĐ 1717)`, go: 'incentive' },
+    { v: g.kcn.length, l: 'khu công nghiệp', s: `${fmtHa(g.kcnHa)} ha quy hoạch · ${g.kcnG[2].n} KCN ưu tiên kêu gọi`, go: 'incentive' },
+    { v: g.ccn.length, l: 'cụm công nghiệp', s: `${fmtHa(g.ccnHa)} ha quy hoạch · ${g.ccnG[0].n} đã thành lập`, go: 'incentive' },
+    { v: 2, l: 'khu kinh tế', s: `${fmtHa(g.kktHa)} ha · cửa khẩu Đồng Tháp, ven biển Gò Công`, go: 'incentive' },
+    { v: nCore + nUd, l: 'ngành nghề ưu đãi', s: `${nCore} đặc biệt ưu đãi · ${nUd} ưu đãi (Phụ lục II NĐ 96/2026)`, go: 'wizard' }
+  ];
+  el.innerHTML = `
+    <p class="process-intro">Tóm tắt nhanh môi trường đầu tư tỉnh <b>Đồng Tháp</b> theo các văn bản đang lưu trên trang (Quy hoạch tỉnh — QĐ 1410/QĐ-UBND, địa bàn ưu đãi — QĐ 1717/QĐ-UBND, Luật Đầu tư 2025 và các nghị định). Bấm vào ô số liệu để mở mục chi tiết.</p>
+    <div class="dash-tiles">
+      ${tiles.map(t => `<button type="button" class="dash-tile" data-go="${t.go}"><span class="dash-num">${t.v.toLocaleString('vi-VN')}</span><span class="dash-lbl">${t.l}</span><span class="dash-sub">${t.s}</span></button>`).join('')}
+    </div>
+    <div class="dash-grid">
+      ${barChart('chartKcn', 'Khu công nghiệp theo tình trạng — diện tích quy hoạch (ha)', g.kcnG.map(x => ({ label: x.label, v: x.ha, text: `${fmtHa(x.ha)} ha · ${x.n} KCN`, tip: `${x.label}: ${x.n} KCN, ${fmtHa(x.ha)} ha — ${x.items.map(z => z.n.replace('KCN ', '')).join(', ')}` })), 'ha', 'Nguồn: Phụ lục III, Quyết định 1410/QĐ-UBND ngày 13/5/2026.')}
+      ${barChart('chartCcn', 'Cụm công nghiệp theo tình trạng — diện tích quy hoạch (ha)', g.ccnG.map(x => ({ label: x.label, v: x.ha, text: `${fmtHa(x.ha)} ha · ${x.n} CCN`, tip: `${x.label}: ${x.n} CCN, ${fmtHa(x.ha)} ha` })), 'ha', 'Nguồn: Phụ lục IV, Quyết định 1410/QĐ-UBND. Nhóm bổ sung mới gồm cả 3 CCN đề xuất mở rộng.')}
+      ${rangeChart('chartTime', 'Thời gian giải quyết thủ tục — lộ trình mẫu (ngày làm việc)', [
+        { label: 'Trong KCN — nhà đầu tư thứ cấp', min: 31, max: 47, tip: 'ERC, IRC, PCCC, nghiệm thu; thêm 16 ngày nếu Ban Quản lý thẩm định báo cáo nghiên cứu khả thi' },
+        { label: 'Đầu tư hạ tầng KCN', min: 51, max: 63, tip: 'Chưa gồm thời gian bồi thường, giải phóng mặt bằng và thẩm định ĐTM' },
+        { label: 'Ngoài KCN — đất tự thỏa thuận', min: 64, max: 84, tip: 'Chấp thuận nhận QSDĐ, đăng ký biến động, thẩm định BCNCKT, PCCC, nghiệm thu; thêm 20 ngày nếu phải lập quy hoạch tổng mặt bằng, đấu nối' }
+      ], 'Chưa gồm thời gian nhà đầu tư chuẩn bị hồ sơ và thi công. Chi tiết từng bước ở tab "Quy trình thực hiện dự án".')}
+      <section class="dash-chart">
+        <div class="dash-chart-title">Thông điệp xúc tiến chính</div>
+        <ul class="dash-list">
+          <li><b>Tầm nhìn 2050:</b> “Trở thành trung tâm nông nghiệp hiện đại và du lịch sinh thái của vùng đồng bằng sông Cửu Long… phát triển công nghiệp tiên tiến” (khoản 2 mục III Điều 1 QĐ 1410/QĐ-UBND).</li>
+          <li><b>Mục tiêu 2026–2030:</b> GRDP tăng bình quân 9,5%/năm (phấn đấu 10%); tổng vốn đầu tư toàn xã hội khoảng 750–800 nghìn tỷ đồng; kim ngạch xuất khẩu 14,8 tỷ USD năm 2030; 22.500 doanh nghiệp thành lập mới; 12.200 căn nhà ở xã hội (QĐ 1410/QĐ-UBND).</li>
+          <li><b>Chế biến, bảo quản nông, thủy sản là ngành đặc biệt ưu đãi</b> (mục A.II.2 Phụ lục II NĐ 96/2026) — tại xã đặc biệt khó khăn: thuế TNDN 10% trong 15 năm, miễn tiền thuê đất toàn bộ thời gian thuê.</li>
+          <li><b>Dự án trong KCN, CCN</b> hưởng ưu đãi như địa bàn khó khăn; trong khu kinh tế như địa bàn đặc biệt khó khăn (khoản 7 Điều 22 NĐ 96/2026).</li>
+          <li><b>${g.kcnG[2].n} KCN ưu tiên kêu gọi đầu tư</b> với ${fmtHa(g.kcnG[2].ha)} ha; ${g.ccnG[2].n + g.ccnG[3].n} CCN đang kêu gọi hoặc bổ sung mới.</li>
+          <li><b>Nhà đầu tư thứ cấp trong KCN</b> làm phần lớn thủ tục tại một đầu mối là Ban Quản lý các KCN, nhanh hơn khoảng một nửa so với ngoài KCN.</li>
+        </ul>
+      </section>
+    </div>
+    <section class="dash-chart dash-updates">
+      <div class="dash-chart-title">Văn bản mới cập nhật</div>
+      <ul class="dash-list">
+        ${DASH_UPDATES.map(u => `<li><span class="dash-date">${u.k} ${u.d}</span> <button type="button" class="timeline-step-link" data-open-doc="${u.id}">${u.t}</button></li>`).join('')}
+      </ul>
+    </section>
+    <div class="dash-tooltip" id="dashTip" role="tooltip"></div>
+  `;
+  el.querySelectorAll('[data-go]').forEach(b => b.addEventListener('click', () => document.querySelector(`.tab[data-view="${b.dataset.go}"]`).click()));
+  el.querySelectorAll('[data-open-doc]').forEach(b => b.addEventListener('click', () => {
+    const id = b.dataset.openDoc;
+    document.querySelector('.tab[data-view="lookup"]').click();
+    activeField = null; localOnly = false; searchInput.value = '';
+    openIds.add(id); refreshNav(); render();
+    const card = document.querySelector(`#list .card[data-id="${id}"]`);
+    if (card) setTimeout(() => card.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+  }));
+  const tip = document.getElementById('dashTip');
+  el.querySelectorAll('.hbar-row').forEach(r => {
+    const show = () => { tip.textContent = r.dataset.tip; tip.style.display = 'block'; const b = r.getBoundingClientRect(); tip.style.left = Math.min(window.innerWidth - 300, b.left + 12) + 'px'; tip.style.top = (b.bottom + 6) + 'px'; };
+    const hide = () => { tip.style.display = 'none'; };
+    r.addEventListener('mouseenter', show); r.addEventListener('focus', show);
+    r.addEventListener('mouseleave', hide); r.addEventListener('blur', hide);
+  });
+}
+renderDashboard();
+
 /* ---------------- Tab switching ---------------- */
 const tabs = document.querySelectorAll('.tab');
 const lookupView = document.getElementById('lookupView');
 const processView = document.getElementById('processView');
 const incentiveView = document.getElementById('incentiveView');
 const wizardView = document.getElementById('wizardView');
+const dashView = document.getElementById('dashView');
 tabs.forEach(btn => {
   btn.addEventListener('click', () => {
     tabs.forEach(b => b.dataset.active = 'false');
     btn.dataset.active = 'true';
     const view = btn.dataset.view;
+    dashView.style.display = view === 'overview' ? 'block' : 'none';
     lookupView.style.display = view === 'lookup' ? 'block' : 'none';
     processView.style.display = view === 'process' ? 'block' : 'none';
     incentiveView.style.display = view === 'incentive' ? 'block' : 'none';
