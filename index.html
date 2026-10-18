@@ -671,6 +671,9 @@
   @media (max-width: 600px) {
     .timeline-table th:nth-child(3), .timeline-table td:nth-child(3) { display: none; }
   }
+  .preset-bar { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; margin-bottom: 16px; }
+  .preset-label { font-size: 13px; font-weight: 700; color: var(--text-muted); margin-bottom: 8px; }
+  .preset-list { display: flex; flex-wrap: wrap; gap: 6px; }
   .flow-node-subs { font-size: 11px; color: var(--text-muted); }
   .sub-list-label { font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); font-weight: 700; margin: 0 0 8px; }
   .sub-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 8px; margin-bottom: 16px; }
@@ -1047,7 +1050,7 @@
   </div>
 
   <div id="wizardView" style="display:none">
-    <p class="process-intro">Trả lời đúng 3 câu nhà đầu tư thường hỏi ở lần gặp đầu tiên — theo thứ tự: <b>quy mô/đặc điểm dự án</b> (xác định thẩm quyền), <b>địa bàn thực hiện</b> (có ưu đãi không) và <b>ngành nghề</b> (có thuộc diện ưu đãi không). Mỗi bước ra kết quả ngay; bấm vào mã điều luật để xem nguyên văn.</p>
+    <p class="process-intro">Công cụ hỏi nhanh để trả lời nhà đầu tư ngay tại buổi làm việc: <b>ai đầu tư</b>, <b>đặc điểm và nguồn đất</b>, <b>xã/phường</b>, <b>ngành nghề</b>. Kết quả gồm thẩm quyền chấp thuận chủ trương, <b>gói ưu đãi dự kiến bằng con số</b> và <b>lộ trình thủ tục kèm tổng số ngày</b>. Có thể bấm một <b>mẫu dự án</b> để điền sẵn, rồi sửa lại cho đúng dự án. Bấm vào mã điều luật để xem nguyên văn.</p>
     <div id="wizardSteps"></div>
   </div>
 
@@ -2910,7 +2913,7 @@ const DIEU24_LIST = [
   { k: 6, tier: "ttg", label: "Nhà máy điện hạt nhân" },
   { k: 7, tier: "ttg", label: "NĐT nước ngoài: viễn thông có hạ tầng mạng / trồng rừng / xuất bản / báo chí" },
   { k: 19, tier: "ttg", label: "Dự án khác thuộc diện Thủ tướng chấp thuận theo quy định pháp luật" },
-  { k: 8, tier: "tinh", label: "Nhà nước giao đất/cho thuê đất không đấu giá, đấu thầu chọn NĐT có sử dụng đất, hoặc chuyển mục đích sử dụng đất" },
+  { k: 8, tier: "tinh", label: "Nhà nước giao đất/cho thuê đất KHÔNG qua đấu giá, đấu thầu; hoặc đề nghị chuyển mục đích sử dụng đất" },
   { k: 9, tier: "tinh", label: "Khu vực ảnh hưởng quốc phòng, an ninh" },
   { k: 10, tier: "tinh", label: "Đề nghị Nhà nước giao khu vực biển" },
   { k: 11, tier: "tinh", label: "Xây nhà ở/khu đô thị (qua nhận quyền sử dụng đất hoặc đang có quyền sử dụng đất)" },
@@ -2925,19 +2928,134 @@ const DIEU24_LIST = [
 ];
 
 const NGANH_UUDAI_LIST = [
-  { k: "a", label: "Khoa học, công nghệ, đổi mới sáng tạo, chuyển đổi số, công nghiệp công nghệ số, công nghiệp bán dẫn (VD: phần mềm, AI, chip, trung tâm dữ liệu)" },
-  { k: "b", label: "Kinh tế xanh, kinh tế tuần hoàn, kinh tế chia sẻ, kinh tế số, mô hình kinh tế mới (VD: tái chế, xử lý chất thải thành nguyên liệu)" },
-  { k: "c", label: "Cụm liên kết ngành, chuỗi giá trị, quản trị hiện đại, giá trị gia tăng cao, kết nối chuỗi cung ứng toàn cầu (VD: logistics, trung tâm logistics)" },
-  { k: "d", label: "Năng lượng tái tạo, năng lượng mới, năng lượng sạch (VD: điện gió, điện mặt trời, điện sinh khối, hydrogen)" },
-  { k: "đ", label: "Nông nghiệp, lâm nghiệp; bảo vệ môi trường, kinh tế biển (VD: chế biến nông sản, thủy sản, nuôi trồng thủy sản, trồng trọt, chăn nuôi, lâm sản)" },
-  { k: "e", label: "Xây dựng và phát triển kết cấu hạ tầng (VD: cấp thoát nước, xử lý nước thải, hạ tầng giao thông, cảng)" },
-  { k: "g", label: "Giáo dục, đào tạo, y tế, thể dục thể thao thành tích cao, văn hóa dân tộc (VD: trường học, bệnh viện)" },
-  { k: "h", label: "Hóa chất trọng điểm, cơ khí trọng điểm, công nghiệp hỗ trợ, công nghiệp dược (VD: linh kiện/phụ liệu cho dệt may, da giày, ô tô — không phải hàng may mặc/giày dép thành phẩm thông thường)" }
+  { k: "A.I.1", level: "db", label: "Ứng dụng công nghệ cao, công nghệ chiến lược; sản xuất sản phẩm công nghệ chiến lược (theo danh mục của Thủ tướng)" },
+  { k: "A.I.2", level: "db", label: "Sản xuất sản phẩm thuộc Danh mục sản phẩm công nghệ cao được khuyến khích phát triển" },
+  { k: "A.I.3", level: "db", label: "Sản xuất sản phẩm thuộc Danh mục sản phẩm công nghiệp hỗ trợ được ưu tiên phát triển", kw: "phu lieu linh kien nguyen phu lieu det may da giay o to" },
+  { k: "A.I.4", level: "db", label: "Ươm tạo, nghiên cứu phát triển công nghệ cao, công nghệ chiến lược; sản xuất sản phẩm công nghệ sinh học; đào tạo nhân lực công nghệ cao" },
+  { k: "A.I.5", level: "db", label: "Sản xuất phần mềm, sản phẩm/dịch vụ công nghệ số trọng điểm; an toàn thông tin mạng; sản phẩm hình thành từ kết quả khoa học và công nghệ" },
+  { k: "A.I.6", level: "db", label: "Sản xuất năng lượng tái tạo, năng lượng mới, năng lượng sạch, năng lượng từ tiêu hủy chất thải; hydrogen, amoniac xanh", kw: "dien mat troi dien gio dien sinh khoi dien rac" },
+  { k: "A.I.7", level: "db", label: "Sản xuất vật liệu composit, vật liệu xây dựng nhẹ, vật liệu quý hiếm" },
+  { k: "A.I.8", level: "db", label: "Sản xuất sản phẩm thuộc Danh mục sản phẩm cơ khí trọng điểm" },
+  { k: "A.I.9", level: "db", label: "Sản xuất sản phẩm công nghiệp hóa chất trọng điểm" },
+  { k: "A.I.10", level: "db", label: "Trung tâm dữ liệu trí tuệ nhân tạo; hệ thống AI; nghiên cứu, thiết kế, sản xuất, đóng gói, kiểm thử chip bán dẫn", kw: "AI chip ban dan data center" },
+  { k: "A.I.11", level: "db", label: "Xây dựng và kinh doanh hạ tầng khu công nghệ số tập trung" },
+  { k: "A.I.12", level: "db", label: "Dự án công nghệ số trong khu công nghệ số tập trung" },
+  { k: "A.I.13", level: "db", label: "Khởi nghiệp sáng tạo trong công nghiệp công nghệ số" },
+  { k: "A.I.14", level: "db", label: "Đầu tư xây dựng hạ tầng công nghiệp công nghệ số" },
+  { k: "A.I.15", level: "db", label: "Sản xuất nguyên liệu, vật liệu, thiết bị, máy móc, công cụ cho công nghiệp bán dẫn (thuộc danh mục khuyến khích)" },
+  { k: "A.I.16", level: "db", label: "Phát triển cụm liên kết ngành, chuỗi giá trị, quản trị hiện đại, giá trị gia tăng cao, kết nối chuỗi sản xuất và cung ứng toàn cầu" },
+  { k: "A.II.1", level: "db", label: "Trồng, chăm sóc, bảo vệ, phát triển rừng; rừng gỗ lớn; lâm sản ngoài gỗ; phục hồi rừng tự nhiên" },
+  { k: "A.II.2", level: "db", label: "Nuôi trồng, chế biến, bảo quản nông, lâm, thủy sản; chế biến lâm sản ngoài gỗ", kw: "gao lua xay xat ca tra tom trai cay rau qua che bien thuc pham nong san thuy san kho lanh" },
+  { k: "A.II.3", level: "db", label: "Sản xuất, nhân và lai tạo giống cây trồng, giống vật nuôi, giống cây lâm nghiệp, giống thủy sản" },
+  { k: "A.II.4", level: "db", label: "Sản xuất, khai thác và tinh chế muối" },
+  { k: "A.II.5", level: "db", label: "Đánh bắt hải sản xa bờ; dịch vụ hậu cần nghề cá; đóng tàu cá" },
+  { k: "A.II.6", level: "db", label: "Dịch vụ cứu hộ trên biển" },
+  { k: "A.II.7", level: "db", label: "Nghiên cứu, sản xuất sản phẩm công nghệ sinh học sử dụng làm thực phẩm" },
+  { k: "A.II.8", level: "db", label: "Sản xuất sản phẩm đồ gỗ; sản xuất ván nhân tạo (ván dán, ván ghép thanh, ván MDF)" },
+  { k: "A.III.1", level: "db", label: "Thu gom, xử lý, tái chế, tái sử dụng chất thải tập trung", kw: "rac nha may xu ly rac" },
+  { k: "A.III.2", level: "db", label: "Xây dựng, kinh doanh kết cấu hạ tầng khu công nghiệp, khu chế xuất, khu công nghệ cao, khu công nghệ số tập trung, khu chức năng trong khu kinh tế", kw: "ha tang KCN" },
+  { k: "A.III.3", level: "db", label: "Nhà máy nước, cấp thoát nước; nhà máy điện; cầu, đường bộ; đường sắt; cảng hàng không, cảng biển, cảng thủy nội địa; sân bay, nhà ga" },
+  { k: "A.III.4", level: "db", label: "Phát triển vận tải hành khách công cộng tại các đô thị" },
+  { k: "A.III.5", level: "db", label: "Đầu tư xây dựng và quản lý, kinh doanh chợ tại vùng nông thôn" },
+  { k: "A.III.6", level: "db", label: "Đầu tư phát triển, vận hành, quản lý hạ tầng kỹ thuật cụm công nghiệp", kw: "ha tang CCN" },
+  { k: "A.IV.1", level: "db", label: "Xây dựng nhà ở xã hội, nhà ở tái định cư", kw: "NOXH" },
+  { k: "A.IV.2", level: "db", label: "Y tế chuyên sâu, y tế dự phòng; cơ sở vệ sinh phòng chống dịch bệnh", kw: "benh vien" },
+  { k: "A.IV.3", level: "db", label: "Nghiên cứu công nghệ bào chế, công nghệ sinh học để sản xuất thuốc mới, thuốc thú y mới, vắc xin" },
+  { k: "A.IV.4", level: "db", label: "Sản xuất nguyên liệu làm thuốc, thuốc thiết yếu, vắc xin, sinh phẩm, thuốc từ dược liệu, thuốc đông y; thuốc đạt GMP quốc tế; bao bì tiếp xúc trực tiếp với thuốc", kw: "duoc pham" },
+  { k: "A.IV.5", level: "db", label: "Cơ sở sản xuất Methadone" },
+  { k: "A.IV.6", level: "db", label: "Trung tâm đào tạo, huấn luyện thể thao thành tích cao; cơ sở thể thao đáp ứng giải đấu quốc tế; thể thao chuyên nghiệp" },
+  { k: "A.IV.7", level: "db", label: "Trung tâm lão khoa, tâm thần; chăm sóc người cao tuổi, người khuyết tật, trẻ mồ côi" },
+  { k: "A.IV.8", level: "db", label: "Trung tâm chữa bệnh - giáo dục - lao động xã hội; cơ sở cai nghiện; điều trị HIV/AIDS" },
+  { k: "A.IV.9", level: "db", label: "Bảo tàng cấp quốc gia, nhà văn hóa dân tộc; rạp hát, trường quay, sản xuất phim; làng nghề truyền thống; nghệ thuật dân gian; thư viện quan trọng" },
+  { k: "A.IV.10", level: "db", label: "Cơ sở hỗ trợ phòng, chống bạo lực trên cơ sở giới tại cộng đồng" },
+  { k: "A.IV.11", level: "db", label: "Sản xuất, chuyển giao công nghệ sản xuất thuốc dược liệu, thuốc cổ truyền, thuốc mới, vắc xin; nuôi trồng dược liệu tại vùng khó khăn" },
+  { k: "A.V.1", level: "db", label: "Dự án thuộc Danh mục công trình, dự án quan trọng quốc gia, trọng điểm ngành do Thủ tướng phê duyệt" },
+  { k: "B.I.1", level: "ud", label: "Đầu tư vào nghiên cứu và phát triển (R&D)" },
+  { k: "B.I.2", level: "ud", label: "Sản xuất phôi thép từ quặng sắt, thép cao cấp, hợp kim" },
+  { k: "B.I.3", level: "ud", label: "Sản xuất than cốc, than hoạt tính" },
+  { k: "B.I.4", level: "ud", label: "Sản xuất sản phẩm tiết kiệm năng lượng" },
+  { k: "B.I.5", level: "ud", label: "Sản xuất hóa dầu, hóa dược, hóa chất cơ bản và cao su" },
+  { k: "B.I.6", level: "ud", label: "Sản xuất sản phẩm có giá trị gia tăng từ 30% trở lên" },
+  { k: "B.I.7", level: "ud", label: "Sản xuất ô tô, phụ tùng ô tô, đóng tàu" },
+  { k: "B.I.8", level: "ud", label: "Sản xuất phụ kiện, linh kiện điện tử, cụm chi tiết điện tử (không thuộc Danh mục A)" },
+  { k: "B.I.9", level: "ud", label: "Sản xuất máy công cụ, máy móc, thiết bị cho nông, lâm, ngư, diêm nghiệp; máy chế biến thực phẩm; thiết bị tưới tiêu" },
+  { k: "B.I.10", level: "ud", label: "Sản xuất vật liệu thay thế vật liệu amiăng" },
+  { k: "B.I.11", level: "ud", label: "Sản xuất vật liệu xây không nung nhẹ (khối lượng riêng nhỏ hơn 1.000 kg/m³)", kw: "gach khong nung" },
+  { k: "B.I.12", level: "ud", label: "Tận dụng nhiệt thừa khí thải để phát điện của cơ sở sản xuất vật liệu xây dựng" },
+  { k: "B.I.13", level: "ud", label: "Sản xuất cát nghiền nhân tạo thay thế cát tự nhiên" },
+  { k: "B.I.14", level: "ud", label: "Xử lý, sử dụng phế thải của nhà máy nhiệt điện, phân bón hóa chất, luyện kim để làm vật liệu xây dựng" },
+  { k: "B.I.15", level: "ud", label: "Xử lý, sử dụng rác thải sinh hoạt làm nhiên liệu trong sản xuất vật liệu xây dựng" },
+  { k: "B.I.16", level: "ud", label: "Sản xuất thiết bị, vật tư, phụ tùng cho ngành xi măng, kính, gạch ốp lát, vật liệu chịu lửa; vật liệu thay thế vật liệu sản xuất bằng công nghệ lạc hậu" },
+  { k: "B.I.17", level: "ud", label: "Sản xuất phương tiện giao thông thân thiện với môi trường", kw: "xe dien" },
+  { k: "B.I.18", level: "ud", label: "Sản xuất lắp ráp đầu máy diesel, toa xe, phụ tùng đường sắt" },
+  { k: "B.I.19", level: "ud", label: "Sản xuất và chế biến khoáng sản làm vật liệu xây dựng" },
+  { k: "B.I.20", level: "ud", label: "Sản xuất, kinh doanh sản phẩm hình thành từ kết quả khoa học và công nghệ của doanh nghiệp khoa học và công nghệ" },
+  { k: "B.I.21", level: "ud", label: "Sản xuất sản phẩm công nghệ số" },
+  { k: "B.I.22", level: "ud", label: "Cung cấp dịch vụ công nghệ số", kw: "phan mem" },
+  { k: "B.I.23", level: "ud", label: "Sản xuất sản phẩm thuộc Danh mục công nghệ lưỡng dụng" },
+  { k: "B.II.1", level: "ud", label: "Nuôi, trồng, thu hoạch, chế biến dược liệu; bảo tồn nguồn gen dược liệu quý hiếm, đặc hữu" },
+  { k: "B.II.2", level: "ud", label: "Sản xuất, chế biến thức ăn chăn nuôi, thủy sản" },
+  { k: "B.II.3", level: "ud", label: "Dịch vụ khoa học, kỹ thuật về gieo trồng, chăn nuôi, thủy sản, bảo vệ thực vật, vật nuôi" },
+  { k: "B.II.4", level: "ud", label: "Cơ sở giết mổ gia súc, gia cầm tập trung theo hướng công nghiệp; bảo quản, chế biến sản phẩm chăn nuôi; đấu giá vật nuôi" },
+  { k: "B.II.5", level: "ud", label: "Xây dựng, phát triển vùng nguyên liệu tập trung phục vụ công nghiệp chế biến" },
+  { k: "B.II.6", level: "ud", label: "Khai thác hải sản" },
+  { k: "B.II.7", level: "ud", label: "Sản xuất thuốc bảo vệ thực vật sinh học, phân bón hữu cơ, phân bón sinh học" },
+  { k: "B.II.8", level: "ud", label: "Nuôi trồng, chế biến nông, lâm, thủy sản theo chuỗi liên kết hoặc theo hình thức nông nghiệp hữu cơ" },
+  { k: "B.II.9", level: "ud", label: "Sản xuất hàng thủ công mỹ nghệ, mây tre đan, gốm sứ, thủy tinh, dệt may, sợi, thêu ren, đan lát" },
+  { k: "B.II.10", level: "ud", label: "Nghiên cứu khoa học và phát triển công nghệ trong lĩnh vực khoa học nông nghiệp" },
+  { k: "B.II.11", level: "ud", label: "Nuôi giữ giống gốc vật nuôi, bảo tồn nguồn gen giống vật nuôi quý, hiếm, bản địa" },
+  { k: "B.II.12", level: "ud", label: "Sản xuất nguyên liệu làm thuốc bảo vệ thực vật, thuốc trừ sâu bệnh; phòng, chữa bệnh cho động vật, thủy sản" },
+  { k: "B.II.13", level: "ud", label: "Sản xuất thuốc thú y, nguyên liệu làm thuốc thú y; trang thiết bị, dụng cụ thú y" },
+  { k: "B.III.1", level: "ud", label: "Xây dựng, phát triển hạ tầng cụm công nghiệp" },
+  { k: "B.III.2", level: "ud", label: "Chung cư cho công nhân KCN, KCX, KCNC, KKT; ký túc xá sinh viên; nhà ở cho đối tượng chính sách xã hội; khu đô thị chức năng phục vụ công nhân" },
+  { k: "B.III.3", level: "ud", label: "Xây dựng mới, cải tạo, nâng cấp chợ đầu mối" },
+  { k: "B.III.4", level: "ud", label: "Xử lý sự cố tràn dầu, sạt lở; công nghệ giảm phát thải khí nhà kính, bảo vệ tầng ô-dôn" },
+  { k: "B.III.5", level: "ud", label: "Trung tâm hội chợ triển lãm hàng hóa, trung tâm logistics, cảng cạn, kho hàng hóa, siêu thị, trung tâm thương mại", kw: "TTTM kho bai" },
+  { k: "B.III.6", level: "ud", label: "Thiết bị quan trắc môi trường, thiết bị xử lý nước thải sinh hoạt tại chỗ; sản phẩm, dịch vụ đạt Nhãn sinh thái Việt Nam" },
+  { k: "B.III.7", level: "ud", label: "Sản xuất thiết bị, sản phẩm công nghiệp môi trường (theo danh mục của Thủ tướng)" },
+  { k: "B.III.8", level: "ud", label: "Cơ sở ươm tạo công nghệ, cơ sở doanh nghiệp khoa học và công nghệ" },
+  { k: "B.III.9", level: "ud", label: "Trung tâm đổi mới sáng tạo, trung tâm nghiên cứu và phát triển" },
+  { k: "B.III.10", level: "ud", label: "Xử lý nước thải sinh hoạt tập trung công suất từ 2.500 m³/ngày tại đô thị loại IV trở lên" },
+  { k: "B.III.11", level: "ud", label: "Thu gom, vận chuyển, xử lý chất thải rắn thông thường tập trung" },
+  { k: "B.III.12", level: "ud", label: "Xử lý chất thải nguy hại, đồng xử lý chất thải nguy hại" },
+  { k: "B.III.13", level: "ud", label: "Xử lý, cải tạo khu vực môi trường bị ô nhiễm tại khu vực công cộng" },
+  { k: "B.III.14", level: "ud", label: "Ứng cứu, xử lý sự cố tràn dầu, sự cố hóa chất, sự cố môi trường khác" },
+  { k: "B.III.15", level: "ud", label: "Hạ tầng kỹ thuật bảo vệ môi trường khu công nghiệp, cụm công nghiệp, làng nghề" },
+  { k: "B.III.16", level: "ud", label: "Di dời, chuyển đổi hoạt động cơ sở gây ô nhiễm môi trường nghiêm trọng" },
+  { k: "B.III.17", level: "ud", label: "Quan trắc môi trường" },
+  { k: "B.III.18", level: "ud", label: "Đầu tư xây dựng nghĩa trang, cơ sở hỏa táng, điện táng" },
+  { k: "B.III.19", level: "ud", label: "Giám định thiệt hại, sức khỏe môi trường; giám định môi trường hàng hóa, phế liệu nhập khẩu" },
+  { k: "B.III.20", level: "ud", label: "Sản xuất ứng dụng sáng chế bảo vệ môi trường được Nhà nước bảo hộ" },
+  { k: "B.III.21", level: "ud", label: "Sản phẩm thân thiện môi trường gắn Nhãn xanh Việt Nam; sản phẩm từ tái chế, xử lý chất thải rắn" },
+  { k: "B.III.22", level: "ud", label: "Sản xuất xăng, nhiên liệu diezen, nhiên liệu sinh học hợp quy; than sinh học; năng lượng từ gió, mặt trời, thủy triều, địa nhiệt, năng lượng tái tạo khác" },
+  { k: "B.III.23", level: "ud", label: "Sản xuất, nhập khẩu máy móc, thiết bị chuyên dùng thu gom, xử lý chất thải; thiết bị quan trắc, phân tích môi trường" },
+  { k: "B.III.24", level: "ud", label: "Cơ sở sản xuất, kinh doanh, dịch vụ thân thiện môi trường được chứng nhận nhãn sinh thái" },
+  { k: "B.III.25", level: "ud", label: "Sản xuất sản phẩm, thiết bị, công nghệ sử dụng nước tiết kiệm" },
+  { k: "B.IV.1", level: "ud", label: "Hạ tầng cơ sở giáo dục; trường mầm non, phổ thông, giáo dục nghề nghiệp, đại học dân lập, tư thục", kw: "truong hoc" },
+  { k: "B.IV.2", level: "ud", label: "Sản xuất thiết bị y tế; kho bảo quản dược phẩm, dự trữ thuốc phòng thiên tai, dịch bệnh" },
+  { k: "B.IV.3", level: "ud", label: "Cơ sở thử nghiệm sinh học, đánh giá sinh khả dụng của thuốc; cơ sở dược đạt tiêu chuẩn thực hành tốt" },
+  { k: "B.IV.4", level: "ud", label: "Nghiên cứu cơ sở khoa học của bài thuốc Đông y, thuốc cổ truyền" },
+  { k: "B.IV.5", level: "ud", label: "Trung tâm thể dục, thể thao, nhà tập luyện, câu lạc bộ, sân vận động, bể bơi; sản xuất trang thiết bị thể thao" },
+  { k: "B.IV.6", level: "ud", label: "Thư viện công cộng cấp xã, thư viện chuyên ngành, đại học, cộng đồng, tư nhân phục vụ cộng đồng" },
+  { k: "B.IV.7", level: "ud", label: "Tổ chức kiểm định chất lượng giáo dục nghề nghiệp; sản xuất thiết bị giáo dục nghề nghiệp" },
+  { k: "B.IV.8", level: "ud", label: "Đào tạo nguồn nhân lực khoa học, công nghệ, đổi mới sáng tạo, chuyển đổi số" },
+  { k: "B.V.1", level: "ud", label: "Hoạt động của Quỹ tín dụng nhân dân, tổ chức tài chính vi mô" },
+  { k: "B.V.2", level: "ud", label: "Hoạt động xuất bản xuất bản phẩm điện tử" },
+  { k: "B.V.3", level: "ud", label: "Chuỗi phân phối sản phẩm của doanh nghiệp nhỏ và vừa; cơ sở ươm tạo, kỹ thuật hỗ trợ doanh nghiệp nhỏ và vừa; khu làm việc chung khởi nghiệp" },
+  { k: "B.V.4", level: "ud", label: "Đầu tư khởi nghiệp sáng tạo" }
 ];
+const NGANH_LEVEL_LABEL = { db: "Đặc biệt ưu đãi", ud: "Ưu đãi" };
+const nganhLabel = x => `[${NGANH_LEVEL_LABEL[x.level]}] ${x.label} (mục ${x.k})`;
 
 const wizardState = {
   khoan: new Set(),
   khoanSearch: '',
+  investorType: '',
+  preset: '',
+  conditional: false,
+  xaHoiHoa: false,
+  datTMDV: false,
+  bds: false,
   resettleCount: '',
   resettleRegion: 'khac',
   inKCN: false,
@@ -3037,9 +3155,11 @@ function computeFinancials() {
 
 const LAND_METHODS = [
   { v: "giao_thue_khong_dg", label: "Đất công — Nhà nước giao đất/cho thuê đất KHÔNG qua đấu giá, đấu thầu" },
-  { v: "dau_gia", label: "Đất công — đấu giá quyền sử dụng đất" },
-  { v: "dau_thau_ndt", label: "Đất công — đấu thầu lựa chọn nhà đầu tư (dự án có sử dụng đất)" },
-  { v: "chuyen_muc_dich", label: "Đất dân — nhà đầu tư tự gom/nhận chuyển nhượng, cần chuyển mục đích sử dụng đất" },
+  { v: "dau_gia", label: "Đất công — trúng đấu giá quyền sử dụng đất" },
+  { v: "dau_thau_ndt", label: "Đất công — trúng đấu thầu lựa chọn nhà đầu tư (dự án có sử dụng đất)" },
+  { v: "chuyen_muc_dich", label: "Đất dân — nhà đầu tư tự gom/nhận chuyển nhượng, CẦN chuyển mục đích sử dụng đất" },
+  { v: "dat_dan_dung_muc_dich", label: "Đất dân — tự thỏa thuận nhận chuyển nhượng/góp vốn/thuê, đất ĐÃ đúng mục đích (không cần chuyển mục đích)" },
+  { v: "thue_lai_kcn", label: "Thuê lại đất trong khu công nghiệp, cụm công nghiệp đã có hạ tầng" },
   { v: "khong_ap_dung", label: "Không thuộc trường hợp nào ở trên / chưa xác định" }
 ];
 
@@ -3048,12 +3168,21 @@ const LAND_METHOD_LEGAL = {
     { ref: "Khoản 8, Điều 24, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Giao đất/cho thuê đất không qua đấu giá, đấu thầu — thuộc diện phải chấp thuận chủ trương đầu tư (đã tính vào Bước 1).", quote: "8. Dự án đầu tư mà nhà đầu tư có đề nghị Nhà nước giao đất, cho thuê đất không đấu giá quyền sử dụng đất, đấu thầu lựa chọn nhà đầu tư thực hiện dự án có sử dụng đất; dự án có đề nghị chuyển mục đích sử dụng đất theo quy định của pháp luật về đất đai. Việc chấp thuận chủ trương đầu tư quy định tại khoản này không áp dụng đối với: a) Dự án đầu tư của cá nhân không thuộc diện phải có văn bản chấp thuận của UBND cấp tỉnh trước khi được quyết định cho thuê đất, cho phép chuyển mục đích sử dụng đất; b) Dự án đầu tư xây dựng hạ tầng kỹ thuật cụm công nghiệp; c) Dự án khai thác khoáng sản thuộc diện đấu giá quyền khai thác khoáng sản...; d) Dự án đầu tư khác theo quy định của Chính phủ." }
   ],
   dau_gia: [
+    { ref: "Khoản 8, Điều 24, Luật 143/2025/QH15", url: "docs/luat-dau-tu-2025-so-143-2025-qh15.pdf", detail: "Trúng đấu giá quyền sử dụng đất KHÔNG thuộc khoản 8 — khoản 8 chỉ áp dụng khi Nhà nước giao, cho thuê đất không qua đấu giá, đấu thầu. Không phải chấp thuận chủ trương vì lý do đất đai.", quote: "8. Dự án đầu tư mà nhà đầu tư có đề nghị Nhà nước giao đất, cho thuê đất không đấu giá quyền sử dụng đất, đấu thầu lựa chọn nhà đầu tư thực hiện dự án có sử dụng đất; dự án có đề nghị chuyển mục đích sử dụng đất theo quy định của pháp luật về đất đai. ..." },
     { ref: "Luật Đấu giá tài sản (01/2016/QH14, sđ 37/2024/QH15)", url: "https://thuvienphapluat.vn/van-ban/Thuong-mai/Luat-Dau-gia-tai-san-sua-doi-2024-588810.aspx", detail: "Trình tự, thủ tục đấu giá quyền sử dụng đất." },
     { ref: "Nghị định 172/2024/NĐ-CP", url: "https://thuvienphapluat.vn/van-ban/Thuong-mai/Nghi-dinh-172-2024-ND-CP-huong-dan-Luat-Dau-gia-tai-san-2016-sua-doi-boi-Luat-Dau-gia-tai-san-2024-638044.aspx", detail: "Hướng dẫn thi hành Luật Đấu giá tài sản." }
   ],
   dau_thau_ndt: [
+    { ref: "Khoản 8, Điều 24, Luật 143/2025/QH15", url: "docs/luat-dau-tu-2025-so-143-2025-qh15.pdf", detail: "Trúng đấu thầu lựa chọn nhà đầu tư KHÔNG thuộc khoản 8 — khoản 8 chỉ áp dụng khi giao, cho thuê đất không qua đấu giá, đấu thầu.", quote: "8. Dự án đầu tư mà nhà đầu tư có đề nghị Nhà nước giao đất, cho thuê đất không đấu giá quyền sử dụng đất, đấu thầu lựa chọn nhà đầu tư thực hiện dự án có sử dụng đất; dự án có đề nghị chuyển mục đích sử dụng đất theo quy định của pháp luật về đất đai. ..." },
+    { ref: "Nghị quyết 40/2026/NQ-HĐND; NQ 46/NQ-HĐND (Đồng Tháp)", url: "docs/dong-thap-nq-40-2026-tieu-chi-dau-thau.pdf", detail: "Tiêu chí đấu thầu khu đô thị (≥ 1 đơn vị ở hoặc ≥ 20 ha), khu dân cư nông thôn (≥ 3 ha); Danh mục khu đất đấu thầu của tỉnh." },
     { ref: "Luật Đấu thầu 2023 (22/2023/QH15)", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-thau-2023-22-2023-QH15-518805.aspx", detail: "Lựa chọn nhà đầu tư thực hiện dự án đầu tư kinh doanh có sử dụng đất." },
     { ref: "Nghị định 274/2026/NĐ-CP", url: "docs/nd-274-2026-nd-cp.pdf", detail: "Hướng dẫn chi tiết lựa chọn nhà đầu tư — từ 21/8/2026 các NĐ 23/2024, 115/2024 (trừ Điều 69), 225/2025 hết hiệu lực." }
+  ],
+  dat_dan_dung_muc_dich: [
+    { ref: "Điểm c khoản 3 Điều 127, Luật Đất đai 2024", url: "docs/luat-dat-dai-2024-so-31-2024-qh15.pdf", detail: "Không phải chấp thuận chủ trương đầu tư vì lý do đất đai, nhưng phải có văn bản chấp thuận của UBND tỉnh về việc thỏa thuận nhận quyền sử dụng đất (15 ngày làm việc), sau đó đăng ký biến động (15 ngày) — xem bước 3.2 tab Quy trình.", quote: "3. Điều kiện sử dụng đất để thực hiện dự án phát triển kinh tế - xã hội thông qua thỏa thuận về nhận quyền sử dụng đất quy định tại khoản 1 Điều này bao gồm: a) Phù hợp với quy hoạch sử dụng đất cấp huyện đã được phê duyệt và công bố; b) Chủ đầu tư phải đáp ứng các điều kiện quy định tại Điều 122 của Luật này; ... c) Có văn bản chấp thuận của Ủy ban nhân dân cấp tỉnh về việc thỏa thuận về nhận quyền sử dụng đất để thực hiện dự án." }
+  ],
+  thue_lai_kcn: [
+    { ref: "Thuê lại đất trong KCN, CCN", detail: "Ký hợp đồng thuê lại đất có hạ tầng với doanh nghiệp đầu tư kinh doanh hạ tầng KCN/CCN — không làm thủ tục giao đất, cho thuê đất với Nhà nước, không thuộc khoản 8 Điều 24." }
   ],
   chuyen_muc_dich: [
     { ref: "Khoản 8, Điều 24, Luật 143/2025/QH15", url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Luat-Dau-tu-2025-so-143-2025-QH15-681550.aspx", detail: "Dự án có đề nghị chuyển mục đích sử dụng đất — thuộc diện phải chấp thuận chủ trương đầu tư (đã tính vào Bước 1).", quote: "8. Dự án đầu tư mà nhà đầu tư có đề nghị Nhà nước giao đất, cho thuê đất không đấu giá quyền sử dụng đất, đấu thầu lựa chọn nhà đầu tư thực hiện dự án có sử dụng đất; dự án có đề nghị chuyển mục đích sử dụng đất theo quy định của pháp luật về đất đai..." },
@@ -3113,7 +3242,7 @@ function computeAuthority() {
     return { tier: "ttg", khoanHit: ttgResettle ? [...ttgKhoan, 3] : ttgKhoan };
   }
   const tinhKhoan = DIEU24_LIST.filter(x => x.tier === "tinh" && wizardState.khoan.has(x.k)).map(x => x.k);
-  const landImpliesKhoan8 = ["giao_thue_khong_dg", "dau_gia", "dau_thau_ndt", "chuyen_muc_dich"].includes(wizardState.landMethod) && !tinhKhoan.includes(8);
+  const landImpliesKhoan8 = ["giao_thue_khong_dg", "chuyen_muc_dich"].includes(wizardState.landMethod) && !tinhKhoan.includes(8);
   if (landImpliesKhoan8) tinhKhoan.push(8);
   if (tinhKhoan.length || tinhResettle) {
     const khoanHit = tinhResettle ? [...tinhKhoan, 3] : tinhKhoan;
@@ -3137,7 +3266,7 @@ function computeDiaBan() {
   if (nq) {
     for (const group of INCENTIVE_DATA) {
       const hit = group.communes.find(c => normalizeVN(c) === nq || normalizeVN(c).includes(nq));
-      if (hit) return { status: "found", level: group.level, commune: hit };
+      if (hit) return { status: "found", level: group.level, commune: hit, gid: group.id };
     }
   }
   if (wizardState.inKCN) return { status: "kcn" };
@@ -3150,6 +3279,132 @@ function computeNganh() {
   return hits;
 }
 
+const INVESTOR_LEGAL = {
+  nuoc_ngoai: [
+    { ref: "Khoản 1 Điều 26, Luật 143/2025/QH15", url: "docs/luat-dau-tu-2025-so-143-2025-qh15.pdf", detail: "Dự án của nhà đầu tư nước ngoài, tổ chức kinh tế có vốn nước ngoài chi phối phải có Giấy chứng nhận đăng ký đầu tư (IRC).", quote: "1. Các dự án phải thực hiện thủ tục cấp Giấy chứng nhận đăng ký đầu tư bao gồm: a) Dự án đầu tư của nhà đầu tư nước ngoài; b) Dự án đầu tư của tổ chức kinh tế quy định tại khoản 1 Điều 20 của Luật này." },
+    { ref: "Khoản 2 Điều 19, Luật 143/2025/QH15", url: "docs/luat-dau-tu-2025-so-143-2025-qh15.pdf", detail: "Được thành lập doanh nghiệp (ERC) trước khi làm thủ tục IRC; phải đáp ứng điều kiện tiếp cận thị trường (Điều 8).", quote: "2. Nhà đầu tư nước ngoài được thành lập tổ chức kinh tế thực hiện dự án đầu tư trước khi thực hiện thủ tục cấp, điều chỉnh Giấy chứng nhận đăng ký đầu tư và phải đáp ứng điều kiện tiếp cận thị trường đối với nhà đầu tư nước ngoài quy định tại Điều 8 của Luật này khi thực hiện thủ tục thành lập tổ chức kinh tế." }
+  ],
+  trong_nuoc: [
+    { ref: "Khoản 2, 4 Điều 26, Luật 143/2025/QH15", url: "docs/luat-dau-tu-2025-so-143-2025-qh15.pdf", detail: "Nhà đầu tư trong nước không phải xin IRC; nếu có nhu cầu thì vẫn được cấp.", quote: "2. Các dự án không phải thực hiện thủ tục cấp Giấy chứng nhận đăng ký đầu tư bao gồm: a) Dự án đầu tư của nhà đầu tư trong nước; ... 4. Trường hợp nhà đầu tư có nhu cầu cấp Giấy chứng nhận đăng ký đầu tư đối với dự án đầu tư quy định tại điểm a và điểm b khoản 2 Điều này, nhà đầu tư thực hiện thủ tục cấp Giấy chứng nhận đăng ký đầu tư." }
+  ]
+};
+
+const WIZ_PRESETS = [
+  { key: "che_bien", label: "Nhà máy chế biến nông sản, thủy sản (gạo, cá tra…)", state: { investorType: "trong_nuoc", landMethod: "dat_dan_dung_muc_dich", nganh: ["A.II.2"], moiTruong: "co", loaiCongTrinh: "nha_xuong" },
+    note: "Chế biến, bảo quản nông, thủy sản thuộc ngành <b>đặc biệt ưu đãi</b> (mục A.II.2 Phụ lục II NĐ 96/2026). Nhà máy quy mô vừa thường chỉ cần <b>đăng ký môi trường</b>; nhà xưởng diện tích sàn trên 2.000 m², khối tích trên 15.000 m³ phải <b>thẩm định thiết kế PCCC</b>. Kinh doanh xuất khẩu gạo cần Giấy chứng nhận đủ điều kiện của Bộ Công Thương (NĐ 107/2018/NĐ-CP)." },
+  { key: "giay_da_kcn", label: "Giày da, may mặc trong khu công nghiệp (nhà đầu tư nước ngoài)", state: { investorType: "nuoc_ngoai", inKCN: true, landMethod: "thue_lai_kcn", nganh: [], moiTruong: "co", loaiCongTrinh: "nha_xuong" },
+    note: "Giày dép, da thành phẩm <b>không có</b> trong Phụ lục II NĐ 96/2026. Hàng dệt may, sợi có ở mục B.II.9 (ưu đãi) — cần đối chiếu sản phẩm cụ thể. Nếu sản xuất nguyên phụ liệu thuộc Danh mục sản phẩm công nghiệp hỗ trợ ưu tiên phát triển thì là <b>đặc biệt ưu đãi</b> (A.I.3). Dù không thuộc ngành ưu đãi, dự án trong KCN vẫn hưởng <b>ưu đãi theo địa bàn</b>. Ban Quản lý các KCN là cơ quan đăng ký đầu tư." },
+  { key: "khu_do_thi", label: "Khu đô thị, khu dân cư (đấu thầu chọn nhà đầu tư)", state: { investorType: "trong_nuoc", landMethod: "dau_thau_ndt", nganh: [], moiTruong: "co", loaiCongTrinh: "chung_cu", datTMDV: true, bds: true },
+    note: "Đồng Tháp: dự án đấu thầu khi khu đô thị từ 1 đơn vị ở trở lên hoặc từ <b>20 ha</b>, khu dân cư nông thôn từ <b>3 ha</b> (NQ 40/2026/NQ-HĐND); khu đất phải có trong Danh mục khu đất đấu thầu (NQ 24/NQ-HĐND, sửa bởi NQ 46/NQ-HĐND). Trình tự lựa chọn nhà đầu tư theo NĐ 274/2026/NĐ-CP. Khu đô thị thương mại không thuộc ngành ưu đãi (chỉ khu đô thị chức năng phục vụ công nhân — B.III.2). Nếu nhà đầu tư tự nhận quyền sử dụng đất để làm nhà ở, khu đô thị thì chọn khoản 11 Điều 24 ở Bước 1." },
+  { key: "tttm", label: "Trung tâm thương mại, siêu thị, kho logistics", state: { investorType: "trong_nuoc", landMethod: "dau_gia", nganh: ["B.III.5"], moiTruong: "", loaiCongTrinh: "khac", datTMDV: true },
+    note: "Trung tâm thương mại, siêu thị, trung tâm logistics, kho hàng hóa thuộc ngành <b>ưu đãi</b> (mục B.III.5 Phụ lục II NĐ 96/2026) — được ưu đãi thuế, nhưng <b>đất thương mại, dịch vụ không được miễn, giảm tiền thuê đất</b> (điểm a khoản 1 Điều 157 Luật Đất đai). Công trình công cộng đông người thường thuộc diện thẩm định thiết kế PCCC — tra danh mục tại NĐ 105/2025/NĐ-CP." },
+  { key: "cay_xang", label: "Cửa hàng xăng dầu", state: { investorType: "trong_nuoc", landMethod: "chuyen_muc_dich", nganh: [], moiTruong: "co", loaiCongTrinh: "khac", conditional: true, datTMDV: true },
+    note: "<b>Kinh doanh xăng dầu là ngành, nghề kinh doanh có điều kiện</b> — phải được cấp giấy chứng nhận đủ điều kiện bán lẻ xăng dầu trước khi hoạt động, vị trí phải phù hợp quy hoạch mạng lưới cửa hàng xăng dầu của tỉnh (đối chiếu Phụ lục IV Luật Đầu tư và pháp luật về kinh doanh xăng dầu hiện hành). Bán lẻ xăng dầu <b>không</b> thuộc ngành ưu đãi (Phụ lục II chỉ có sản xuất xăng, nhiên liệu sinh học — B.III.22)." },
+  { key: "noxh", label: "Nhà ở xã hội", state: { investorType: "trong_nuoc", landMethod: "giao_thue_khong_dg", nganh: ["A.IV.1"], moiTruong: "co", loaiCongTrinh: "chung_cu" },
+    note: "Nhà ở xã hội thuộc ngành <b>đặc biệt ưu đãi</b> (A.IV.1). Áp dụng cơ chế thí điểm NQ 201/2025/QH15 và NĐ 192/2025/NĐ-CP: chấp thuận chủ trương đầu tư <b>đồng thời giao chủ đầu tư</b>. Đồng Tháp hỗ trợ 50% chi phí hạ tầng kỹ thuật trong dự án (tối đa 5 tỷ đồng) và 100% phí, lệ phí thủ tục (NQ 43/2026/NQ-HĐND); dự án phải phù hợp Chương trình phát triển nhà ở (QĐ 2860/QĐ-UBND)." },
+  { key: "dien_mt", label: "Điện mặt trời, điện sinh khối, điện rác", state: { investorType: "trong_nuoc", landMethod: "chuyen_muc_dich", nganh: ["A.I.6"], moiTruong: "co", loaiCongTrinh: "khac", conditional: true },
+    note: "Sản xuất năng lượng tái tạo, năng lượng từ tiêu hủy chất thải thuộc ngành <b>đặc biệt ưu đãi</b> (A.I.6). Dự án điện phải phù hợp quy hoạch phát triển điện lực; hoạt động phát điện bán cho lưới là ngành có điều kiện (giấy phép hoạt động điện lực)." },
+  { key: "xa_hoi_hoa", label: "Trường học, bệnh viện tư (xã hội hóa)", state: { investorType: "trong_nuoc", landMethod: "giao_thue_khong_dg", nganh: ["B.IV.1"], moiTruong: "co", loaiCongTrinh: "khac", xaHoiHoa: true },
+    note: "Dự án xã hội hóa đáp ứng danh mục loại hình, tiêu chí, quy mô của Thủ tướng được miễn tiền thuê đất theo <b>NQ 56/2026/NQ-HĐND tỉnh Đồng Tháp</b> (hiệu lực 05/10/2026) — mức miễn tính trong phần Gói ưu đãi bên dưới. Trường học thuộc B.IV.1 (ưu đãi); y tế chuyên sâu, y tế dự phòng thuộc A.IV.2 (đặc biệt ưu đãi)." }
+];
+
+function applyPreset(key) {
+  const p = WIZ_PRESETS.find(x => x.key === key);
+  if (!p) return;
+  Object.assign(wizardState, { investorType: '', inKCN: false, landMethod: '', moiTruong: '', loaiCongTrinh: '', conditional: false, xaHoiHoa: false, datTMDV: false, bds: false });
+  wizardState.khoan = new Set();
+  wizardState.nganh = new Set(p.state.nganh || []);
+  const { nganh, ...rest } = p.state;
+  Object.assign(wizardState, rest);
+  wizardState.preset = key;
+  renderWizard();
+}
+
+function nganhLevel() {
+  const hits = computeNganh();
+  if (hits.some(h => h.level === 'db')) return 'db';
+  if (hits.some(h => h.level === 'ud')) return 'ud';
+  return 'none';
+}
+
+const STATE_LAND = ["giao_thue_khong_dg", "dau_gia", "dau_thau_ndt", "chuyen_muc_dich"];
+
+function computeIncentive() {
+  const d = computeDiaBan();
+  const area = d.status === 'found' ? d.gid : d.status === 'kcn' ? 'kcn' : (d.status === 'notfound' ? 'none' : null);
+  const lv = nganhLevel();
+  const rows = [];
+  if (!area && lv === 'none') return { rows, ready: false };
+  if (wizardState.bds) rows.push({ label: "Thuế TNDN", value: "Thu nhập từ chuyển nhượng bất động sản (bán nhà, đất nền) thường KHÔNG được hưởng ưu đãi thuế TNDN, trừ nhà ở xã hội — cần đối chiếu Luật Thuế TNDN 2025 và NĐ 320/2025 trước khi tư vấn; phần hoạt động khác của dự án (nếu có) xét riêng", ref: "Luật 67/2025/QH15; NĐ 320/2025/NĐ-CP — chưa trích nguyên văn" });
+  const lvTxt = lv === 'db' ? 'ngành đặc biệt ưu đãi' : lv === 'ud' ? 'ngành ưu đãi' : 'không thuộc ngành ưu đãi';
+  // Thuế TNDN
+  if (wizardState.bds) {}
+  else if (area === 'dbkk') rows.push({ label: "Thuế TNDN", value: "Thuế suất 10% trong 15 năm; miễn 4 năm, giảm 50% trong 9 năm tiếp theo", ref: "Điều 19–20 NĐ 320/2025/NĐ-CP (địa bàn đặc biệt khó khăn)" });
+  else if (area === 'kk') rows.push({ label: "Thuế TNDN", value: lv === 'db' ? "Có thể áp dụng mức như địa bàn đặc biệt khó khăn (10% trong 15 năm; miễn 4 năm, giảm 50% 9 năm) vì thuộc ngành đặc biệt ưu đãi — đối chiếu Điều 19–20 NĐ 320/2025" : "Thuế suất 17% trong 10 năm; miễn 2 năm, giảm 50% trong 4 năm tiếp theo", ref: "Điều 19–20 NĐ 320/2025/NĐ-CP (địa bàn khó khăn)" });
+  else if (lv !== 'none' || area === 'kcn') rows.push({ label: "Thuế TNDN", value: `Có ưu đãi theo ${area === 'kcn' ? 'địa bàn KCN' : ''}${area === 'kcn' && lv !== 'none' ? ' và ' : ''}${lv !== 'none' ? lvTxt : ''} — mức cụ thể tra Điều 19–20 NĐ 320/2025/NĐ-CP (chưa tính tự động)`, ref: "Điều 19–20 NĐ 320/2025/NĐ-CP" });
+  else rows.push({ label: "Thuế TNDN", value: "Không có ưu đãi theo địa bàn, ngành — có thể xét theo quy mô vốn, lao động lớn (điểm c khoản 1 Điều 14 Luật Đầu tư)", ref: "Điều 14 Luật 143/2025/QH15" });
+  // Tiền thuê đất
+  const thueNhaNuoc = STATE_LAND.includes(wizardState.landMethod);
+  const isNOXH = wizardState.nganh.has('A.IV.1');
+  if (isNOXH) {
+    rows.push({ label: "Tiền sử dụng đất, tiền thuê đất", value: "Dự án nhà ở xã hội được miễn, giảm theo pháp luật đất đai và nhà ở; Đồng Tháp hỗ trợ thêm 50% chi phí hạ tầng kỹ thuật (tối đa 5 tỷ đồng) và 100% phí, lệ phí (NQ 43/2026/NQ-HĐND)", ref: "Điểm b khoản 1 Điều 157 Luật Đất đai 2024; NQ 43/2026/NQ-HĐND" });
+  } else if (wizardState.datTMDV) {
+    rows.push({ label: "Tiền thuê đất", value: "Không được miễn, giảm — miễn, giảm theo lĩnh vực/địa bàn ưu đãi loại trừ đất xây dựng nhà ở thương mại, đất thương mại, dịch vụ", ref: "Điểm a khoản 1 Điều 157 Luật Đất đai 2024" });
+  } else if (!thueNhaNuoc && wizardState.landMethod) {
+    rows.push({ label: "Tiền thuê đất", value: wizardState.landMethod === 'thue_lai_kcn' ? "Thuê lại đất của doanh nghiệp hạ tầng KCN — giá thuê theo hợp đồng, không áp dụng miễn tiền thuê đất của Nhà nước" : "Đất nhận chuyển nhượng/góp vốn/thuê của người dân — miễn, giảm tiền thuê đất của Nhà nước chỉ áp dụng khi Nhà nước cho thuê đất", ref: "Điều 39 NĐ 103/2024/NĐ-CP" });
+  } else if (wizardState.xaHoiHoa) {
+    const t = { dbkk: { db: "toàn bộ thời gian thuê", ud: "30 năm", none: "25 năm" }, kk: { db: "30 năm", ud: "25 năm", none: "20 năm" } };
+    let v;
+    if (area === 'dbkk' || area === 'kk') v = t[area][lv];
+    else v = lv === 'db' ? '25 năm' : lv === 'ud' ? '15 năm' : '15 năm nếu là cơ sở xã hội hóa theo khoản 7 Điều 5 NĐ 230/2025/NĐ-CP (Điều 4 NQ 56)';
+    rows.push({ label: "Tiền thuê đất (dự án xã hội hóa)", value: `Miễn ${v}, tính sau thời gian miễn trong xây dựng cơ bản; dự án phi lợi nhuận: miễn toàn bộ`, ref: "Điều 3–4 NQ 56/2026/NQ-HĐND tỉnh Đồng Tháp" });
+  } else if (area === 'dbkk' || area === 'kk') {
+    const t = { dbkk: { db: "toàn bộ thời gian thuê", ud: "15 năm", none: "11 năm" }, kk: { db: "15 năm", ud: "11 năm", none: "7 năm" } };
+    rows.push({ label: "Tiền thuê đất", value: `Miễn ${t[area][lv]} (thuê đất trực tiếp của Nhà nước)`, ref: "Khoản 2, 3 Điều 39 NĐ 103/2024/NĐ-CP (sđ NĐ 291/2025/NĐ-CP)" });
+  } else if (lv !== 'none' || area === 'kcn') {
+    rows.push({ label: "Tiền thuê đất", value: "Có thể được miễn, giảm theo ngành/địa bàn — tra Điều 39 NĐ 103/2024/NĐ-CP (chưa tính tự động cho trường hợp ngoài địa bàn khó khăn)", ref: "Điều 39 NĐ 103/2024/NĐ-CP" });
+  }
+  // Thuế nhập khẩu
+  if (area === 'dbkk' || area === 'kk' || area === 'kcn' || lv !== 'none') rows.push({ label: "Thuế nhập khẩu", value: "Miễn thuế nhập khẩu hàng hóa tạo tài sản cố định (máy móc, thiết bị, vật tư trong nước chưa sản xuất được)" + (area === 'dbkk' || lv === 'db' ? "; miễn thuế nhập khẩu nguyên liệu, vật tư, linh kiện 5 năm kể từ khi sản xuất (nếu đủ điều kiện)" : ""), ref: "Khoản 11, 13 Điều 16 Luật 107/2016/QH13; Điều 14–15 NĐ 134/2016/NĐ-CP" });
+  return { rows, ready: true, area, lv };
+}
+
+function computeRoadmap() {
+  const auth = computeAuthority();
+  const fdi = wizardState.investorType === 'nuoc_ngoai';
+  const items = [];
+  const add = (code, task, agency, days, kind, note) => items.push({ code, task, agency, days, kind, note });
+  if (auth.tier !== 'none') add('2.2', `Chấp thuận chủ trương đầu tư (${AUTHORITY_LABEL[auth.tier]})`, auth.tier === 'banql' ? 'Ban Quản lý các KCN' : 'Sở Tài chính → UBND tỉnh', auth.tier === 'ttg' ? 38 : auth.tier === 'qh' ? null : 26, 'must');
+  if (fdi) add('2.3', 'Thành lập doanh nghiệp (ERC) — làm trước IRC', 'Sở Tài chính', 3, 'must');
+  if (fdi) add('2.4', 'Giấy chứng nhận đăng ký đầu tư (IRC) — bắt buộc', wizardState.inKCN ? 'Ban Quản lý các KCN' : 'Sở Tài chính', auth.tier !== 'none' ? 5 : 10, 'must');
+  else add('2.4', 'Giấy chứng nhận đăng ký đầu tư (IRC) — không bắt buộc, làm nếu có nhu cầu (song song)', 'Sở Tài chính', 10, 'parallel');
+  const lm = wizardState.landMethod;
+  if (lm === 'dat_dan_dung_muc_dich') { add('3.2', 'UBND tỉnh chấp thuận thỏa thuận nhận quyền sử dụng đất', 'Sở Nông nghiệp và Môi trường → UBND tỉnh', 15, 'must'); add('3.2', 'Công chứng hợp đồng, đăng ký biến động đất đai', 'Văn phòng Đăng ký đất đai', 15, 'must'); }
+  else if (lm === 'thue_lai_kcn') add('3', 'Ký hợp đồng thuê lại đất với doanh nghiệp hạ tầng KCN', 'Doanh nghiệp hạ tầng KCN', null, 'info');
+  else if (lm === 'dau_gia') add('3.1', 'Tham gia đấu giá quyền sử dụng đất, nhận quyết định giao/cho thuê đất', 'Sở Nông nghiệp và Môi trường / tổ chức đấu giá', null, 'info', 'theo kế hoạch đấu giá');
+  else if (lm === 'dau_thau_ndt') add('3.1', 'Đấu thầu lựa chọn nhà đầu tư, ký hợp đồng dự án, giao/cho thuê đất', 'Sở Tài chính / Sở Nông nghiệp và Môi trường', null, 'info', 'theo kế hoạch đấu thầu (NĐ 274/2026)');
+  else if (lm === 'giao_thue_khong_dg' || lm === 'chuyen_muc_dich') add('3.1', lm === 'chuyen_muc_dich' ? 'Chuyển mục đích sử dụng đất, thuê đất' : 'Giao đất, cho thuê đất (bồi thường, giải phóng mặt bằng nếu có)', 'Sở Nông nghiệp và Môi trường → UBND tỉnh', null, 'info', 'phụ thuộc bồi thường, giải phóng mặt bằng');
+  if (wizardState.moiTruong === 'co') add('4.1–4.4', 'Thủ tục môi trường: đăng ký môi trường, giấy phép môi trường hoặc ĐTM tùy nhóm dự án', 'UBND cấp xã / Sở Nông nghiệp và Môi trường', null, 'info', 'đăng ký môi trường: nộp trước thi công');
+  if (!wizardState.inKCN && lm !== 'thue_lai_kcn') add('5.1', 'Quy hoạch tổng mặt bằng (nếu khu đất chưa có quy hoạch chi tiết)', 'UBND cấp xã/phường', 15, 'maybe');
+  if (!wizardState.inKCN && lm !== 'thue_lai_kcn') add('5.1', 'Đấu nối đường tỉnh (nếu có)', 'Sở Xây dựng', 5, 'maybe');
+  add('5.2', 'Thẩm định Báo cáo nghiên cứu khả thi (nếu quy mô lớn hoặc có công trình ảnh hưởng lớn đến an toàn cộng đồng) — được miễn giấy phép xây dựng', 'Sở Xây dựng', 16, 'maybe');
+  add('5.3', 'Thẩm định thiết kế về PCCC (nếu thuộc diện)', 'Công an tỉnh', 6, 'maybe');
+  add('5.4', 'Kiểm tra công tác nghiệm thu hoàn thành (công trình cấp II)', 'Sở Xây dựng', 12, 'maybe');
+  if (wizardState.conditional || wizardState.preset === 'che_bien') add('6.1', 'Giấy phép, giấy chứng nhận đủ điều kiện kinh doanh của ngành', 'Bộ, ngành / sở chuyên ngành', wizardState.preset === 'che_bien' ? 15 : null, 'maybe', wizardState.preset === 'che_bien' ? 'nếu xuất khẩu gạo' : 'tùy ngành');
+  if (fdi) add('6.3', 'Giấy phép lao động cho chuyên gia nước ngoài (nếu có)', 'Sở Nội vụ', null, 'info');
+  const min = items.filter(i => i.kind === 'must' && i.days).reduce((a, i) => a + i.days, 0);
+  const max = min + items.filter(i => i.kind === 'maybe' && i.days).reduce((a, i) => a + i.days, 0);
+  return { items, min, max };
+}
+
+function gotoProcess(code) {
+  const m = String(code).match(/^(\d+)(?:\.(\d+))?/);
+  if (!m) return;
+  const tab = document.querySelector('.tab[data-view="process"]');
+  if (tab) tab.click();
+  openStep(Number(m[1]) - 1, m[2] ? Number(m[2]) - 1 : 0, 'start');
+}
+
 function renderResultPanel(html, empty) {
   return `<div class="result-panel${empty ? ' empty' : ''}">${html}</div>`;
 }
@@ -3157,7 +3412,7 @@ function renderResultPanel(html, empty) {
 function renderTagSearch({ inputId, placeholder, searchValue, items, selectedSet, addAttr, removeAttr, keyProp, labelFn, emptyNote }) {
   const nq = normalizeVN(searchValue);
   const selected = items.filter(x => selectedSet.has(x[keyProp]));
-  const suggestions = searchValue ? items.filter(x => !selectedSet.has(x[keyProp]) && normalizeVN(labelFn(x)).includes(nq)) : [];
+  const suggestions = searchValue ? items.filter(x => !selectedSet.has(x[keyProp]) && normalizeVN(labelFn(x) + ' ' + (x.kw || '')).includes(nq)) : [];
   return `
     <div class="search-box tag-search-box">
       <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke-width="2"/><path d="M21 21l-4.3-4.3" stroke-width="2" stroke-linecap="round"/></svg>
@@ -3173,6 +3428,17 @@ function renderWizard() {
   const auth = computeAuthority();
   const diaban = computeDiaBan();
   const nganhHits = computeNganh();
+
+  const investorBody = `
+    <h4 style="margin-top:0;">Nhà đầu tư là ai?</h4>
+    <div class="wizard-fields">
+      <label class="wizard-check"><input type="radio" name="wizInvestor" data-investor="trong_nuoc" ${wizardState.investorType === 'trong_nuoc' ? 'checked' : ''} /><span>Nhà đầu tư trong nước</span></label>
+      <label class="wizard-check"><input type="radio" name="wizInvestor" data-investor="nuoc_ngoai" ${wizardState.investorType === 'nuoc_ngoai' ? 'checked' : ''} /><span>Nhà đầu tư nước ngoài, hoặc doanh nghiệp có vốn nước ngoài chi phối (khoản 1 Điều 20)</span></label>
+    </div>
+    ${wizardState.investorType === 'nuoc_ngoai' ? renderResultPanel('<span class="result-line">→ <b>Bắt buộc có Giấy chứng nhận đăng ký đầu tư (IRC)</b>; thành lập doanh nghiệp (ERC) trước rồi mới làm IRC; phải đáp ứng điều kiện tiếp cận thị trường đối với nhà đầu tư nước ngoài (Điều 8).</span>', false) + renderLegalList(INVESTOR_LEGAL.nuoc_ngoai)
+      : wizardState.investorType === 'trong_nuoc' ? renderResultPanel('<span class="result-line">→ <b>Không bắt buộc IRC</b> — có thể xin nếu cần (vay vốn, chứng minh ưu đãi…), làm song song với các thủ tục khác.</span>', false) + renderLegalList(INVESTOR_LEGAL.trong_nuoc)
+      : renderResultPanel('Chọn loại nhà đầu tư để biết có bắt buộc Giấy chứng nhận đăng ký đầu tư hay không.', true)}
+  `;
 
   const step1Body = `
     ${renderTagSearch({
@@ -3197,6 +3463,15 @@ function renderWizard() {
       `).join('')}
     </div>
     ${wizardState.landMethod && LAND_METHOD_LEGAL[wizardState.landMethod] ? renderLegalList(LAND_METHOD_LEGAL[wizardState.landMethod]) : ''}
+    <label class="wizard-check" style="margin-top:8px;">
+      <input type="checkbox" id="wizTMDV" ${wizardState.datTMDV ? 'checked' : ''} />
+      <span>Dự án dùng <b>đất thương mại, dịch vụ</b> hoặc xây <b>nhà ở thương mại</b> (khu đô thị, trung tâm thương mại, cây xăng, khách sạn…) — không được miễn, giảm tiền thuê đất theo ưu đãi đầu tư</span>
+    </label>
+    <label class="wizard-check">
+      <input type="checkbox" id="wizBDS" ${wizardState.bds ? 'checked' : ''} />
+      <span>Dự án <b>kinh doanh bất động sản</b> (bán nhà ở, đất nền trong khu đô thị, khu dân cư)</span>
+    </label>
+    ${wizardState.datTMDV ? renderLegalList([{ ref: "Điểm a khoản 1 Điều 157, Luật Đất đai 2024", url: "docs/luat-dat-dai-2024-so-31-2024-qh15.pdf", detail: "Miễn, giảm tiền sử dụng đất, tiền thuê đất theo lĩnh vực/địa bàn ưu đãi không áp dụng cho đất nhà ở thương mại, đất thương mại, dịch vụ. (Trích bản gốc 2024.)", quote: "1. Việc miễn, giảm tiền sử dụng đất, tiền thuê đất được thực hiện trong các trường hợp sau đây: a) Sử dụng đất vào mục đích sản xuất, kinh doanh thuộc lĩnh vực ưu đãi đầu tư hoặc tại địa bàn ưu đãi đầu tư theo quy định của pháp luật về đầu tư và pháp luật có liên quan, trừ trường hợp sử dụng đất xây dựng nhà ở thương mại, sử dụng đất thương mại, dịch vụ; b) ... sử dụng đất để thực hiện dự án đầu tư xây dựng nhà ở xã hội, nhà lưu trú công nhân trong khu công nghiệp ... ;" }]) : ''}
     <div class="wizard-inline-row">
       <span>Di dân tái định cư:</span>
       <input type="number" id="wizResettle" min="0" placeholder="Số người" value="${wizardState.resettleCount}" />
@@ -3257,7 +3532,7 @@ function renderWizard() {
       <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke-width="2"/><path d="M21 21l-4.3-4.3" stroke-width="2" stroke-linecap="round"/></svg>
       <input id="wizCommune" type="text" placeholder="Gõ tên xã/phường (VD: Tháp Mười, Lai Vung…)" autocomplete="off" value="${wizardState.communeQuery}" />
     </div>
-    ${wizardState.inKCN ? '<div class="note">Đã đánh dấu ở Bước 1: dự án đặt trong KCN/KCX/KCNC/KKT.</div>' : ''}
+    ${wizardState.inKCN ? '<div class="note">Đã đánh dấu ở Bước 2: dự án đặt trong KCN/KCX/KCNC/KKT.</div>' : ''}
     ${renderResultPanel(
       diaban.status === 'found'
         ? `<span class="result-line">→ Xã/phường <b>${diaban.commune}</b> thuộc <b>${diaban.level}</b> — được hưởng ưu đãi theo địa bàn.</span>`
@@ -3275,25 +3550,62 @@ function renderWizard() {
   const step3Body = `
     ${renderTagSearch({
       inputId: 'wizNganhSearch',
-      placeholder: 'Tìm ngành nghề: công nghệ số, năng lượng tái tạo, nông nghiệp, giáo dục…',
+      placeholder: 'Tìm ngành nghề: chế biến gạo, thủy sản, điện mặt trời, trường học, trung tâm thương mại…',
       searchValue: wizardState.nganhSearch,
       items: NGANH_UUDAI_LIST,
       selectedSet: wizardState.nganh,
       addAttr: 'add-nganh',
       removeAttr: 'remove-nganh',
       keyProp: 'k',
-      labelFn: x => x.label,
-      emptyNote: 'Không khớp nhóm ngành ưu đãi nào trong 8 nhóm của khoản 1 Điều 15 — đây là điều bình thường với nhiều dự án phổ biến (VD: khu đô thị, trung tâm thương mại, cửa hàng xăng dầu, may mặc/giày dép thành phẩm thông thường). Không thuộc ngành ưu đãi không có nghĩa là không đầu tư được — vẫn có thể xin ưu đãi theo địa bàn (Bước 2) hoặc theo quy mô vốn/lao động lớn (Bước 1).'
+      labelFn: nganhLabel,
+      emptyNote: 'Không khớp ngành nào trong Phụ lục II NĐ 96/2026 (115 mục) — nhiều dự án phổ biến không thuộc ngành ưu đãi (VD: khu đô thị thương mại, cửa hàng xăng dầu bán lẻ, giày dép thành phẩm). Không thuộc ngành ưu đãi vẫn có thể hưởng ưu đãi theo địa bàn (Bước 3) hoặc theo quy mô vốn, lao động lớn.'
     })}
     ${renderResultPanel(
       nganhHits.length
-        ? `<span class="result-line">→ Thuộc nhóm ngành ưu đãi đầu tư: <b>${nganhHits.map(n => 'điểm ' + n.k).join(', ')}</b> khoản 1 Điều 15.</span>`
-        : `<span class="result-line">Chưa chọn nhóm nào ở trên — nếu không thuộc nhóm nào, dự án vẫn có thể xin ưu đãi theo địa bàn (Bước 2) mà không cần thuộc ngành ưu đãi.</span>`,
+        ? `<span class="result-line">→ Dự án thuộc <b>ngành, nghề ${nganhLevel() === 'db' ? 'ĐẶC BIỆT ưu đãi' : 'ưu đãi'} đầu tư</b> (mục ${nganhHits.map(n => n.k).join(', ')} Phụ lục II NĐ 96/2026/NĐ-CP).</span>`
+        : `<span class="result-line">Gõ để tìm ngành của dự án trong 115 mục Phụ lục II NĐ 96/2026 (A — đặc biệt ưu đãi, B — ưu đãi). Nếu không có, dự án vẫn có thể hưởng ưu đãi theo địa bàn.</span>`,
       !nganhHits.length
     )}
-    <div class="note">Riêng biệt: kiểm tra thêm ngành nghề <b>có điều kiện</b> (Phụ lục IV, Điều 7) và ngành nghề <b>cấm</b> (Phụ lục I–III, Điều 6) tại tab "Tra cứu văn bản".</div>
+    <label class="wizard-check" style="margin-top:10px;">
+      <input type="checkbox" id="wizXHH" ${wizardState.xaHoiHoa ? 'checked' : ''} />
+      <span>Dự án xã hội hóa (giáo dục, y tế, văn hóa, thể thao, môi trường) đáp ứng danh mục của Thủ tướng — áp dụng mức miễn tiền thuê đất của NQ 56/2026/NQ-HĐND tỉnh Đồng Tháp</span>
+    </label>
+    <label class="wizard-check">
+      <input type="checkbox" id="wizConditional" ${wizardState.conditional ? 'checked' : ''} />
+      <span>Ngành nghề thuộc danh mục <b>kinh doanh có điều kiện</b> (Phụ lục IV Luật Đầu tư — VD: xăng dầu, điện, dược, giáo dục…) → phải có giấy phép/điều kiện ngành trước khi hoạt động</span>
+    </label>
+    ${wizardState.conditional ? renderResultPanel('<span class="result-line">⚠ Ngành có điều kiện: thêm bước <b>6.1 Giấy phép, điều kiện kinh doanh chuyên ngành</b> vào lộ trình. Kiểm tra cả ngành <b>cấm</b> (Điều 6, Phụ lục I–III) — từ 01/01/2027 cấm thêm kinh doanh khí N2O dùng cho con người qua đường hô hấp.</span>', false) : ''}
     <h4>Căn cứ pháp lý</h4>
-    ${renderLegalList(NGANH_15_17_LEGAL)}
+    ${renderLegalList([...nganhHits.map(n => ({ ref: `Mục ${n.k}, Phụ lục II NĐ 96/2026/NĐ-CP`, url: "https://thuvienphapluat.vn/van-ban/Dau-tu/Nghi-dinh-96-2026-ND-CP-huong-dan-Luat-Dau-tu-690303.aspx", detail: `${NGANH_LEVEL_LABEL[n.level]} đầu tư — ${n.label} (tóm tắt nội dung mục).` })), ...NGANH_15_17_LEGAL])}
+  `;
+
+  const inc = computeIncentive();
+  const road = computeRoadmap();
+  const presetObj = WIZ_PRESETS.find(x => x.key === wizardState.preset);
+  const resultBody = `
+    ${presetObj ? `<div class="note"><b>Lưu ý riêng — ${presetObj.label}:</b> ${presetObj.note}</div>` : ''}
+    <h4 style="margin-top:${presetObj ? '14px' : '0'};">Gói ưu đãi dự kiến</h4>
+    ${inc.ready ? `
+      <table class="timeline-table">
+        <thead><tr><th>Ưu đãi</th><th>Mức dự kiến</th><th>Căn cứ</th></tr></thead>
+        <tbody>${inc.rows.map(r => `<tr><td><b>${r.label}</b></td><td>${r.value}</td><td>${r.ref}</td></tr>`).join('')}</tbody>
+      </table>
+      <div class="note">Ước tính theo địa bàn (Bước 3) và ngành nghề (Bước 4). Mức chính thức do cơ quan thuế, cơ quan quản lý đất đai xác định khi thực hiện thủ tục — chi tiết từng xã xem tab "Ưu đãi theo địa bàn (Đồng Tháp)".</div>
+    ` : renderResultPanel('Nhập xã/phường (Bước 3) hoặc chọn ngành nghề (Bước 4) để tính gói ưu đãi.', true)}
+    <h4 style="margin-top:20px;">Lộ trình thủ tục & thời gian dự kiến</h4>
+    <table class="timeline-table">
+      <thead><tr><th>Bước</th><th>Thủ tục</th><th>Cơ quan đầu mối</th><th>Thời hạn</th></tr></thead>
+      <tbody>
+        ${road.items.map(r => `<tr class="${r.kind === 'parallel' ? 'parallel' : ''}">
+          <td><button type="button" class="timeline-step-link" data-goto-proc="${r.code}">Bước ${r.code}</button></td>
+          <td>${r.task}${r.kind === 'maybe' ? ' <i>(tùy dự án)</i>' : ''}${r.kind === 'parallel' ? ' <i>(song song, không cộng)</i>' : ''}</td>
+          <td>${r.agency}</td>
+          <td class="num">${r.days ? r.days + ' ngày' : (r.note || '—')}</td>
+        </tr>`).join('')}
+        <tr class="total"><td></td><td colspan="2">Tổng thời gian giải quyết thủ tục (ngày làm việc, cộng tuần tự)</td><td class="num">${road.min === 0 ? 'tối đa ' + road.max : road.min === road.max ? road.min : road.min + '–' + road.max} ngày</td></tr>
+      </tbody>
+    </table>
+    <div class="note">Số ngày tính từ khi nhận đủ hồ sơ hợp lệ, chưa gồm thời gian chuẩn bị hồ sơ, đàm phán đất, giải phóng mặt bằng, đấu giá/đấu thầu và thi công. Bấm vào số bước để xem chi tiết hồ sơ, căn cứ ở tab "Quy trình thực hiện dự án".</div>
   `;
 
   const suatDauTu = computeSuatDauTu();
@@ -3311,11 +3623,11 @@ function renderWizard() {
     ${suatDauTu.rate !== null ? renderResultPanel(
       `<span class="result-line">→ Suất đầu tư thực tế: <b>${suatDauTu.rate.toFixed(1)} triệu đồng/m²</b>${suatDauTu.compareText ? ` — ${suatDauTu.compareText}` : ''}</span>`,
       false
-    ) : renderResultPanel('Nhập vốn đầu tư (Bước 1) và diện tích sàn xây dựng để tính suất đầu tư.', true)}
+    ) : renderResultPanel('Nhập vốn đầu tư (Bước 2) và diện tích sàn xây dựng để tính suất đầu tư.', true)}
     ${renderLegalList(SUAT_DAU_TU_LEGAL)}
 
     <h4 style="margin-top:22px;">Hiệu quả tài chính sơ bộ (NPV, IRR, thời gian hoàn vốn)</h4>
-    <p class="process-intro" style="margin:0 0 10px;">Dùng vốn đầu tư đã nhập ở Bước 1. Nhập doanh thu/chi phí bình quân mỗi năm (giả định đều đặn) để ước tính nhanh — không thay thế phương án tài chính chi tiết trong hồ sơ dự án.</p>
+    <p class="process-intro" style="margin:0 0 10px;">Dùng vốn đầu tư đã nhập ở Bước 2. Nhập doanh thu/chi phí bình quân mỗi năm (giả định đều đặn) để ước tính nhanh — không thay thế phương án tài chính chi tiết trong hồ sơ dự án.</p>
     <div class="wizard-inline-row">
       <span>Doanh thu bình quân/năm:</span>
       <input type="number" id="wizDoanhThu" min="0" placeholder="Tỷ đồng" value="${wizardState.doanhThuNam}" />
@@ -3337,17 +3649,27 @@ function renderWizard() {
         false
       )}
       <div class="note">Đây là ước tính <b>sơ bộ, dòng tiền đều mỗi năm</b> — hồ sơ chính thức cần phương án tài chính chi tiết theo từng năm (đặc biệt 1-2 năm đầu thường thấp hơn), có thể khác kết quả ở đây.</div>
-    ` : renderResultPanel('Nhập đủ vốn đầu tư (Bước 1), doanh thu/chi phí và số năm dự án để tính NPV/IRR.', true)}
+    ` : renderResultPanel('Nhập đủ vốn đầu tư (Bước 2), doanh thu/chi phí và số năm dự án để tính NPV/IRR.', true)}
   `;
 
   const steps = [
-    { title: "Quy mô, đặc điểm dự án → Thẩm quyền chấp thuận chủ trương", body: step1Body },
+    { title: "Nhà đầu tư → Có bắt buộc Giấy chứng nhận đăng ký đầu tư không?", body: investorBody },
+    { title: "Quy mô, đặc điểm, nguồn đất → Thẩm quyền chấp thuận chủ trương", body: step1Body },
     { title: "Địa bàn thực hiện dự án → Có được ưu đãi địa bàn không?", body: step2Body },
-    { title: "Ngành, nghề dự án → Có thuộc ngành ưu đãi không?", body: step3Body },
-    { title: "Suất đầu tư & hiệu quả tài chính sơ bộ", body: step4Body }
+    { title: "Ngành, nghề dự án → Ưu đãi, đặc biệt ưu đãi hay có điều kiện?", body: step3Body },
+    { title: "Kết quả: gói ưu đãi dự kiến & lộ trình thủ tục, số ngày", body: resultBody },
+    { title: "Suất đầu tư & hiệu quả tài chính sơ bộ (tùy chọn)", body: step4Body }
   ];
 
-  stepsEl.innerHTML = steps.map((s, i) => `
+  const presetBar = `
+    <div class="preset-bar">
+      <div class="preset-label">Chọn nhanh mẫu dự án (tự điền sẵn các câu trả lời phổ biến, có thể sửa lại):</div>
+      <div class="preset-list">
+        ${WIZ_PRESETS.map(pr => `<button type="button" class="chip" data-preset="${pr.key}" data-active="${wizardState.preset === pr.key}">${pr.label}</button>`).join('')}
+        <button type="button" class="chip chip-local" data-preset-reset="1">Làm lại từ đầu</button>
+      </div>
+    </div>`;
+  stepsEl.innerHTML = presetBar + steps.map((s, i) => `
     <div class="step" data-open="true">
       <div class="step-rail"><div class="step-num">${i + 1}</div><div class="step-line"></div></div>
       <div style="flex:1; min-width:0;">
@@ -3366,13 +3688,16 @@ function renderWizard() {
   `).join('') + `
     <div class="wizard-summary">
       <h4>Tổng hợp nhanh</h4>
+      ${wizardState.investorType ? `<div class="summary-row"><span class="label">Nhà đầu tư</span><span>${wizardState.investorType === 'nuoc_ngoai' ? 'Nước ngoài — bắt buộc ERC trước, IRC sau' : 'Trong nước — IRC không bắt buộc'}</span></div>` : ''}
       <div class="summary-row"><span class="label">Thẩm quyền</span><span>${AUTHORITY_LABEL[auth.tier]}</span></div>
       <div class="summary-row"><span class="label">Địa bàn</span><span>${
         diaban.status === 'found' ? diaban.level + ' (' + diaban.commune + ')' :
         diaban.status === 'kcn' ? 'Trong KCN/KCX/KCNC/KKT' :
         diaban.status === 'notfound' ? 'Không thuộc địa bàn ưu đãi (theo dữ liệu hiện có)' : 'Chưa xác định'
       }</span></div>
-      <div class="summary-row"><span class="label">Ngành nghề ưu đãi</span><span>${nganhHits.length ? nganhHits.map(n => n.label).join('; ') : 'Chưa xác định thuộc nhóm nào'}</span></div>
+      <div class="summary-row"><span class="label">Ngành nghề</span><span>${nganhHits.length ? `${NGANH_LEVEL_LABEL[nganhLevel()]} — ${nganhHits.map(n => n.label + ' (mục ' + n.k + ')').join('; ')}` : 'Chưa xác định / không thuộc ngành ưu đãi'}${wizardState.conditional ? ' · <b>ngành có điều kiện</b>' : ''}</span></div>
+      ${inc.ready ? inc.rows.map(r => `<div class="summary-row"><span class="label">${r.label}</span><span>${r.value}</span></div>`).join('') : ''}
+      <div class="summary-row"><span class="label">Thời gian thủ tục</span><span>${road.min === 0 ? 'Tùy dự án, tối đa khoảng ' + road.max : 'Khoảng ' + (road.min === road.max ? road.min : road.min + '–' + road.max)} ngày làm việc (xem bảng lộ trình ở bước 5)</span></div>
       ${(Number(wizardState.vonDauTu) > 0 || Number(wizardState.soLaoDong) > 0) ? `<div class="summary-row"><span class="label">Vốn / lao động</span><span>${wizardState.vonDauTu ? wizardState.vonDauTu + ' tỷ đồng' : '—'}${wizardState.soLaoDong ? ' · ' + wizardState.soLaoDong + ' lao động' : ''} (điểm c khoản 1 Điều 14)</span></div>` : ''}
       ${computeProjectGroup().group ? `<div class="summary-row"><span class="label">Nhóm dự án (ước tính)</span><span>${PROJECT_GROUP_LABEL[computeProjectGroup().group]} — theo Luật Đầu tư công 2024</span></div>` : ''}
       ${wizardState.moiTruong === 'co' ? `<div class="summary-row"><span class="label">Môi trường</span><span>Có phát sinh chất thải — cần kiểm tra ĐTM/giấy phép môi trường (Điều 30 Luật BVMT 2020)</span></div>` : ''}
@@ -3380,6 +3705,30 @@ function renderWizard() {
   `;
 
   // wire up listeners after DOM is built
+  stepsEl.querySelectorAll('[data-investor]').forEach(el => {
+    el.addEventListener('change', () => { wizardState.investorType = el.dataset.investor; renderWizard(); });
+  });
+  stepsEl.querySelectorAll('[data-preset]').forEach(el => {
+    el.addEventListener('click', () => applyPreset(el.dataset.preset));
+  });
+  stepsEl.querySelectorAll('[data-preset-reset]').forEach(el => {
+    el.addEventListener('click', () => {
+      Object.assign(wizardState, { investorType: '', preset: '', inKCN: false, landMethod: '', moiTruong: '', loaiCongTrinh: '', conditional: false, xaHoiHoa: false, datTMDV: false, bds: false, communeQuery: '', khoanSearch: '', nganhSearch: '', vonDauTu: '', soLaoDong: '', resettleCount: '' });
+      wizardState.khoan = new Set(); wizardState.nganh = new Set();
+      renderWizard();
+    });
+  });
+  stepsEl.querySelectorAll('[data-goto-proc]').forEach(el => {
+    el.addEventListener('click', () => gotoProcess(el.dataset.gotoProc));
+  });
+  const bdsEl = document.getElementById('wizBDS');
+  if (bdsEl) bdsEl.addEventListener('change', () => { wizardState.bds = bdsEl.checked; renderWizard(); });
+  const tmdvEl = document.getElementById('wizTMDV');
+  if (tmdvEl) tmdvEl.addEventListener('change', () => { wizardState.datTMDV = tmdvEl.checked; renderWizard(); });
+  const xhhEl = document.getElementById('wizXHH');
+  if (xhhEl) xhhEl.addEventListener('change', () => { wizardState.xaHoiHoa = xhhEl.checked; renderWizard(); });
+  const condEl = document.getElementById('wizConditional');
+  if (condEl) condEl.addEventListener('change', () => { wizardState.conditional = condEl.checked; renderWizard(); });
   stepsEl.querySelectorAll('[data-land]').forEach(el => {
     el.addEventListener('change', () => {
       wizardState.landMethod = el.dataset.land;
