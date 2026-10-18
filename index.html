@@ -350,6 +350,41 @@
     stroke: currentColor;
     opacity: 0.75;
   }
+  .lookup-layout { display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: 22px; align-items: start; margin-top: 14px; }
+  .law-nav {
+    position: sticky; top: 96px; max-height: calc(100vh - 110px); overflow-y: auto;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 8px;
+  }
+  .law-nav-group { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); font-weight: 700; padding: 10px 10px 4px; }
+  .law-nav button {
+    display: flex; justify-content: space-between; align-items: center; gap: 8px; width: 100%;
+    text-align: left; background: none; border: 0; border-radius: 8px; padding: 8px 10px;
+    font: inherit; font-size: 14px; line-height: 1.3; color: var(--text); cursor: pointer;
+  }
+  .law-nav button:hover { background: var(--surface-alt); }
+  .law-nav button[data-active="true"] { background: var(--accent-soft); color: var(--accent); font-weight: 700; }
+  .law-nav .nav-count { font-size: 12px; color: var(--text-muted); font-variant-numeric: tabular-nums; font-weight: 600; }
+  .law-select-wrap { display: none; }
+  .lookup-main #list { display: flex; flex-direction: column; gap: 8px; }
+  .status-legend { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 10px; }
+  .status { display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 700; padding: 3px 8px; border-radius: 999px; white-space: nowrap; }
+  .status::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+  .st-hieuluc { color: var(--cat-luat); background: var(--cat-luat-bg); }
+  .st-suadoi { color: var(--accent-warm); background: var(--accent-warm-soft); }
+  .st-sap { color: var(--cat-nd); background: var(--cat-nd-bg); }
+  .st-het { color: var(--text-muted); background: var(--surface-alt); text-decoration: line-through; }
+  .st-thamkhao { color: var(--text-muted); background: var(--surface-alt); }
+  .card-meta-row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin-top: 6px; }
+  .card-meta-row .card-meta { margin-top: 0; font-weight: 500; color: var(--text-muted); }
+  .lookup-main .card-head { padding: 12px 16px; }
+  .lookup-main .card-code { white-space: normal; }
+  .card-body-inner > .card-summary-open { font-size: 14px; color: var(--text); background: var(--surface-alt); border-radius: 8px; padding: 10px 12px; margin-bottom: 12px; }
+  @media (max-width: 820px) {
+    .lookup-layout { grid-template-columns: minmax(0, 1fr); }
+    .law-nav { display: none; }
+    .law-select-wrap { display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px; font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+    .law-select-wrap select { font: inherit; font-size: 15px; text-transform: none; letter-spacing: 0; font-weight: 600; color: var(--text); background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; }
+  }
   .card-summary {
     color: var(--text-muted);
     font-size: 13.5px;
@@ -966,11 +1001,27 @@
         </div>
         <span class="result-count" id="resultCount"></span>
       </div>
-      <div class="chips" id="chipRow"></div>
+
     </div>
 
-    <div id="list"></div>
-    <div class="empty" id="emptyState" style="display:none">Không tìm thấy nội dung phù hợp. Thử từ khoá khác hoặc bỏ bớt bộ lọc.</div>
+    <div class="lookup-layout">
+      <nav class="law-nav" id="lawNav" aria-label="Danh mục luật"></nav>
+      <div class="lookup-main">
+        <label class="law-select-wrap">
+          <span>Chọn luật</span>
+          <select id="lawSelect"></select>
+        </label>
+        <div class="status-legend">
+        <span class="status st-hieuluc">Còn hiệu lực</span>
+        <span class="status st-suadoi">Đã sửa đổi — dùng bản hợp nhất</span>
+        <span class="status st-sap">Sắp có hiệu lực</span>
+        <span class="status st-het">Hết hiệu lực</span>
+        <span class="status st-thamkhao">Tài liệu tổng hợp</span>
+        </div>
+        <div id="list"></div>
+        <div class="empty" id="emptyState" style="display:none">Không tìm thấy nội dung phù hợp. Thử từ khoá khác hoặc chọn "Tất cả luật".</div>
+      </div>
+    </div>
   </div>
 
   <div id="processView" style="display:none">
@@ -1928,7 +1979,6 @@ function codeBadge(item, q) {
 }
 
 const listEl = document.getElementById('list');
-const chipRow = document.getElementById('chipRow');
 const searchInput = document.getElementById('searchInput');
 const resultCount = document.getElementById('resultCount');
 const emptyState = document.getElementById('emptyState');
@@ -1952,29 +2002,67 @@ const FIELD_INDEX = new Map();
 LAW_FIELDS.forEach((f, i) => f.ids.forEach(id => FIELD_INDEX.set(id, i)));
 const fieldIdxOf = item => FIELD_INDEX.has(item.id) ? FIELD_INDEX.get(item.id) : LAW_FIELDS.length;
 
-let activeField = null;
+let activeField = 0;
 let localOnly = false;
 let openIds = new Set();
 
-function buildChips() {
-  const make = (label, count, onClick, isActive) => {
-    const btn = document.createElement('button');
-    btn.className = 'chip';
-    btn.type = 'button';
-    btn.dataset.active = isActive() ? 'true' : 'false';
-    btn.innerHTML = `${label}${count !== null ? ` <span class="chip-count">${count}</span>` : ''}`;
-    btn.addEventListener('click', () => { onClick(); refreshChips(); render(); });
-    btn._isActive = isActive;
-    chipRow.appendChild(btn);
-  };
-  make('Tất cả luật', null, () => { activeField = null; }, () => activeField === null);
-  LAW_FIELDS.forEach((f, i) => make(f.label, f.ids.length, () => { activeField = activeField === i ? null : i; }, () => activeField === i));
-  make('Văn bản Đồng Tháp', LOCAL_IDS.size, () => { localOnly = !localOnly; }, () => localOnly);
-  chipRow.lastChild.classList.add('chip-local');
+const STATUS = {
+  "luat-2025": "hieuluc", "luat-24-2026": "sap", "tham-quyen": "hieuluc", "irc-erc": "hieuluc", "nghi-dinh-96": "hieuluc",
+  "nganh-uu-dai": "hieuluc", "uu-dai-dac-biet": "hieuluc", "dieu-kien-kinh-doanh": "hieuluc", "quy-ho-tro-dau-tu": "hieuluc",
+  "quy-trinh-xuc-tien": "thamkhao", "luat-doanh-nghiep": "suadoi", "luat-dat-dai": "suadoi", "nd-102-2024": "suadoi",
+  "nd-103-2024": "suadoi", "nq-56-2026-dt": "hieuluc", "luat-dau-tu-cong": "suadoi", "luat-bvmt": "suadoi", "nd-08-2022": "suadoi",
+  "luat-xay-dung-2025": "hieuluc", "nd-217-2026": "hieuluc", "nd-206-2026": "hieuluc", "qd-425-bxd": "hieuluc", "nd-207-2026": "hieuluc",
+  "nd-269-2025": "hieuluc", "nd-320-2025": "hieuluc", "luat-thue-tndn": "hieuluc", "uu-dai-thue-nk-khauhao": "suadoi",
+  "khau-hao-nhanh": "suadoi", "luat-dau-thau": "suadoi", "nd-214-2025": "suadoi", "nd-349-2026": "hieuluc", "tt-dau-thau-mau": "hieuluc",
+  "nd-274-2026": "hieuluc", "nq-40-46-2026-dt": "hieuluc", "luat-kd-bds": "suadoi", "nd-96-2024-bds": "suadoi", "luat-nha-o": "suadoi",
+  "nd-95-100-2024": "suadoi", "nq-201-2025": "hieuluc", "dt-nha-o-xa-hoi": "hieuluc", "luat-dau-gia": "suadoi", "nd-172-2024": "hieuluc",
+  "nd-35-2022": "hieuluc", "nd-32-2024-ccn": "suadoi", "luat-pccc": "suadoi", "luat-ppp": "suadoi", "nd-377-2026": "hieuluc"
+};
+const STATUS_LABEL = { hieuluc: "Còn hiệu lực", suadoi: "Đã sửa đổi", sap: "Sắp có hiệu lực", het: "Hết hiệu lực", thamkhao: "Tài liệu tổng hợp" };
+const STATUS_NOTE = { "luat-24-2026": "Sắp có hiệu lực 01/3/2027" };
+function statusPill(item) {
+  const st = STATUS[item.id] || 'thamkhao';
+  return `<span class="status st-${st}">${STATUS_NOTE[item.id] || STATUS_LABEL[st]}</span>`;
 }
 
-function refreshChips() {
-  chipRow.querySelectorAll('.chip').forEach(btn => { btn.dataset.active = btn._isActive() ? 'true' : 'false'; });
+const lawNav = document.getElementById('lawNav');
+const lawSelect = document.getElementById('lawSelect');
+const NAV_OPTIONS = [
+  { key: 'all', label: 'Tất cả luật', count: DATA.length },
+  ...LAW_FIELDS.map((f, i) => ({ key: 'f' + i, label: f.label, count: f.ids.length })),
+  { key: 'local', label: 'Văn bản tỉnh Đồng Tháp', count: LOCAL_IDS.size }
+];
+function currentNavKey() { return localOnly ? 'local' : activeField === null ? 'all' : 'f' + activeField; }
+function applyNavKey(key) {
+  localOnly = key === 'local';
+  activeField = key.startsWith('f') ? Number(key.slice(1)) : null;
+  refreshNav();
+  render();
+  if (window.innerWidth > 820) {
+    const top = document.querySelector('.lookup-layout').getBoundingClientRect().top + window.scrollY - 140;
+    if (window.scrollY > top) window.scrollTo({ top, behavior: 'smooth' });
+  }
+}
+function buildChips() {
+  lawNav.innerHTML = '';
+  NAV_OPTIONS.forEach((o, idx) => {
+    if (idx === 1) lawNav.insertAdjacentHTML('beforeend', '<div class="law-nav-group">Theo luật</div>');
+    if (o.key === 'local') lawNav.insertAdjacentHTML('beforeend', '<div class="law-nav-group">Địa phương</div>');
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.dataset.key = o.key;
+    btn.innerHTML = `<span>${o.label}</span><span class="nav-count">${o.count}</span>`;
+    btn.addEventListener('click', () => applyNavKey(o.key));
+    lawNav.appendChild(btn);
+  });
+  lawSelect.innerHTML = NAV_OPTIONS.map(o => `<option value="${o.key}">${o.label} (${o.count})</option>`).join('');
+  lawSelect.addEventListener('change', () => applyNavKey(lawSelect.value));
+  refreshNav();
+}
+function refreshNav() {
+  const key = currentNavKey();
+  lawNav.querySelectorAll('button').forEach(b => { b.dataset.active = b.dataset.key === key ? 'true' : 'false'; });
+  lawSelect.value = key;
 }
 
 function highlight(text, q) {
@@ -2011,8 +2099,8 @@ function groupSortKey(item) {
 function render() {
   const q = searchInput.value.trim();
   const filtered = DATA.filter(item => {
-    const fieldOk = activeField === null || fieldIdxOf(item) === activeField;
-    const localOk = !localOnly || LOCAL_IDS.has(item.id);
+    const fieldOk = q || activeField === null || fieldIdxOf(item) === activeField;
+    const localOk = q || !localOnly || LOCAL_IDS.has(item.id);
     return fieldOk && localOk && matches(item, q);
   });
   filtered.sort((a, b) => {
@@ -2023,7 +2111,7 @@ function render() {
 
   listEl.innerHTML = '';
   emptyState.style.display = filtered.length === 0 ? 'block' : 'none';
-  resultCount.textContent = q || activeField !== null || localOnly ? `${filtered.length} / ${DATA.length} mục` : `${DATA.length} mục`;
+  resultCount.textContent = q ? `${filtered.length} kết quả trong tất cả luật` : `${filtered.length} / ${DATA.length} văn bản`;
 
   let lastField = -1;
   filtered.forEach(item => {
@@ -2058,8 +2146,8 @@ function render() {
           <span class="card-title">${highlight(item.title, q)}</span>
           ${codeBadge(item, q)}
         </div>
-        <div class="card-summary">${highlight(item.summary, q)}</div>
-        ${item.date ? `<div class="card-meta">${item.date}</div>` : ''}
+        <div class="card-meta-row">${statusPill(item)}${item.date ? `<span class="card-meta">${item.date}</span>` : ''}</div>
+        ${q && normalizeVN(item.summary).includes(normalizeVN(q)) ? `<div class="card-summary">${highlight(item.summary, q)}</div>` : ''}
       </div>
       <svg class="chevron" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
     `;
@@ -2075,7 +2163,7 @@ function render() {
     const body = document.createElement('div');
     body.className = 'card-body';
     const legalArr = item.legal || (item.url ? [{ ref: item.code, url: item.url, detail: "Toàn văn văn bản." }] : null);
-    body.innerHTML = `<div class="card-body-inner">${item.body}${legalArr ? `<h4>Căn cứ pháp lý cụ thể</h4>${renderLegalList(legalArr)}` : ''}</div>`;
+    body.innerHTML = `<div class="card-body-inner"><div class="card-summary-open">${item.summary}</div>${item.body}${legalArr ? `<h4>Căn cứ pháp lý cụ thể</h4>${renderLegalList(legalArr)}` : ''}</div>`;
 
     card.appendChild(head);
     card.appendChild(body);
